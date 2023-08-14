@@ -10,4 +10,4 @@ if you did it right, we'll be seeing your file in our repo
 
 
 
-in later stages, we'll use different branches and only merge on main when the project is stable 
+in later stages, we'll use different branches and only merge on main when the project is stable .
