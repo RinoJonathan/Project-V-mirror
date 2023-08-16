@@ -1,0 +1,35 @@
+{
+  "name": "project-v",
+  "version": "1.0.0",
+  "description": "a lightweight video editing tool which doesnt require you to commit to this ineffecient cycle of uploading your video to the server and downloading it",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JustinFrost47/webVideoEditor.git"
+  },
+  "keywords": [
+    "video",
+    "editing",
+    "ffmpeg.js",
+    "online",
+    "no-upload"
+  ],
+  "author": "team-v",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JustinFrost47/webVideoEditor/issues"
+  },
+  "homepage": "https://github.com/JustinFrost47/webVideoEditor#readme",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "ejs-mate": "^4.0.0",
+    "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "method-override": "^3.0.0",
+    "mongoose": "^7.4.3",
+    "nodemon": "^3.0.1"
+  }
+}
