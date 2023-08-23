@@ -34,12 +34,12 @@ const initialize_Ffmpeg = async () => {
         await ffmpeg.load({
           
             //single threading
-            // coreURL: "/assets/core/ffmpeg-core.js",
+            coreURL: "/assets/core/ffmpeg-core.js",
 
             //multithreading - uncomment and run nodemon server
-            coreURL: "/assets/multi-thread/ffmpeg-core.js",
-            wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
-            workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
+            // coreURL: "/assets/multi-thread/ffmpeg-core.js",
+            // wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
+            // workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
         
         });
 
