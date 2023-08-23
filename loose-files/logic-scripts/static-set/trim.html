@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <span id="mode">trim</span>
+
+    <input type="file" id="videoInput" accept="video/*">
+    <input type="text" id="outputName" placeholder="Output filename">
+
+
+    <label for="startTime">Start Time:</label>
+    <input type="time" id="startTime" step="1" >
+    
+    <label for="endTime">End Time:</label>
+    <input type="time" id="endTime" step="1">
+
+
+
+
+    <video id="output-video" controls></video><br/>
+    <button id="convertButton">Convert</button>
+
+    <p id="message"></p>
+
+    <a href="#" id="downloadLink" download>Download Output</a>
+
+    
+    <!-- <script src="ffmpeg.wasm.js"></script> -->
+    <script type="module" src="script.js"></script>
+
+
+    
+</body>
+</html>
