@@ -20,3 +20,19 @@ a {
 #mode {
     display: none;
 }
+
+
+fieldset {
+    border-radius: 5px;
+    width: max-content;
+    border: 1px solid #D4D4D5;
+    display: inline-block;
+    }
+
+.time_input{
+    background-color: white;
+display: inline-flex;
+border: 1px solid #ccc;
+color: #555;
+width :90px;
+}

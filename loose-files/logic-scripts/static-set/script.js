@@ -103,6 +103,23 @@ convertButton.addEventListener('click', async () => {
     const videoFile = videoInput.files[0];
     const inputFilename = videoFile.name;
     var outputFileType ="";
+    var fileTime = {}
+
+    // fileTime = {
+    //     start : {
+    //         hour: document.getElementById('start_hour').value,
+    //         minute: document.getElementById('start_minute').value,
+    //         second: document.getElementById('start_second').value
+    //     },
+    //     end : {
+    //         hour: document.getElementById('end_hour').value,
+    //         minute: document.getElementById('end_minute').value,
+    //         second: document.getElementById('end_second').value
+    //     } 
+    // }
+
+
+
 
     // used this to provide default output format as that of input for
     //situations which doesnt require users to specify format -should use switch in future
@@ -113,10 +130,10 @@ convertButton.addEventListener('click', async () => {
         outputFileType = videoInput.files[0].name.split('.').pop();
         console.log(outputFileType)
     }
-    
+    const outputFileName = `${outputName.value}.${outputFileType}`;
 
     
-    const outputFileName = `${outputName.value}.${outputFileType}`;
+    
 
 
     // console.log(inputFilename)
