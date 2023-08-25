@@ -56,6 +56,11 @@ const processVideo = async (inputFilename, outputFileName, videoFile ) => {
 
     await ffmpeg.exec(['-i', inputFilename,  outputFileName]);
 
+
+    // ffmpeg -i input.mp4 -ss [start_time] -to [end_time] -c:v copy -c:a copy output.mp4
+    // ffmpeg -i input.mp4 -ss 00:30 -to 02:00 -c:v copy -c:a copy output.mp4
+
+
     // const arg = `-i ${inputFilename} -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus ${outputFileName}`.split(" ");
     // console.log(arg)
     // await ffmpeg.exec(arg);
