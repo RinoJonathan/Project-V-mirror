@@ -52,8 +52,8 @@ const initialize_Ffmpeg = async () => {
 const getCommands = (inputObject, mode)=> {
 
     const editoptions={
-        conversion: `-i ${inputObject.inputFilename} ${inputObject.outputFileName}`,
-        trim: `-i ${inputObject.inputFileName} -ss 0 -to 1 ${inputObject.outputFileName}`,
+        conversion: `-i ${inputObject.inputFileName} ${inputObject.outputFileName}`,
+        trim: `-ss ${inputObject.start.time} -i ${inputObject.inputFileName} -t ${inputObject.end.time} -c ${inputObject.outputFileName}`,
         merge: ``,
         split: ``
     }
@@ -61,7 +61,7 @@ const getCommands = (inputObject, mode)=> {
     return editoptions[mode]
 }
 
-// `ffmpeg -ss ${inputObject.} -i ${inputObject.inputFileName} -t  -c ${inputObject.outputFileName}`
+// `ffmpeg -ss ${inputObject.start.time} -i ${inputObject.inputFileName} -t ${inputObject.end.time} -c ${inputObject.outputFileName}`
 // 
 
 
@@ -70,8 +70,11 @@ const processVideo = async (inputObject, mode ) => {
 
     switch (mode) {
         case 'conversion':
+
+        console.log(inputObject.inputFileName)
+        console.log(inputObject.videoFile.name)
             
-        await ffmpeg.writeFile(inputObject.inputFilename, await fetchFile(inputObject.videoFile));  //await fetchFile(files[0]) was used as 2nd arg
+        await ffmpeg.writeFile(inputObject.inputFileName, await fetchFile(inputObject.videoFile));  //await fetchFile(files[0]) was used as 2nd arg
 
 
             break;
@@ -80,19 +83,19 @@ const processVideo = async (inputObject, mode ) => {
         
         default:
 
-        document.write("invalid  mode")
+        console.log("path not found")
             break;
     }
-   
+   console.log("out")
     message.innerHTML = 'Start transcoding';
 
   
 
-    const command = getCommands(inputObject.inputFilename, inputObject.outputFileName, mode).split(" ");
+    const command = getCommands(inputObject, mode).split(" ");
 
     await ffmpeg.exec(command);
 
-    // const arg = `-i ${inputFilename} -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus ${outputFileName}`.split(" ");
+    // const arg = `-i ${inputFileName} -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus ${outputFileName}`.split(" ");
     // console.log(arg)
     // await ffmpeg.exec(arg);
     
@@ -143,36 +146,38 @@ convertButton.addEventListener('click', async () => {
 
     
 
+    console.log("0")
 
-
-    switch(Option)
+    switch(mode)
     {
         case 'conversion':
-            
+            console.log("00")
             inputObject = {
 
                 videoFile: videoInput.files[0],
-                inputFilename: inputObject.videoFile.name ,
+                // inputFileName: inputObject.videoFile.name ,
                 outputFileN: document.getElementById('outputName').value,
-                outputFileType: document.getElementById('outputFormat').value,
-                outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`
+                outputFileType: document.getElementById('outputFormat').value
+                // outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`
 
             }
+
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
 
             break;
         
         case 'trim':
-            
+            console.log("11");
         
         inputObject = {
             
             videoFile: videoInput.files[0],
-            inputFilename: inputObject.videoFile.name ,
+            // inputFileName: inputObject.videoFile.name ,
             outputFileName: document.getElementById('outputName').value,
-            outputFileType: inputObject.inputFilename.split('.').pop(),
-            outputfile: `${inputObject.outputFileN}.${inputObject.outputFileType}`,
-
+            outputFileType: inputObject.inputFileName.split('.').pop(),
+            // outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`,
             start : {
                 hour: document.getElementById('start_hour').value,
                 minute: document.getElementById('start_minute').value,
@@ -187,11 +192,16 @@ convertButton.addEventListener('click', async () => {
             },
              
         }
+
+        inputObject.inputFileName = inputObject.videoFile.name;
+        inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+
+
             break;
 
         default:
 
-        document.write("invalid mode ")
+        console.log("path not found")
             break;
     }
 
@@ -212,16 +222,20 @@ convertButton.addEventListener('click', async () => {
     
 
 
-    // console.log(inputFilename)
+    // console.log(inputFileName)
     // console.log(outputFileName)
 
 
+    console.log("1")
  
     await initialize_Ffmpeg();
+    console.log("2")
 
     await processVideo(inputObject, mode);
+    console.log("3")
 
      generateOutput( inputObject );
+     console.log("4")
 
 
 
