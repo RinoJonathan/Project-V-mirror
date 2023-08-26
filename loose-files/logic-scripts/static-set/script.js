@@ -7,7 +7,7 @@ let previousProcessedVideoUrl;
 // Get DOM elements
 const videoInput = document.getElementById('videoInput');
 const outputName = document.getElementById('outputName');
-const outputFormat = document.getElementById('outputFormat');
+// const outputFormat = document.getElementById('outputFormat');
 const convertButton = document.getElementById('convertButton');
 const downloadLink = document.getElementById('downloadLink');
 
@@ -49,17 +49,48 @@ const initialize_Ffmpeg = async () => {
 }
 
 
-const processVideo = async (inputFilename, outputFileName, videoFile ) => {
+const getCommands = (inputObject, mode)=> {
 
-    await ffmpeg.writeFile(inputFilename, await fetchFile(videoFile));  //await fetchFile(files[0]) was used as 2nd arg
+    const editoptions={
+        conversion: `-i ${inputObject.inputFilename} ${inputObject.outputFileName}`,
+        trim: `-i ${inputObject.inputFileName} -ss 0 -to 1 ${inputObject.outputFileName}`,
+        merge: ``,
+        split: ``
+    }
+
+    return editoptions[mode]
+}
+
+// `ffmpeg -ss ${inputObject.} -i ${inputObject.inputFileName} -t  -c ${inputObject.outputFileName}`
+// 
+
+
+const processVideo = async (inputObject, mode ) => {
+
+
+    switch (mode) {
+        case 'conversion':
+            
+        await ffmpeg.writeFile(inputObject.inputFilename, await fetchFile(inputObject.videoFile));  //await fetchFile(files[0]) was used as 2nd arg
+
+
+            break;
+    
+
+        
+        default:
+
+        document.write("invalid  mode")
+            break;
+    }
+   
     message.innerHTML = 'Start transcoding';
 
-    await ffmpeg.exec(['-i', inputFilename,  outputFileName]);
+  
 
+    const command = getCommands(inputObject.inputFilename, inputObject.outputFileName, mode).split(" ");
 
-    // ffmpeg -i input.mp4 -ss [start_time] -to [end_time] -c:v copy -c:a copy output.mp4
-    // ffmpeg -i input.mp4 -ss 00:30 -to 02:00 -c:v copy -c:a copy output.mp4
-
+    await ffmpeg.exec(command);
 
     // const arg = `-i ${inputFilename} -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus ${outputFileName}`.split(" ");
     // console.log(arg)
@@ -70,12 +101,12 @@ const processVideo = async (inputFilename, outputFileName, videoFile ) => {
 
 }
 
-const generateOutput = async (outputFileName, outputFileType ) => {
+const generateOutput = async (inputObject ) => {
 
-    const data = await ffmpeg.readFile( outputFileName )
+    const data = await ffmpeg.readFile( inputObject.outputFileName )
     const video = document.getElementById('output-video'); //========
 
-    const mimeType = `video/${outputFileType}`;
+    const mimeType = `video/${inputObject.outputFileType}`;
     const processedVideoUrl = URL.createObjectURL(new Blob([data.buffer], { type: mimeType }));
     video.src = processedVideoUrl
 
@@ -86,7 +117,7 @@ const generateOutput = async (outputFileName, outputFileType ) => {
     previousProcessedVideoUrl = processedVideoUrl; // Store the current URL for future revocation    
 
     downloadLink.href = processedVideoUrl;
-    downloadLink.download = outputFileName;
+    downloadLink.download = inputObject.outputFileName;
     downloadLink.style.display = "block";
 }
 
@@ -105,37 +136,77 @@ convertButton.addEventListener('click', async () => {
 
 
     const message = document.getElementById('message'); 
-    const videoFile = videoInput.files[0];
-    const inputFilename = videoFile.name;
-    var outputFileType ="";
-    var fileTime = {}
+    // const videoFile = videoInput.files[0];
+    // const inputFilename = videoFile.name;
+    // var outputFileType ="";
+    var inputObject = {}
 
-    // fileTime = {
-    //     start : {
-    //         hour: document.getElementById('start_hour').value,
-    //         minute: document.getElementById('start_minute').value,
-    //         second: document.getElementById('start_second').value
-    //     },
-    //     end : {
-    //         hour: document.getElementById('end_hour').value,
-    //         minute: document.getElementById('end_minute').value,
-    //         second: document.getElementById('end_second').value
-    //     } 
-    // }
+    
 
 
 
+    switch(Option)
+    {
+        case 'conversion':
+            
+            inputObject = {
 
+                videoFile: videoInput.files[0],
+                inputFilename: inputObject.videoFile.name ,
+                outputFileN: document.getElementById('outputName').value,
+                outputFileType: document.getElementById('outputFormat').value,
+                outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`
+
+            }
+
+
+            break;
+        
+        case 'trim':
+            
+        
+        inputObject = {
+            
+            videoFile: videoInput.files[0],
+            inputFilename: inputObject.videoFile.name ,
+            outputFileName: document.getElementById('outputName').value,
+            outputFileType: inputObject.inputFilename.split('.').pop(),
+            outputfile: `${inputObject.outputFileN}.${inputObject.outputFileType}`,
+
+            start : {
+                hour: document.getElementById('start_hour').value,
+                minute: document.getElementById('start_minute').value,
+                second: document.getElementById('start_second').value,
+                time: `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`
+            },
+            end : {
+                hour: document.getElementById('end_hour').value,
+                minute: document.getElementById('end_minute').value,
+                second: document.getElementById('end_second').value,
+                time: `${inputObject.end.hour}:${inputObject.end.minute}:${inputObject.end.second}`
+            },
+             
+        }
+            break;
+
+        default:
+
+        document.write("invalid mode ")
+            break;
+    }
+
+
+    //
     // used this to provide default output format as that of input for
     //situations which doesnt require users to specify format -should use switch in future
-    if(outputFormat){
-        outputFileType = outputFormat.value; 
-    }
-    else{
-        outputFileType = videoInput.files[0].name.split('.').pop();
-        console.log(outputFileType)
-    }
-    const outputFileName = `${outputName.value}.${outputFileType}`;
+    // if(outputFormat){
+    //     outputFileType = outputFormat.value; 
+    // }
+    // else{
+    //     outputFileType = videoInput.files[0].name.split('.').pop();
+    //     console.log(outputFileType)
+    // }
+    // const outputFileName = `${outputName.value}.${outputFileType}`;
 
     
     
@@ -148,9 +219,9 @@ convertButton.addEventListener('click', async () => {
  
     await initialize_Ffmpeg();
 
-    await processVideo(inputFilename, outputFileName, videoFile)
+    await processVideo(inputObject, mode);
 
-     generateOutput( outputFileName, outputFileType )
+     generateOutput( inputObject );
 
 
 
@@ -161,3 +232,25 @@ convertButton.addEventListener('click', async () => {
 
     
 
+// const inputObjec = {
+            
+//     videoFile: videoInput.files[0],
+//     inputFilename: inputObjec.videoFile.name ,
+//     outputFileName: document.getElementById('outputName').value,
+//     outputFileType: inputObjec.inputFilename.split('.').pop(),
+//     outputfile: `${inputObjec.outputFileN}.${inputObjec.outputFileType}`,
+
+//     start : {
+//         hour: document.getElementById('start_hour').value,
+//         minute: document.getElementById('start_minute').value,
+//         second: document.getElementById('start_second').value,
+//         time: `${inputObjec.start.hour}:${inputObjec.start.minute}:${inputObjec.start.second}`
+//     },
+//     end : {
+//         hour: document.getElementById('end_hour').value,
+//         minute: document.getElementById('end_minute').value,
+//         second: document.getElementById('end_second').value,
+//         time: `${inputObjec.end.hour}:${inputObjec.end.minute}:${inputObjec.end.second}`
+//     },
+     
+// }
