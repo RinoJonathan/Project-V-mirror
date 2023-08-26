@@ -48,12 +48,39 @@ const initialize_Ffmpeg = async () => {
       
 }
 
+// Function to split command string into an array while considering spaces within quotes
+function parseCommandString(commandString) {
+    const args = [];
+    let currentArg = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < commandString.length; i++) {
+        const char = commandString.charAt(i);
+
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ' ' && !inQuotes) {
+            if (currentArg) {
+                args.push(currentArg);
+                currentArg = '';
+            }
+        } else {
+            currentArg += char;
+        }
+    }
+
+    if (currentArg) {
+        args.push(currentArg);
+    }
+
+    return args;
+}
 
 const getCommands = (inputObject, mode)=> {
 
     const editoptions={
-        conversion: `-i ${inputObject.inputFileName} ${inputObject.outputFileName}`,
-        trim: `-ss ${inputObject.start.time} -i ${inputObject.inputFileName} -t ${inputObject.end.time} -c ${inputObject.outputFileName}`,
+        conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
+        trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
         merge: ``,
         split: ``
     }
@@ -69,7 +96,8 @@ const processVideo = async (inputObject, mode ) => {
 
 
     switch (mode) {
-        case 'conversion':
+        case 'conversion' :
+        case 'trim':
 
         console.log(inputObject.inputFileName)
         console.log(inputObject.videoFile.name)
@@ -86,14 +114,25 @@ const processVideo = async (inputObject, mode ) => {
         console.log("path not found")
             break;
     }
-   console.log("out")
+   
     message.innerHTML = 'Start transcoding';
 
   
 
-    const command = getCommands(inputObject, mode).split(" ");
+    const command = await getCommands(inputObject, mode);
+    const commandArray = parseCommandString(command);
+    console.log(commandArray)
+    console.log(commandArray)
 
-    await ffmpeg.exec(command);
+    await ffmpeg.exec(commandArray);
+
+    // const command = getCommands(inputObject, mode).split(" ");
+
+    // console.log(command)
+
+    // await ffmpeg.exec(command);
+
+    
 
     // const arg = `-i ${inputFileName} -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus ${outputFileName}`.split(" ");
     // console.log(arg)
@@ -142,7 +181,16 @@ convertButton.addEventListener('click', async () => {
     // const videoFile = videoInput.files[0];
     // const inputFilename = videoFile.name;
     // var outputFileType ="";
-    var inputObject = {}
+    var inputObject = {
+
+            videoFile: videoInput.files[0],
+            inputFileName:'',
+            outputFileN: document.getElementById('outputName').value,
+            outputFileType: '',
+            outputFileName: '',
+            start: '',
+            end : ''
+    }
 
     
 
@@ -152,16 +200,19 @@ convertButton.addEventListener('click', async () => {
     {
         case 'conversion':
             console.log("00")
-            inputObject = {
+            // inputObject = {
 
-                videoFile: videoInput.files[0],
-                // inputFileName: inputObject.videoFile.name ,
-                outputFileN: document.getElementById('outputName').value,
-                outputFileType: document.getElementById('outputFormat').value
-                // outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`
+            //     videoFile: videoInput.files[0],
+            //     // inputFileName: inputObject.videoFile.name ,
+            //     outputFileN: document.getElementById('outputName').value,
+            //     outputFileType: document.getElementById('outputFormat').value,
+            //     start: '',
+            //     end : ''
+            //     // outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`
 
-            }
+            // }
 
+            inputObject.outputFileType = document.getElementById('outputFormat').value;
             inputObject.inputFileName = inputObject.videoFile.name;
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
@@ -171,30 +222,45 @@ convertButton.addEventListener('click', async () => {
         case 'trim':
             console.log("11");
         
-        inputObject = {
+        // inputObject = {
             
-            videoFile: videoInput.files[0],
-            // inputFileName: inputObject.videoFile.name ,
-            outputFileName: document.getElementById('outputName').value,
-            outputFileType: inputObject.inputFileName.split('.').pop(),
-            // outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`,
-            start : {
-                hour: document.getElementById('start_hour').value,
-                minute: document.getElementById('start_minute').value,
-                second: document.getElementById('start_second').value,
-                time: `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`
-            },
-            end : {
-                hour: document.getElementById('end_hour').value,
-                minute: document.getElementById('end_minute').value,
-                second: document.getElementById('end_second').value,
-                time: `${inputObject.end.hour}:${inputObject.end.minute}:${inputObject.end.second}`
-            },
+        //     videoFile: videoInput.files[0],
+        //     // inputFileName: inputObject.videoFile.name ,
+        //     outputFileName: document.getElementById('outputName').value,
+        //     outputFileType: inputObject.inputFileName.split('.').pop(),
+        //     // outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`,
+        //     start : {
+        //         hour: document.getElementById('start_hour').value,
+        //         minute: document.getElementById('start_minute').value,
+        //         second: document.getElementById('start_second').value,
+        //         time: `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`
+        //     },
+        //     end : {
+        //         hour: document.getElementById('end_hour').value,
+        //         minute: document.getElementById('end_minute').value,
+        //         second: document.getElementById('end_second').value,
+        //         time: `${inputObject.end.hour}:${inputObject.end.minute}:${inputObject.end.second}`
+        //     },
              
+        // }
+
+        
+        inputObject.inputFileName = inputObject.videoFile.name;
+        inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+        inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+        inputObject.start = {
+            hour: document.getElementById('start_hour').value,
+            minute: document.getElementById('start_minute').value,
+            second: document.getElementById('start_second').value,
+        }
+        inputObject.end = {
+            hour: document.getElementById('end_hour').value,
+            minute: document.getElementById('end_minute').value,
+            second: document.getElementById('end_second').value,
         }
 
-        inputObject.inputFileName = inputObject.videoFile.name;
-        inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+        inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
+        inputObject.end.time = `${inputObject.end.hour}:${inputObject.end.minute}:${inputObject.end.second}`;
 
 
             break;
