@@ -26,11 +26,18 @@ const initialize_Ffmpeg = async () => {
             console.log(message);
         
         })
+        if(mode==='merge'){
+            ffmpeg.on("progress", ({ progress, time }) => {
+                message.innerHTML = `${time / 1000000} s`;
+                  });
+        }
+        else{
         ffmpeg.on("progress", ({ progress }) => {
           
             message.innerHTML = `${progress * 100} %`;
         
         });
+    }
         await ffmpeg.load({
           
             //single threading
@@ -139,17 +146,7 @@ const processVideo = async (inputObject, mode ) => {
 
     await ffmpeg.exec(commandArray);
 
-    // const command = getCommands(inputObject, mode).split(" ");
 
-    // console.log(command)
-
-    // await ffmpeg.exec(command);
-
-    
-
-    // const arg = `-i ${inputFileName} -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus ${outputFileName}`.split(" ");
-    // console.log(arg)
-    // await ffmpeg.exec(arg);
     
     message.innerHTML = 'transcoding completed';
 
@@ -202,7 +199,8 @@ convertButton.addEventListener('click', async () => {
             outputFileType: '',
             outputFileName: '',
             start: '',
-            end : ''
+            end : '',
+            duration:''
     }
 
     
@@ -212,97 +210,65 @@ convertButton.addEventListener('click', async () => {
     switch(mode)
     {
         case 'conversion':
-            console.log("00")
-            // inputObject = {
 
-            //     videoFile: videoInput.files[0],
-            //     // inputFileName: inputObject.videoFile.name ,
-            //     outputFileN: document.getElementById('outputName').value,
-            //     outputFileType: document.getElementById('outputFormat').value,
-            //     start: '',
-            //     end : ''
-            //     // outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`
-
-            // }
-
-            inputObject.outputFileType = document.getElementById('outputFormat').value;
-            inputObject.inputFileName = inputObject.videoFile.name;
-            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                inputObject.outputFileType = document.getElementById('outputFormat').value;
+                inputObject.inputFileName = inputObject.videoFile.name;
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
 
             break;
         
         case 'trim':
-            console.log("11");
-        
-        // inputObject = {
-            
-        //     videoFile: videoInput.files[0],
-        //     // inputFileName: inputObject.videoFile.name ,
-        //     outputFileName: document.getElementById('outputName').value,
-        //     outputFileType: inputObject.inputFileName.split('.').pop(),
-        //     // outputFileName: `${inputObject.outputFileN}.${inputObject.outputFileType}`,
-        //     start : {
-        //         hour: document.getElementById('start_hour').value,
-        //         minute: document.getElementById('start_minute').value,
-        //         second: document.getElementById('start_second').value,
-        //         time: `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`
-        //     },
-        //     end : {
-        //         hour: document.getElementById('end_hour').value,
-        //         minute: document.getElementById('end_minute').value,
-        //         second: document.getElementById('end_second').value,
-        //         time: `${inputObject.end.hour}:${inputObject.end.minute}:${inputObject.end.second}`
-        //     },
-             
-        // }
 
-        
-        inputObject.inputFileName = inputObject.videoFile.name;
-        inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
-        inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-        inputObject.start = {
-            hour: document.getElementById('start_hour').value,
-            minute: document.getElementById('start_minute').value,
-            second: document.getElementById('start_second').value,
-        }
-        inputObject.end = {
-            hour: document.getElementById('end_hour').value,
-            minute: document.getElementById('end_minute').value,
-            second: document.getElementById('end_second').value,
-        }
+                inputObject.inputFileName = inputObject.videoFile.name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                inputObject.start = {
+                    hour: document.getElementById('start_hour').value,
+                    minute: document.getElementById('start_minute').value,
+                    second: document.getElementById('start_second').value,
+                }
+                inputObject.end = {
+                    hour: document.getElementById('end_hour').value,
+                    minute: document.getElementById('end_minute').value,
+                    second: document.getElementById('end_second').value,
+                }
 
-        inputObject.start.time = `${inputObject.start.minute}:${inputObject.start.second}`;
-        inputObject.end.time = `${inputObject.end.minute}:${inputObject.end.second}`;
+                inputObject.start.time = `${inputObject.start.minute}:${inputObject.start.second}`;
+                inputObject.end.time = `${inputObject.end.minute}:${inputObject.end.second}`;
 
+
+            break;
+
+
+        case 'merge':
+                console.log("merging - input");
+
+
+                inputObject.videoFile = videoInput.files;
+                console.log(inputObject.videoFile)
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileType = document.getElementById('outputFormat').value;
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+
+                const inputType = inputObject.inputFileName.split('.').pop();
+                for( var type of inputObject.videoFile){
+
+                    if(type.name.split('.').pop() != inputType){
+                        alert("input files must be of the same type")
+                        return
+                    }
+                }
 
             break;
 
         default:
 
-        console.log("path not found")
+                console.log("path not found")
+            
+            
             break;
     }
-
-
-    //
-    // used this to provide default output format as that of input for
-    //situations which doesnt require users to specify format -should use switch in future
-    // if(outputFormat){
-    //     outputFileType = outputFormat.value; 
-    // }
-    // else{
-    //     outputFileType = videoInput.files[0].name.split('.').pop();
-    //     console.log(outputFileType)
-    // }
-    // const outputFileName = `${outputName.value}.${outputFileType}`;
-
-    
-    
-
-
-    // console.log(inputFileName)
-    // console.log(outputFileName)
 
 
     console.log("1")
@@ -320,30 +286,3 @@ convertButton.addEventListener('click', async () => {
 
 
 });
-
-
-
-    
-
-// const inputObjec = {
-            
-//     videoFile: videoInput.files[0],
-//     inputFilename: inputObjec.videoFile.name ,
-//     outputFileName: document.getElementById('outputName').value,
-//     outputFileType: inputObjec.inputFilename.split('.').pop(),
-//     outputfile: `${inputObjec.outputFileN}.${inputObjec.outputFileType}`,
-
-//     start : {
-//         hour: document.getElementById('start_hour').value,
-//         minute: document.getElementById('start_minute').value,
-//         second: document.getElementById('start_second').value,
-//         time: `${inputObjec.start.hour}:${inputObjec.start.minute}:${inputObjec.start.second}`
-//     },
-//     end : {
-//         hour: document.getElementById('end_hour').value,
-//         minute: document.getElementById('end_minute').value,
-//         second: document.getElementById('end_second').value,
-//         time: `${inputObjec.end.hour}:${inputObjec.end.minute}:${inputObjec.end.second}`
-//     },
-     
-// }
