@@ -81,13 +81,14 @@ const getCommands = (inputObject, mode)=> {
     const editoptions={
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
         trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
-        merge: ``,
+        merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
         split: ``
     }
 
     return editoptions[mode]
 }
 
+//['-f', 'concat', '-safe', '0', '-i', 'concat_list.txt', 'output.mp4']
 // `ffmpeg -ss ${inputObject.start.time} -i ${inputObject.inputFileName} -t ${inputObject.end.time} -c ${inputObject.outputFileName}`
 // 
 
@@ -108,7 +109,19 @@ const processVideo = async (inputObject, mode ) => {
             break;
     
 
-        
+        case 'merge':
+
+        console.log("Start Concating");
+
+        const inputPaths = [];
+        for (const file of inputObject.videoFile) {
+          const { name } = file;
+          ffmpeg.writeFile(name, await fetchFile(file));
+          inputPaths.push(`file ${name}`);
+        }
+        console.log(inputPaths)
+        await ffmpeg.writeFile('concat_list.txt', inputPaths.join('\n'));
+            break;
         default:
 
         console.log("path not found")
@@ -259,8 +272,8 @@ convertButton.addEventListener('click', async () => {
             second: document.getElementById('end_second').value,
         }
 
-        inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
-        inputObject.end.time = `${inputObject.end.hour}:${inputObject.end.minute}:${inputObject.end.second}`;
+        inputObject.start.time = `${inputObject.start.minute}:${inputObject.start.second}`;
+        inputObject.end.time = `${inputObject.end.minute}:${inputObject.end.second}`;
 
 
             break;
