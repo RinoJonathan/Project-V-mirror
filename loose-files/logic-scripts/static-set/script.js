@@ -89,7 +89,7 @@ const getCommands = (inputObject, mode)=> {
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
         trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
-        split: ``
+        split: `-i ${inputObject.inputFileName} -t ${inputObject.duration} ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
@@ -106,6 +106,7 @@ const processVideo = async (inputObject, mode ) => {
     switch (mode) {
         case 'conversion' :
         case 'trim':
+        case 'split':
 
                 console.log(inputObject.inputFileName)
                 console.log(inputObject.videoFile.name)
@@ -129,7 +130,9 @@ const processVideo = async (inputObject, mode ) => {
                 console.log(inputPaths)
                 await ffmpeg.writeFile('concat_list.txt', inputPaths.join('\n'));
                     break;
-                default:
+        
+                    
+        default:
 
                 console.log("path not found")
             break;
@@ -200,12 +203,16 @@ convertButton.addEventListener('click', async () => {
             outputFileName: '',
             start: '',
             end : '',
-            duration:''
+            duration:'',
+            size:'',
+            dimension:'',
+            audioinput:'',
+            text:''
     }
 
     
 
-    console.log("0")
+    
 
     switch(mode)
     {
@@ -261,6 +268,17 @@ convertButton.addEventListener('click', async () => {
                 }
 
             break;
+
+
+        case 'split':
+                inputObject.outputFileType = document.getElementById('outputFormat').value;
+                inputObject.inputFileName = inputObject.videoFile.name;
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                inputObject.duration= document.getElementById('duration').value;
+
+            break;
+
+
 
         default:
 
