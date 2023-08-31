@@ -3,6 +3,7 @@ import { FFmpeg } from "/assets/ffmpeg/index.js";
 import { fetchFile } from "/assets/utils/index.js";
 let ffmpeg = null;
 let previousProcessedVideoUrl;
+let previousProcessedVideoUrl2;
 
 // Get DOM elements
 const videoInput = document.getElementById('videoInput');
@@ -89,7 +90,7 @@ const getCommands = (inputObject, mode)=> {
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
         trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
-        split: `-i ${inputObject.inputFileName} -t ${inputObject.duration} ${inputObject.outputFileName}`
+        split: `-i "${inputObject.inputFileName}" -t ${inputObject.duration} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.duration} -c:v copy -c:a copy "${inputObject.outputFileName2}"`
     }
 
     return editoptions[mode]
@@ -131,7 +132,7 @@ const processVideo = async (inputObject, mode ) => {
                 await ffmpeg.writeFile('concat_list.txt', inputPaths.join('\n'));
                     break;
         
-                    
+
         default:
 
                 console.log("path not found")
@@ -174,6 +175,25 @@ const generateOutput = async (inputObject ) => {
     downloadLink.href = processedVideoUrl;
     downloadLink.download = inputObject.outputFileName;
     downloadLink.style.display = "block";
+
+
+    if(mode === 'split'){
+
+        const data2 = await ffmpeg.readFile(inputObject.outputFileName2);
+        const processedVideoUrl2 = URL.createObjectURL(new Blob([data2.buffer], { type: mimeType }));
+
+        if (previousProcessedVideoUrl2) {
+            URL.revokeObjectURL(previousProcessedVideoUrl2);
+        }
+        previousProcessedVideoUrl2 = processedVideoUrl2; // Store the current URL for future revocation 
+
+        var downloadLink2 = document.getElementById('downloadLink2');
+
+        downloadLink2.href = processedVideoUrl2;
+        downloadLink2.download = inputObject.outputFileName2;
+        downloadLink2.style.display = "block";
+
+    }
 }
 
 
@@ -201,6 +221,7 @@ convertButton.addEventListener('click', async () => {
             outputFileN: document.getElementById('outputName').value,
             outputFileType: '',
             outputFileName: '',
+            outputFileName2: '',
             start: '',
             end : '',
             duration:'',
@@ -271,6 +292,14 @@ convertButton.addEventListener('click', async () => {
 
 
         case 'split':
+
+                // update the below code for the new dependencies:
+                // inputFileName, outputFileName, outputFileName2, duration
+                // also remove getting outputFileType from User , use  something similar to what we used in trim
+                
+                // add  2 output name fields, 2 download links in split .html
+
+                
                 inputObject.outputFileType = document.getElementById('outputFormat').value;
                 inputObject.inputFileName = inputObject.videoFile.name;
                 inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
