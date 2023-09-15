@@ -90,7 +90,7 @@ const getCommands = (inputObject, mode)=> {
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
         trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
-        split: `-i "${inputObject.inputFileName}" -t ${inputObject.duration} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.duration} -c:v copy -c:a copy "${inputObject.outputFileName2}"`
+        split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`
     }
 
     return editoptions[mode]
@@ -300,10 +300,18 @@ convertButton.addEventListener('click', async () => {
                 // add  2 output name fields, 2 download links in split .html
 
                 
-                inputObject.outputFileType = document.getElementById('outputFormat').value;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
                 inputObject.inputFileName = inputObject.videoFile.name;
-                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-                inputObject.duration= document.getElementById('duration').value;
+                inputObject.outputFileName = `${inputObject.outputFileN}p1.${inputObject.outputFileType}`;
+                inputObject.outputFileName2 = `${inputObject.outputFileN}p2.${inputObject.outputFileType}`;
+                //duration
+                inputObject.start = {
+                    hour: document.getElementById('start_hour').value,
+                    minute: document.getElementById('start_minute').value,
+                    second: document.getElementById('start_second').value,
+                } 
+
+                inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
 
             break;
 
