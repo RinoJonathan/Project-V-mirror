@@ -179,6 +179,8 @@ const generateOutput = async (inputObject ) => {
 
     if(mode === 'split'){
 
+        console.log("i am inside split")
+
         const data2 = await ffmpeg.readFile(inputObject.outputFileName2);
         const processedVideoUrl2 = URL.createObjectURL(new Blob([data2.buffer], { type: mimeType }));
 
@@ -299,9 +301,9 @@ convertButton.addEventListener('click', async () => {
                 
                 // add  2 output name fields, 2 download links in split .html
 
-                
-                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
                 inputObject.inputFileName = inputObject.videoFile.name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                
                 inputObject.outputFileName = `${inputObject.outputFileN}p1.${inputObject.outputFileType}`;
                 inputObject.outputFileName2 = `${inputObject.outputFileN}p2.${inputObject.outputFileType}`;
                 //duration
