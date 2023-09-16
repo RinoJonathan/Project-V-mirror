@@ -91,7 +91,8 @@ const getCommands = (inputObject, mode)=> {
         //trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
         trim: `-i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -t ${inputObject.end.time} -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
-        split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`
+        split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
+        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.dimension},setsar=1:1" ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
@@ -109,6 +110,7 @@ const processVideo = async (inputObject, mode ) => {
         case 'conversion' :
         case 'trim':
         case 'split':
+        case 'resize':
 
                 console.log(inputObject.inputFileName)
                 console.log(inputObject.videoFile.name)
@@ -353,6 +355,18 @@ convertButton.addEventListener('click', async () => {
                 } 
 
                 inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
+
+            break;
+
+        
+        case 'resize':
+
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+            
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+
+            inputObject.dimension = document.getElementById('dimension').value;
 
             break;
 
