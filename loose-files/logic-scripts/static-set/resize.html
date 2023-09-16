@@ -3,31 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Split</title>
+    <title>Resize</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <span id="mode">Split</span>
+    <span id="mode">resize</span>
 
     <input type="file" id="videoInput" accept="video/*">
     <input type="text" id="outputName" placeholder="Output filename">
+    <select id="resolution">
+        <option value="360p">480:360</option>
+        <option value="480p">640:480</option>
+        <option value="720p">1280:720</option>
+        <option value="1080p">1920:1080</option>
+        <!--<option value="size"></option>-->
+    </select>
 
-
-
-
-
-    <fieldset>
-        <legend>Start time</legend>
-        <div>
-          <input class="time_input" id="start_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
-          <input class="time_input" id="start_minute" type="number" min="0" max="59" placeholder="00" value=0 >:
-          <input class="time_input" id="start_second"type="number" min="0" max="59" placeholder="00"  value=0 >
-          
-           
-        </div>         
-     </fieldset>   
     <video id="output-video" controls></video><br/>
     <button id="convertButton">Convert</button>
 
