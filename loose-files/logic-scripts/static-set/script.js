@@ -4,6 +4,7 @@ import { fetchFile } from "/assets/utils/index.js";
 let ffmpeg = null;
 let previousProcessedVideoUrl;
 let previousProcessedVideoUrl2;
+let isMultiThreaded = false;
 
 // Get DOM elements
 const videoInput = document.getElementById('videoInput');
@@ -39,17 +40,23 @@ const initialize_Ffmpeg = async () => {
         
         });
     }
-        await ffmpeg.load({
+        // await ffmpeg.load({
           
-            //single threading
-            coreURL: "/assets/core/ffmpeg-core.js",
+        //     //single threading
+        //     coreURL: "/assets/core/ffmpeg-core.js",
 
-            //multithreading - uncomment and run nodemon server
-            // coreURL: "/assets/multi-thread/ffmpeg-core.js",
-            // wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
-            // workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
+        //     //multithreading - uncomment and run nodemon server
+        //     // coreURL: "/assets/multi-thread/ffmpeg-core.js",
+        //     // wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
+        //     // workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
         
-        });
+        // });
+
+        if (isMultiThreaded) {
+            await loadMultiThreadFiles();
+        } else {
+            await loadSingleThreadFiles();
+        }
 
       }   
 
@@ -226,6 +233,58 @@ function calculateDuration(startTime, endTime) {
   
 
 
+// Function to load multi-threading files
+async function loadMultiThreadFiles() {
+
+    console.log("multithreading engaged")
+
+
+    await ffmpeg.load({
+        coreURL: "/assets/multi-thread/ffmpeg-core.js",
+        wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
+        workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
+    });
+}
+
+// Function to load single-threading files
+async function loadSingleThreadFiles() {
+
+    console.log("singlethreading engaged")
+
+    await ffmpeg.load({
+        coreURL: "/assets/core/ffmpeg-core.js"
+    });
+}
+
+
+
+
+
+
+
+// Function to toggle between single-threaded and multi-threaded modes
+async function toggleMode() {
+    isMultiThreaded = !isMultiThreaded; // Toggle the mode
+    
+    if (isMultiThreaded) {
+        // Load multi-threading files
+        await loadMultiThreadFiles();
+    } else {
+        // Load single-threading files
+        await loadSingleThreadFiles();
+    }
+}
+
+
+
+
+//loading ffmpeg first
+
+console.log("loading ffmpeg")
+ 
+await initialize_Ffmpeg();
+
+
 //event handler for conversion 
 
 convertButton.addEventListener('click', async () => {
@@ -271,6 +330,7 @@ convertButton.addEventListener('click', async () => {
     
 
     
+    console.log("before switch for input mode")
 
     switch(mode)
     {
@@ -381,9 +441,7 @@ convertButton.addEventListener('click', async () => {
     }
 
 
-    console.log("1")
- 
-    await initialize_Ffmpeg();
+
     console.log("2")
 
     await processVideo(inputObject, mode);
@@ -396,3 +454,7 @@ convertButton.addEventListener('click', async () => {
 
 
 });
+
+// Add an event listener to the toggle button
+const toggleModeButton = document.getElementById('toggleModeButton');
+toggleModeButton.addEventListener('click', toggleMode);
