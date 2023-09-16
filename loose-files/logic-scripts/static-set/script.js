@@ -88,7 +88,8 @@ const getCommands = (inputObject, mode)=> {
 
     const editoptions={
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
-        trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
+        //trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
+        trim: `-i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -t ${inputObject.end.time} -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`
     }
@@ -199,6 +200,30 @@ const generateOutput = async (inputObject ) => {
 }
 
 
+
+//subtract start and end time to find duration
+
+function calculateDuration(startTime, endTime) {
+    const startParts = startTime.split(':').map(Number);
+    const endParts = endTime.split(':').map(Number);
+  
+    // Calculate the total seconds for start and end times
+    const startSeconds = startParts[0] * 3600 + startParts[1] * 60 + startParts[2];
+    const endSeconds = endParts[0] * 3600 + endParts[1] * 60 + endParts[2];
+  
+    // Calculate the duration in seconds
+    const durationSeconds = endSeconds - startSeconds;
+  
+    // Convert the duration back to hours, minutes, and seconds
+    const hours = Math.floor(durationSeconds / 3600);
+    const minutes = Math.floor((durationSeconds % 3600) / 60);
+    const seconds = durationSeconds % 60;
+  
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  
+
+
 //event handler for conversion 
 
 convertButton.addEventListener('click', async () => {
@@ -224,8 +249,16 @@ convertButton.addEventListener('click', async () => {
             outputFileType: '',
             outputFileName: '',
             outputFileName2: '',
-            start: '',
-            end : '',
+            start: {
+                hour: 0,
+                minute: 0,
+                second: 0
+            },
+            end : {
+                hour: 0,
+                minute: 0,
+                second: 0
+            },
             duration:'',
             size:'',
             dimension:'',
@@ -264,9 +297,15 @@ convertButton.addEventListener('click', async () => {
                     second: document.getElementById('end_second').value,
                 }
 
-                inputObject.start.time = `${inputObject.start.minute}:${inputObject.start.second}`;
-                inputObject.end.time = `${inputObject.end.minute}:${inputObject.end.second}`;
+                inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
+                inputObject.end.time = `${inputObject.start.hour}:${inputObject.end.minute}:${inputObject.end.second}`;
 
+                console.log(`Duration: ${inputObject.end.time}`)
+                console.log(`Duration: ${inputObject.start.time}`)
+
+                //store duration in end.time itself
+                inputObject.end.time = calculateDuration(inputObject.start.time, inputObject.end.time); 
+                console.log(`Duration: ${inputObject.end.time}`);
 
             break;
 
