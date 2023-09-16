@@ -3,6 +3,7 @@ import { FFmpeg } from "/assets/ffmpeg/index.js";
 import { fetchFile } from "/assets/utils/index.js";
 let ffmpeg = null;
 let previousProcessedVideoUrl;
+let previousProcessedVideoUrl2;
 
 // Get DOM elements
 const videoInput = document.getElementById('videoInput');
@@ -87,9 +88,11 @@ const getCommands = (inputObject, mode)=> {
 
     const editoptions={
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
-        trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
+        //trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
+        trim: `-i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -t ${inputObject.end.time} -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
-        split: ``
+        split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
+        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.dimension},setsar=1:1" ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
@@ -106,6 +109,8 @@ const processVideo = async (inputObject, mode ) => {
     switch (mode) {
         case 'conversion' :
         case 'trim':
+        case 'split':
+        case 'resize':
 
                 console.log(inputObject.inputFileName)
                 console.log(inputObject.videoFile.name)
@@ -129,7 +134,9 @@ const processVideo = async (inputObject, mode ) => {
                 console.log(inputPaths)
                 await ffmpeg.writeFile('concat_list.txt', inputPaths.join('\n'));
                     break;
-                default:
+        
+
+        default:
 
                 console.log("path not found")
             break;
@@ -171,7 +178,52 @@ const generateOutput = async (inputObject ) => {
     downloadLink.href = processedVideoUrl;
     downloadLink.download = inputObject.outputFileName;
     downloadLink.style.display = "block";
+
+
+    if(mode === 'split'){
+
+        console.log("i am inside split")
+
+        const data2 = await ffmpeg.readFile(inputObject.outputFileName2);
+        const processedVideoUrl2 = URL.createObjectURL(new Blob([data2.buffer], { type: mimeType }));
+
+        if (previousProcessedVideoUrl2) {
+            URL.revokeObjectURL(previousProcessedVideoUrl2);
+        }
+        previousProcessedVideoUrl2 = processedVideoUrl2; // Store the current URL for future revocation 
+
+        var downloadLink2 = document.getElementById('downloadLink2');
+
+        downloadLink2.href = processedVideoUrl2;
+        downloadLink2.download = inputObject.outputFileName2;
+        downloadLink2.style.display = "block";
+
+    }
 }
+
+
+
+//subtract start and end time to find duration
+
+function calculateDuration(startTime, endTime) {
+    const startParts = startTime.split(':').map(Number);
+    const endParts = endTime.split(':').map(Number);
+  
+    // Calculate the total seconds for start and end times
+    const startSeconds = startParts[0] * 3600 + startParts[1] * 60 + startParts[2];
+    const endSeconds = endParts[0] * 3600 + endParts[1] * 60 + endParts[2];
+  
+    // Calculate the duration in seconds
+    const durationSeconds = endSeconds - startSeconds;
+  
+    // Convert the duration back to hours, minutes, and seconds
+    const hours = Math.floor(durationSeconds / 3600);
+    const minutes = Math.floor((durationSeconds % 3600) / 60);
+    const seconds = durationSeconds % 60;
+  
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  
 
 
 //event handler for conversion 
@@ -198,14 +250,27 @@ convertButton.addEventListener('click', async () => {
             outputFileN: document.getElementById('outputName').value,
             outputFileType: '',
             outputFileName: '',
-            start: '',
-            end : '',
-            duration:''
+            outputFileName2: '',
+            start: {
+                hour: 0,
+                minute: 0,
+                second: 0
+            },
+            end : {
+                hour: 0,
+                minute: 0,
+                second: 0
+            },
+            duration:'',
+            size:'',
+            dimension:'',
+            audioinput:'',
+            text:''
     }
 
     
 
-    console.log("0")
+    
 
     switch(mode)
     {
@@ -234,9 +299,15 @@ convertButton.addEventListener('click', async () => {
                     second: document.getElementById('end_second').value,
                 }
 
-                inputObject.start.time = `${inputObject.start.minute}:${inputObject.start.second}`;
-                inputObject.end.time = `${inputObject.end.minute}:${inputObject.end.second}`;
+                inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
+                inputObject.end.time = `${inputObject.start.hour}:${inputObject.end.minute}:${inputObject.end.second}`;
 
+                console.log(`Duration: ${inputObject.end.time}`)
+                console.log(`Duration: ${inputObject.start.time}`)
+
+                //store duration in end.time itself
+                inputObject.end.time = calculateDuration(inputObject.start.time, inputObject.end.time); 
+                console.log(`Duration: ${inputObject.end.time}`);
 
             break;
 
@@ -261,6 +332,45 @@ convertButton.addEventListener('click', async () => {
                 }
 
             break;
+
+
+        case 'split':
+
+                // update the below code for the new dependencies:
+                // inputFileName, outputFileName, outputFileName2, duration
+                // also remove getting outputFileType from User , use  something similar to what we used in trim
+                
+                // add  2 output name fields, 2 download links in split .html
+
+                inputObject.inputFileName = inputObject.videoFile.name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                
+                inputObject.outputFileName = `${inputObject.outputFileN}p1.${inputObject.outputFileType}`;
+                inputObject.outputFileName2 = `${inputObject.outputFileN}p2.${inputObject.outputFileType}`;
+                //duration
+                inputObject.start = {
+                    hour: document.getElementById('start_hour').value,
+                    minute: document.getElementById('start_minute').value,
+                    second: document.getElementById('start_second').value,
+                } 
+
+                inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
+
+            break;
+
+        
+        case 'resize':
+
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+            
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+
+            inputObject.dimension = document.getElementById('dimension').value;
+
+            break;
+
+
 
         default:
 
