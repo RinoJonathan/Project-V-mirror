@@ -19,6 +19,11 @@ const mode = document.getElementById('mode').textContent ;
 
 
 //defining functions
+
+
+//ffmpeg initialization
+
+
 const initialize_Ffmpeg = async () => {
     if (ffmpeg === null) {
 
@@ -276,6 +281,9 @@ async function toggleMode() {
 }
 
 
+
+
+/***************************** Driver and main codes start from here ************************** */
 
 
 //loading ffmpeg first
