@@ -44,7 +44,7 @@ app.use((err, req, res, next) => {
     
     const { message= "something went wrong", status= 500, stack } = err
 
-    console.log(`${status}  ${message}`)
+    console.log(`Error: ${status}  ${message}`)
     res.status(status).render("error", { status, message, stack})
 })
 
