@@ -4,6 +4,7 @@ import { fetchFile } from "/assets/utils/index.js";
 let ffmpeg = null;
 let previousProcessedVideoUrl;
 let previousProcessedVideoUrl2;
+let isMultiThreaded = false;
 
 // Get DOM elements
 const videoInput = document.getElementById('videoInput');
@@ -18,6 +19,11 @@ const mode = document.getElementById('mode').textContent ;
 
 
 //defining functions
+
+
+//ffmpeg initialization
+
+
 const initialize_Ffmpeg = async () => {
     if (ffmpeg === null) {
 
@@ -39,17 +45,23 @@ const initialize_Ffmpeg = async () => {
         
         });
     }
-        await ffmpeg.load({
+        // await ffmpeg.load({
           
-            //single threading
-            coreURL: "/assets/core/ffmpeg-core.js",
+        //     //single threading
+        //     coreURL: "/assets/core/ffmpeg-core.js",
 
-            //multithreading - uncomment and run nodemon server
-            // coreURL: "/assets/multi-thread/ffmpeg-core.js",
-            // wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
-            // workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
+        //     //multithreading - uncomment and run nodemon server
+        //     // coreURL: "/assets/multi-thread/ffmpeg-core.js",
+        //     // wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
+        //     // workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
         
-        });
+        // });
+
+        if (isMultiThreaded) {
+            await loadMultiThreadFiles();
+        } else {
+            await loadSingleThreadFiles();
+        }
 
       }   
 
@@ -88,9 +100,11 @@ const getCommands = (inputObject, mode)=> {
 
     const editoptions={
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
-        trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
+        //trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
+        trim: `-ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -t ${inputObject.end.time} -map 0:v -map 1:a -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
-        split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`
+        split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
+        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.dimension},setsar=1:1" ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
@@ -108,6 +122,7 @@ const processVideo = async (inputObject, mode ) => {
         case 'conversion' :
         case 'trim':
         case 'split':
+        case 'resize':
 
                 console.log(inputObject.inputFileName)
                 console.log(inputObject.videoFile.name)
@@ -199,6 +214,85 @@ const generateOutput = async (inputObject ) => {
 }
 
 
+
+//subtract start and end time to find duration
+
+function calculateDuration(startTime, endTime) {
+    const startParts = startTime.split(':').map(Number);
+    const endParts = endTime.split(':').map(Number);
+  
+    // Calculate the total seconds for start and end times
+    const startSeconds = startParts[0] * 3600 + startParts[1] * 60 + startParts[2];
+    const endSeconds = endParts[0] * 3600 + endParts[1] * 60 + endParts[2];
+  
+    // Calculate the duration in seconds
+    const durationSeconds = endSeconds - startSeconds;
+  
+    // Convert the duration back to hours, minutes, and seconds
+    const hours = Math.floor(durationSeconds / 3600);
+    const minutes = Math.floor((durationSeconds % 3600) / 60);
+    const seconds = durationSeconds % 60;
+  
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  
+
+
+// Function to load multi-threading files
+async function loadMultiThreadFiles() {
+
+    console.log("multithreading engaged")
+
+
+    await ffmpeg.load({
+        coreURL: "/assets/multi-thread/ffmpeg-core.js",
+        wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
+        workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
+    });
+}
+
+// Function to load single-threading files
+async function loadSingleThreadFiles() {
+
+    console.log("singlethreading engaged")
+
+    await ffmpeg.load({
+        coreURL: "/assets/core/ffmpeg-core.js"
+    });
+}
+
+
+
+
+
+
+
+// Function to toggle between single-threaded and multi-threaded modes
+async function toggleMode() {
+    isMultiThreaded = !isMultiThreaded; // Toggle the mode
+    
+    if (isMultiThreaded) {
+        // Load multi-threading files
+        await loadMultiThreadFiles();
+    } else {
+        // Load single-threading files
+        await loadSingleThreadFiles();
+    }
+}
+
+
+
+
+/***************************** Driver and main codes start from here ************************** */
+
+
+//loading ffmpeg first
+
+console.log("loading ffmpeg")
+ 
+await initialize_Ffmpeg();
+
+
 //event handler for conversion 
 
 convertButton.addEventListener('click', async () => {
@@ -224,8 +318,16 @@ convertButton.addEventListener('click', async () => {
             outputFileType: '',
             outputFileName: '',
             outputFileName2: '',
-            start: '',
-            end : '',
+            start: {
+                hour: 0,
+                minute: 0,
+                second: 0
+            },
+            end : {
+                hour: 0,
+                minute: 0,
+                second: 0
+            },
             duration:'',
             size:'',
             dimension:'',
@@ -236,6 +338,7 @@ convertButton.addEventListener('click', async () => {
     
 
     
+    console.log("before switch for input mode")
 
     switch(mode)
     {
@@ -264,9 +367,15 @@ convertButton.addEventListener('click', async () => {
                     second: document.getElementById('end_second').value,
                 }
 
-                inputObject.start.time = `${inputObject.start.minute}:${inputObject.start.second}`;
-                inputObject.end.time = `${inputObject.end.minute}:${inputObject.end.second}`;
+                inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
+                inputObject.end.time = `${inputObject.start.hour}:${inputObject.end.minute}:${inputObject.end.second}`;
 
+                console.log(`Duration: ${inputObject.end.time}`)
+                console.log(`Duration: ${inputObject.start.time}`)
+
+                //store duration in end.time itself
+                inputObject.end.time = calculateDuration(inputObject.start.time, inputObject.end.time); 
+                console.log(`Duration: ${inputObject.end.time}`);
 
             break;
 
@@ -317,6 +426,18 @@ convertButton.addEventListener('click', async () => {
 
             break;
 
+        
+        case 'resize':
+
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+            
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+
+            inputObject.dimension = document.getElementById('dimension').value;
+
+            break;
+
 
 
         default:
@@ -328,9 +449,7 @@ convertButton.addEventListener('click', async () => {
     }
 
 
-    console.log("1")
- 
-    await initialize_Ffmpeg();
+
     console.log("2")
 
     await processVideo(inputObject, mode);
@@ -343,3 +462,7 @@ convertButton.addEventListener('click', async () => {
 
 
 });
+
+// Add an event listener to the toggle button
+const toggleModeButton = document.getElementById('toggleModeButton');
+toggleModeButton.addEventListener('click', toggleMode);
