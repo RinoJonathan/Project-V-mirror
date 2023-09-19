@@ -123,6 +123,7 @@ const processVideo = async (inputObject, mode ) => {
         case 'conversion' :
         case 'trim':
         case 'split':
+        case 'removeaudio':
         case 'resize':
 
                 console.log(inputObject.inputFileName)
@@ -133,7 +134,7 @@ const processVideo = async (inputObject, mode ) => {
 
             break;
     
-
+        
         case 'merge':
 
                 console.log("Start Concating");
@@ -148,7 +149,6 @@ const processVideo = async (inputObject, mode ) => {
                 await ffmpeg.writeFile('concat_list.txt', inputPaths.join('\n'));
                     break;
         
-
         default:
 
                 console.log("path not found")
@@ -441,8 +441,9 @@ convertButton.addEventListener('click', async () => {
 
         case 'removeaudio':
 
-            inputObject.outputFileType = document.getElementById('outputFormat').value;
             inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+        
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
 
