@@ -7,13 +7,13 @@ const router  = express.Router();
 router.get('/setCookie', (req, res) => {
 
     res.cookie('name', 'rino1')
-    res.send("got some cookie")
+    res.send("got some cookies")
 })
 
 router.get('/getCookie', (req, res) =>{
 
     console.log(req.cookies)
-    res.send("cookies:")
+    res.send(req.cookies)
 })
 
 router.get('/greet', (req, res) => {
