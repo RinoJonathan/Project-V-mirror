@@ -8,9 +8,14 @@ const methodOverride = require('method-override');
 const appError = require("./utilities/appError")
 const asyncWrapper = require("./utilities/asyncWrapper")
 
+const cookieParser = require('cookie-parser')
+
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+
+const secret = "projectV"  //must be placed in .env during production
+app.use(cookieParser(secret))
 
 
 app.engine('ejs', ejsMate);
@@ -18,7 +23,12 @@ app.set("view engine", 'ejs');
 app.set("views", path.join(__dirname, "views"));
 
 
+//routes
+const testRoutes = require('./routes/test')
+const cookieRoute = require('./routes/cookie-test')
 
+app.use('/test', testRoutes)
+app.use('/cookie', cookieRoute)
 
 const port =  3000;
 
@@ -26,6 +36,7 @@ app.get("/", (req, res) => {
     
     res.render("pages/homepage");
 })
+
 
 
 
