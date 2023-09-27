@@ -106,7 +106,7 @@ const getCommands = (inputObject, mode)=> {
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
         resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.dimension},setsar=1:1" ${inputObject.outputFileName}`,
         removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
-        crop:`-i ${inputObject.inputFileName} -vf ${dimention} ${inputObject.outputFileName}`
+        crop:`-i ${inputObject.inputFileName} -vf crop=${dimention} ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
