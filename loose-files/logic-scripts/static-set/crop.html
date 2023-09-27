@@ -22,22 +22,46 @@
 
     <input type="file" id="videoInput" accept="video/*">
     <input type="text" id="outputName" placeholder="Output filename">
-    
-    <select id="Dimention">
-        
-            <label for="width">Width:</label>
-            <input type="number" id="width" placeholder="Enter width">
-        
-            <label for="height">Height:</label>
+    <fieldset>
+        <legend>Height</legend>
+        <div>
+            
             <input type="number" id="height" placeholder="Enter height">
+           
+          
+        </div>         
+     </fieldset>    
 
-            <label for="x">X axis:</label>
+     <fieldset>
+        <legend>width</legend>
+        <div>
+            <input type="number" id="width" placeholder="Enter width">
+          
+           
+        </div>         
+     </fieldset>    
+     <fieldset>
+        <legend>X axis</legend>
+        <div>
+           
             <input type="number" id="x" placeholder="Enter x axis">
-
-            <label for="y">Y axis:</label>
+           
+        </div>         
+     </fieldset>    
+     <fieldset>
+        <legend>Y axis</legend>
+        <div>
             <input type="number" id="y" placeholder="Enter y axis">
+          
+           
+        </div>         
+     </fieldset>    
+   
+           
+
+           
+            >
         
-    </select>
     <video id="output-video" controls></video><br/>
     <button id="convertButton">Convert</button>
 
