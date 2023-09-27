@@ -460,8 +460,6 @@ convertButton.addEventListener('click', async () => {
             break;
     }
 
-
-
     console.log("2")
 
     await processVideo(inputObject, mode);
@@ -469,9 +467,6 @@ convertButton.addEventListener('click', async () => {
 
      generateOutput( inputObject );
      console.log("4")
-
-
-
 
 });
 
