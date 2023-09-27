@@ -333,7 +333,7 @@ convertButton.addEventListener('click', async () => {
             },
             duration:'',
             size:'',
-            dimension:'',
+            dimension:'height:width:x:y',
             audioinput:'',
             text:''
     }
