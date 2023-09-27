@@ -106,7 +106,7 @@ const getCommands = (inputObject, mode)=> {
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
         resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
         removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
-        crop:`-i ${inputObject.inputFileName} -vf crop=${dimension} ${inputObject.outputFileName}`
+        crop:`-i ${inputObject.inputFileName} -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
@@ -453,11 +453,14 @@ convertButton.addEventListener('click', async () => {
 
 
         case 'crop':
-            inputObject.outputFileType = document.getElementById('outputFormat').value;
+            
             inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
             
-            inputObject.dimension=`${document.getElementById(height).value;}:${document.getElementById(width).value;}:${document.getElementById(x).value;}:${document.getElementById(y).value;}`;
+            inputObject.dimension=`${document.getElementById('width').value}:${document.getElementById('height').value}:${document.getElementById('x').value}:${document.getElementById('y').value}`;
+            console.log(inputObject.dimension)
+            
             break;
 
 

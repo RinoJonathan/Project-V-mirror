@@ -8,6 +8,9 @@
 </head>
 <body>
 
+    <!-- NOTE: we get 4 values for dimensions: width, height, x axis , y axis offset in order of 
+        ffmpeg's input sequence. The 0,0 coordinate starts from top leftmost point of our video -->
+
     <span id="mode">crop</span>
 
     <!--  switch between single and multithreading -->
@@ -27,40 +30,18 @@
         <div>
             
             <input type="number" id="height" placeholder="Enter height">
-           
-          
-        </div>         
-     </fieldset>    
-
-     <fieldset>
-        <legend>width</legend>
-        <div>
             <input type="number" id="width" placeholder="Enter width">
-          
-           
-        </div>         
-     </fieldset>    
-     <fieldset>
-        <legend>X axis</legend>
-        <div>
-           
             <input type="number" id="x" placeholder="Enter x axis">
-           
-        </div>         
-     </fieldset>    
-     <fieldset>
-        <legend>Y axis</legend>
-        <div>
             <input type="number" id="y" placeholder="Enter y axis">
           
-           
         </div>         
      </fieldset>    
-   
+
+
            
 
            
-            >
+            
         
     <video id="output-video" controls></video><br/>
     <button id="convertButton">Convert</button>
