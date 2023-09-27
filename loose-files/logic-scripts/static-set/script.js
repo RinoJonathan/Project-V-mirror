@@ -104,9 +104,9 @@ const getCommands = (inputObject, mode)=> {
         trim: `-ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -t ${inputObject.end.time} -map 0:v -map 1:a -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
-        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.dimension},setsar=1:1" ${inputObject.outputFileName}`,
+        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
         removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
-        crop:`-i ${inputObject.inputFileName} -vf crop=${dimention} ${inputObject.outputFileName}`
+        crop:`-i ${inputObject.inputFileName} -vf crop=${dimension} ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
@@ -333,7 +333,7 @@ convertButton.addEventListener('click', async () => {
             },
             duration:'',
             size:'',
-            dimension:'height:width:x:y',
+            dimension:'',
             audioinput:'',
             text:''
     }
@@ -437,7 +437,7 @@ convertButton.addEventListener('click', async () => {
             
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
-            inputObject.dimension = document.getElementById('dimension').value;
+            inputObject.size = document.getElementById('dimension').value;
 
             break;
 
@@ -456,7 +456,8 @@ convertButton.addEventListener('click', async () => {
             inputObject.outputFileType = document.getElementById('outputFormat').value;
             inputObject.inputFileName = inputObject.videoFile.name;
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-            inputObject.dimension=document.getElementById('Dimention').value;
+            
+            inputObject.dimension=`${document.getElementById(height).value;}:${document.getElementById(width).value;}:${document.getElementById(x).value;}:${document.getElementById(y).value;}`;
             break;
 
 
