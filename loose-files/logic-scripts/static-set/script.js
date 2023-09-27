@@ -105,7 +105,8 @@ const getCommands = (inputObject, mode)=> {
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
         resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.dimension},setsar=1:1" ${inputObject.outputFileName}`,
-        removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`
+        removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
+        crop:`-i ${inputObject.inputFileName} -vf ${dimention} ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
@@ -125,6 +126,7 @@ const processVideo = async (inputObject, mode ) => {
         case 'split':
         case 'removeaudio':
         case 'resize':
+        case 'crop':
 
                 console.log(inputObject.inputFileName)
                 console.log(inputObject.videoFile.name)
@@ -448,7 +450,14 @@ convertButton.addEventListener('click', async () => {
 
 
         break;
-    
+
+
+        case 'crop':
+            inputObject.outputFileType = document.getElementById('outputFormat').value;
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+            inputObject.dimension=document.getElementById('Dimention').value;
+            break;
 
 
 
