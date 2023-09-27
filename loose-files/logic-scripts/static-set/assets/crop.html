@@ -22,8 +22,17 @@
 
     <input type="file" id="videoInput" accept="video/*">
     <input type="text" id="outputName" placeholder="Output filename">
-    <select id="outputFormat">
+    
+    <select id="Dimention">
+        <div>
+            <label for="width">Width:</label>
+            <input type="number" id="width" placeholder="Enter width">
+        </div>
         
+        <div>
+            <label for="height">Height:</label>
+            <input type="number" id="height" placeholder="Enter height">
+        </div>
     </select>
     <video id="output-video" controls></video><br/>
     <button id="convertButton">Convert</button>
