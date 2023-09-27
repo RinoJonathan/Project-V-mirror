@@ -9,6 +9,7 @@ const appError = require("./utilities/appError")
 const asyncWrapper = require("./utilities/asyncWrapper")
 
 const cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
@@ -16,6 +17,20 @@ app.use(methodOverride('_method'));
 
 const secret = "projectV"  //must be placed in .env during production
 app.use(cookieParser(secret))
+
+const sessionConfig ={
+    secret: secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+
+        httpOnly: true,
+        expires: Date.now() + 1000*60*60*24*7,
+        maxAge: 1000*60*60*24*7
+    }
+}
+
+app.use(session(sessionConfig))
 
 
 app.engine('ejs', ejsMate);
@@ -26,9 +41,11 @@ app.set("views", path.join(__dirname, "views"));
 //routes
 const testRoutes = require('./routes/test')
 const cookieRoute = require('./routes/cookie-test')
+const sessionRoute = require('./routes/session')
 
 app.use('/test', testRoutes)
 app.use('/cookie', cookieRoute)
+app.use('/session', sessionRoute)
 
 const port =  3000;
 
