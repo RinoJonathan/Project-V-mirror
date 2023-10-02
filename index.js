@@ -10,6 +10,18 @@ const asyncWrapper = require("./utilities/asyncWrapper")
 
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+const flash = require('connect-flash')
+
+
+mongoose.connect("mongodb://localhost:27017/projectV")
+    .then(() => {
+        console.log("Mongoose Connected successfully")
+    })
+    .catch( (e)=> {
+        console.log(e)
+    })
+
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
@@ -38,7 +50,20 @@ app.set("view engine", 'ejs');
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")))
+app.use(flash())
 
+
+
+//middlewares
+
+const flashMiddleware = (req, res, next) => {
+    res.locals.success = req.flash('success')
+    res.locals.failure = req.flash('failure')
+    
+    next()
+}
+
+app.use(flashMiddleware)
 
 //routes
 const testRoutes = require('./routes/test')
