@@ -11,6 +11,8 @@ const asyncWrapper = require("./utilities/asyncWrapper")
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const flash = require('connect-flash')
+const passport = require('passport')
+const passportLocal = require('passport-local')
 
 
 mongoose.connect("mongodb://localhost:27017/projectV")
@@ -21,6 +23,7 @@ mongoose.connect("mongodb://localhost:27017/projectV")
         console.log(e)
     })
 
+const User = require('./models/user')
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -53,12 +56,23 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(flash())
 
 
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new passportLocal(User.authenticate()))
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
+
 
 //middlewares
 
 const flashMiddleware = (req, res, next) => {
+    res.locals.currentUser = req.user
     res.locals.success = req.flash('success')
     res.locals.failure = req.flash('failure')
+    res.locals.error = req.flash('error')
+    
     
     next()
 }
@@ -70,20 +84,32 @@ const testRoutes = require('./routes/test')
 const cookieRoute = require('./routes/cookie-test')
 const sessionRoute = require('./routes/session')
 
+const userRoute = require('./routes/user')
+
 app.use('/test', testRoutes)
 app.use('/cookie', cookieRoute)
 app.use('/session', sessionRoute)
 
+app.use('/user', userRoute)
+
 const port =  3000;
 
 app.get("/", (req, res) => {
+
+    console.log(req.user)
     
     res.render("pages/homepage");
 })
 
 
 
+app.get('/fakeUser', (req, res) => {
 
+    const fakeUser = new User({email:"sandy@gmail.com", username: "sandy"})
+    const rUser = User.register(fakeUser, "randompass")
+    res.send(rUser)
+    
+})
 
 
 

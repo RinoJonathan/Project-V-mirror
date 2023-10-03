@@ -1,0 +1,24 @@
+<% layout("./layouts/boilerplate.ejs") %> 
+
+<h1>Register User</h1>
+    <form action="/user/register" method="post">
+
+        <div>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email">
+        </div>
+        <div>
+            <label for="username">User Name</label>
+            <input type="text" name="username" id="username" placeholder="username">
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password">
+        </div>
+        
+        <div><button>Register</button>
+        </div>
+    </form>
+    
+    <a href="/user/login">Login</a>
+    <a href="/user/logout">Logout</a>
