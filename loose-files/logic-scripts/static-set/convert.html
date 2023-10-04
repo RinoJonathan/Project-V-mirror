@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Video Editor</title>
+    <title>Conversion</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <span id="mode">conversion</span>
+
+    <!--  switch between single and multithreading -->
+     <p>toggle multithreading</p>
+     
+     <label class="switch">
+        
+        <input type="checkbox" id="toggleModeButton">
+        <span class="slider round"></span>
+        
+    </label>
 
     <input type="file" id="videoInput" accept="video/*">
     <input type="text" id="outputName" placeholder="Output filename">

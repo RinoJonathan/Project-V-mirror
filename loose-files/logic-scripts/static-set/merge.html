@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Video Editor</title>
+    <title>Merge Videos</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,6 +12,16 @@
     <p>merge videos of  similair filetypes</p>
 
     <span id="mode">merge</span>
+
+    <!--  switch between single and multithreading -->
+     <p>toggle multithreading</p>
+     
+     <label class="switch">
+        
+        <input type="checkbox" id="toggleModeButton">
+        <span class="slider round"></span>
+        
+    </label>
 
     <input type="file" id="videoInput" accept="video/*" multiple>
     <input type="text" id="outputName" placeholder="Output filename">

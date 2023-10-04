@@ -4,6 +4,7 @@ import { fetchFile } from "/assets/utils/index.js";
 let ffmpeg = null;
 let previousProcessedVideoUrl;
 let previousProcessedVideoUrl2;
+let isMultiThreaded = false;
 
 // Get DOM elements
 const videoInput = document.getElementById('videoInput');
@@ -18,6 +19,11 @@ const mode = document.getElementById('mode').textContent ;
 
 
 //defining functions
+
+
+//ffmpeg initialization
+
+
 const initialize_Ffmpeg = async () => {
     if (ffmpeg === null) {
 
@@ -39,17 +45,23 @@ const initialize_Ffmpeg = async () => {
         
         });
     }
-        await ffmpeg.load({
+        // await ffmpeg.load({
           
-            //single threading
-            coreURL: "/assets/core/ffmpeg-core.js",
+        //     //single threading
+        //     coreURL: "/assets/core/ffmpeg-core.js",
 
-            //multithreading - uncomment and run nodemon server
-            // coreURL: "/assets/multi-thread/ffmpeg-core.js",
-            // wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
-            // workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
+        //     //multithreading - uncomment and run nodemon server
+        //     // coreURL: "/assets/multi-thread/ffmpeg-core.js",
+        //     // wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
+        //     // workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
         
-        });
+        // });
+
+        if (isMultiThreaded) {
+            await loadMultiThreadFiles();
+        } else {
+            await loadSingleThreadFiles();
+        }
 
       }   
 
@@ -89,10 +101,13 @@ const getCommands = (inputObject, mode)=> {
     const editoptions={
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
         //trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
-        trim: `-i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -t ${inputObject.end.time} -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
+        trim: `-ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -t ${inputObject.end.time} -map 0:v -map 1:a -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
-        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.dimension},setsar=1:1" ${inputObject.outputFileName}`
+        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
+        removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
+        crop:`-i ${inputObject.inputFileName} -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`,
+        getaudio: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`
     }
 
     return editoptions[mode]
@@ -110,7 +125,10 @@ const processVideo = async (inputObject, mode ) => {
         case 'conversion' :
         case 'trim':
         case 'split':
+        case 'removeaudio':
         case 'resize':
+        case 'crop':
+        case 'getaudio':
 
                 console.log(inputObject.inputFileName)
                 console.log(inputObject.videoFile.name)
@@ -120,7 +138,7 @@ const processVideo = async (inputObject, mode ) => {
 
             break;
     
-
+        
         case 'merge':
 
                 console.log("Start Concating");
@@ -135,7 +153,6 @@ const processVideo = async (inputObject, mode ) => {
                 await ffmpeg.writeFile('concat_list.txt', inputPaths.join('\n'));
                     break;
         
-
         default:
 
                 console.log("path not found")
@@ -226,6 +243,61 @@ function calculateDuration(startTime, endTime) {
   
 
 
+// Function to load multi-threading files
+async function loadMultiThreadFiles() {
+
+    console.log("multithreading engaged")
+
+
+    await ffmpeg.load({
+        coreURL: "/assets/multi-thread/ffmpeg-core.js",
+        wasmURL: '/assets/multi-thread/ffmpeg-core.wasm',
+        workerURL: '/assets/multi-thread/ffmpeg-core.worker.js'
+    });
+}
+
+// Function to load single-threading files
+async function loadSingleThreadFiles() {
+
+    console.log("singlethreading engaged")
+
+    await ffmpeg.load({
+        coreURL: "/assets/core/ffmpeg-core.js"
+    });
+}
+
+
+
+
+
+
+
+// Function to toggle between single-threaded and multi-threaded modes
+async function toggleMode() {
+    isMultiThreaded = !isMultiThreaded; // Toggle the mode
+    
+    if (isMultiThreaded) {
+        // Load multi-threading files
+        await loadMultiThreadFiles();
+    } else {
+        // Load single-threading files
+        await loadSingleThreadFiles();
+    }
+}
+
+
+
+
+/***************************** Driver and main codes start from here ************************** */
+
+
+//loading ffmpeg first
+
+console.log("loading ffmpeg")
+ 
+await initialize_Ffmpeg();
+
+
 //event handler for conversion 
 
 convertButton.addEventListener('click', async () => {
@@ -271,6 +343,7 @@ convertButton.addEventListener('click', async () => {
     
 
     
+    console.log("before switch for input mode")
 
     switch(mode)
     {
@@ -366,10 +439,41 @@ convertButton.addEventListener('click', async () => {
             
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
-            inputObject.dimension = document.getElementById('dimension').value;
+            inputObject.size = document.getElementById('dimension').value;
 
             break;
 
+        case 'removeaudio':
+
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+        
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+
+
+        break;
+
+
+        case 'crop':
+            
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+            
+            inputObject.dimension=`${document.getElementById('width').value}:${document.getElementById('height').value}:${document.getElementById('x').value}:${document.getElementById('y').value}`;
+            console.log(inputObject.dimension)
+            
+            break;
+
+        case 'getaudio':
+
+            inputObject.outputFileType = document.getElementById('outputFormat').value;
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+
+
+            break;
+        
 
 
         default:
@@ -380,10 +484,6 @@ convertButton.addEventListener('click', async () => {
             break;
     }
 
-
-    console.log("1")
- 
-    await initialize_Ffmpeg();
     console.log("2")
 
     await processVideo(inputObject, mode);
@@ -392,7 +492,8 @@ convertButton.addEventListener('click', async () => {
      generateOutput( inputObject );
      console.log("4")
 
-
-
-
 });
+
+// Add an event listener to the toggle button
+const toggleModeButton = document.getElementById('toggleModeButton');
+toggleModeButton.addEventListener('click', toggleMode);
