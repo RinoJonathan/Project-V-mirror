@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+require('dotenv').config();
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const mongoose = require('mongoose');
@@ -13,6 +14,7 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const passport = require('passport')
 const passportLocal = require('passport-local')
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 
 mongoose.connect("mongodb://localhost:27017/projectV")
@@ -56,9 +58,34 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(flash())
 
 
+
+
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new passportLocal(User.authenticate()))
+
+passport.use(new GoogleStrategy({
+    clientID: process.env['GOOGLE_CLIENT_ID'],
+    clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
+    callbackURL: "http://localhost:3000/user/google/callback"
+    // scope: ['profile', 'email']
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log(profile)
+    User.findOrCreate({ googleId: profile.id },
+        {
+        email: profile.emails[0].value,
+        username: profile.displayName // Get the first email from the profile
+        // Other fields you want to store
+    }, 
+    function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
+
+
 
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())

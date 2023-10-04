@@ -15,7 +15,15 @@ router.get('/register', (req, res) => {
 router.post('/register', catchAsync(async (req, res) => {
 
     try{
-        const {email, username, password} = req.body
+
+        // Check if the user is already authenticated with Google
+    if (req.isAuthenticated() && req.user.googleId) {
+        // Handle the case where the user is already authenticated with Google
+        req.flash('error', 'You are already registered with Google.');
+        return res.redirect('/');
+    }
+
+    const {email, username, password} = req.body
     const newUser = new User({email, username})
     const registeredUser = await User.register(newUser, password)
     console.log("registered user: " + registeredUser)
@@ -41,6 +49,7 @@ router.post('/login', passport.authenticate('local', {failureFlash: true, failur
 
     req.flash("success", `Logged in successfully as ${req.user.username} `)
 
+    // console.log(req.user)
     if(req.session.returnTo){
     const redirectUrl = req.session.returnTo ;
     delete req.session.returnTo;
@@ -51,6 +60,18 @@ router.post('/login', passport.authenticate('local', {failureFlash: true, failur
     }
 
 })
+
+
+router.get('/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    req.flash('success', 'Logged in with Google successfully');
+    res.redirect('/');
+  });
 
 
 router.get('/logout', (req, res) => {
@@ -69,5 +90,8 @@ router.get('/', isLoggedIn, (req, res) => {
 
     res.send('user')
 })
+
+
+
 
 module.exports = router
