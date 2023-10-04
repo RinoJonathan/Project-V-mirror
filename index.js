@@ -33,7 +33,7 @@ app.use(methodOverride('_method'));
 
 
 
-app.use(cookieParser(secret))
+app.use(cookieParser(process.env['COOKIE_PARSER_SECRET']))
 
 const sessionConfig ={
     secret: process.env['SESSION_SECRET'],
