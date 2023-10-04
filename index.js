@@ -32,11 +32,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 
-const secret = "projectV"  //must be placed in .env during production
+
 app.use(cookieParser(secret))
 
 const sessionConfig ={
-    secret: secret,
+    secret: process.env['SESSION_SECRET'],
     resave: false,
     saveUninitialized: false,
     cookie: {
