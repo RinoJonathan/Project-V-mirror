@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    line-height: normal;
+  }
+  
+  :root {
+    /* fonts */
+    --font-keania-one: "Keania One";
+  
+    /* font sizes */
+    --font-size-109xl: 128px;
+    --font-size-29xl: 48px;
+    --font-size-131xl: 150px;
+    --font-size-13xl: 32px;
+  
+    /* Colors */
+    --color-white: #fff;
+    --color-red: #ff0000;
+    --color-blue: #2400ff;
+    --color-black: #000;
+  
+    /* border radiuses */
+    --br-xl: 20px;
+  }
+  
