@@ -107,7 +107,8 @@ const getCommands = (inputObject, mode)=> {
         resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
         removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
         crop:`-i ${inputObject.inputFileName} -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`,
-        getaudio: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`
+        getaudio: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
+        textoverlay:`-i ${inputObject.inputFileName} -vf drawtext=${drawtext} ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
@@ -129,6 +130,7 @@ const processVideo = async (inputObject, mode ) => {
         case 'resize':
         case 'crop':
         case 'getaudio':
+        case 'textoverlay':
 
                 console.log(inputObject.inputFileName)
                 console.log(inputObject.videoFile.name)
@@ -337,7 +339,7 @@ convertButton.addEventListener('click', async () => {
             size:'',
             dimension:'',
             audioinput:'',
-            text:''
+            drawtext:''
     }
 
     
@@ -472,6 +474,16 @@ convertButton.addEventListener('click', async () => {
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
 
+            break;
+
+        case 'textoverlay':
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+        
+            inputObject.drawtext=`${document.getElementById('text').value}:${document.getElementById('x').value}:${document.getElementById('y').value}:${document.getElementById('fontsize').value}`;
+            console.log(inputObject.drawtext)
+            
             break;
         
 
