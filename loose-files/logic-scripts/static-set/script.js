@@ -91,7 +91,7 @@ function parseCommandString(commandString) {
 
     if (currentArg) {
         args.push(currentArg);
-    }
+    } 
 
     return args;
 }
