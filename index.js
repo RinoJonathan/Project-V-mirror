@@ -112,12 +112,14 @@ const cookieRoute = require('./routes/cookie-test')
 const sessionRoute = require('./routes/session')
 
 const userRoute = require('./routes/user')
+const featureRoute = require('./routes/features')
 
 app.use('/test', testRoutes)
 app.use('/cookie', cookieRoute)
 app.use('/session', sessionRoute)
 
 app.use('/user', userRoute)
+app.use('/feature', featureRoute)
 
 const port =  3000;
 
