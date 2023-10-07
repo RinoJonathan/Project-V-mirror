@@ -16,34 +16,51 @@ const downloadLink = document.getElementById('downloadLink');
 
 const mode = document.getElementById('mode').textContent ;
 
-import jwtDecode from "/javascript/jwt/jwt-decode.js"
-// import jwtDecode from 'https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/+esm'
 
-// Check if the JWT token cookie is present
-const jwtToken = document.cookie.split('; ').find((cookie) => cookie.startsWith('jwt='));
-
-if (jwtToken) {
-  // Extract the token value from the cookie
-  const tokenValue = jwtToken.split('=')[1];
-
-  // Try to decode the token (you need to have a JWT library for this)
-  try {
-    const decodedToken = jwtDecode(tokenValue); // Assuming you have a library like jwt_decode
-    const { username } = decodedToken; // Replace with the actual field in your token
-
-    // Display a welcome message with the username
-    console.log(`Welcome, ${username}`);
-  } catch (error) {
-    // Token decoding failed (possibly expired or invalid)
-    console.error('Token decoding failed:', error);
-    console.log('Please log in using the internet.');
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js') // Replace with the path to your service worker file
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+    });
   }
-} else {
-  // Token cookie is not present
-  console.log('Please log in using the internet.');
+
+
+
+import jwtDecode from "/javascript/jwt/jwt-decode.js"
+const jwsDemo = () => {
+    
+    // import jwtDecode from 'https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/+esm'
+    
+    // Check if the JWT token cookie is present
+    const jwtToken = document.cookie.split('; ').find((cookie) => cookie.startsWith('jwt='));
+    
+    if (jwtToken) {
+      // Extract the token value from the cookie
+      const tokenValue = jwtToken.split('=')[1];
+    
+      // Try to decode the token (you need to have a JWT library for this)
+      try {
+        const decodedToken = jwtDecode(tokenValue); // Assuming you have a library like jwt_decode
+        const { username } = decodedToken; // Replace with the actual field in your token
+    
+        // Display a welcome message with the username
+        console.log(`Welcome, ${username}`);
+      } catch (error) {
+        // Token decoding failed (possibly expired or invalid)
+        console.error('Token decoding failed:', error);
+        console.log('Please log in using the internet.');
+      }
+    } else {
+      // Token cookie is not present
+      console.log('Please log in using the internet.');
+    }
 }
-
-
 
 
 //defining functions
