@@ -40,7 +40,7 @@ const FEATURE_RESOURCES = [
 ]
 
 //function to check if user had logged in online
-//This is no longer required - can acess if logged in atleast once
+//This is no longer required - can acess if logged in atleast once - vestigial feature
 const checkAuth = () => {
   // const jwtToken = document.cookie.split('; ').find((cookie) => cookie.startsWith('jwt='));
   // const jwtToken = true

@@ -7,7 +7,7 @@ require('dotenv').config();
 const catchAsync= require('../utilities/asyncWrapper')
 const {isLoggedIn} = require('../utilities/middlewares')
 
-//JWT settings
+//JWT settings - vestigial feature
 // JWT is rudimentarily used in our app, /feature  caching strategy made this happen
 const jwt = require('jsonwebtoken');
 const tokenExpirationDays = 21; 
