@@ -1,5 +1,5 @@
 // Define a version for your cache (update this when you make changes).
-const CACHE_VERSION = 'vt0.009';
+const CACHE_VERSION = 'vt0.014';
 
 // Define a cache name based on the version.
 const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
@@ -18,6 +18,19 @@ const APP_STATIC_RESOURCES = [
 
 const FEATURE_RESOURCES = [
   '/temp.js',
+  "/javascript/ffmpeg/core/ffmpeg-core.js",
+  "/javascript/ffmpeg/core/ffmpeg-core.wasm",
+  "/javascript/ffmpeg/ffmpeg/index.js",
+  "/javascript/ffmpeg/utils/index.js",
+  "/javascript/ffmpeg/ffmpeg/classes.js",
+  "/javascript/ffmpeg/utils/errors.js",
+  "/javascript/ffmpeg/utils/const.js",
+  "/javascript/ffmpeg/ffmpeg/const.js",
+  "/javascript/ffmpeg/ffmpeg/utils.js",
+  "/javascript/ffmpeg/ffmpeg/errors.js",
+  "/javascript/ffmpeg/ffmpeg/worker.js",
+
+
 ]
 
 //function to check if user had logged in online
@@ -41,22 +54,22 @@ const checkAuth = () => {
 }
 
 // Function to clean up old caches when activating a new service worker.
-const cleanUpCaches= () => {
-  return caches.keys().then((cacheNames) => {
-    console.log(cacheNames)
-    return Promise.all(
+// const cleanUpCaches= () => {
+//   return caches.keys().then((cacheNames) => {
+//     console.log(cacheNames)
+//     return Promise.all(
       
-      cacheNames.map((cache) => {
-        console.log("iteration1")
-        if (cache !== CACHE_NAME)
-         {
-          console.log(`${cache} deleted`)
-          return caches.delete(cache);
-        }
-      })
-    );
-  });
-}
+//       cacheNames.map((cache) => {
+//         console.log("iteration1")
+//         if (cache !== CACHE_NAME)
+//          {
+//           console.log(`${cache} deleted`)
+//           return caches.delete(cache);
+//         }
+//       })
+//     );
+//   });
+// }
 
 // On install, cache the static resources
 self.addEventListener("install", (event) => {
@@ -66,10 +79,10 @@ self.addEventListener("install", (event) => {
         cache.addAll(APP_STATIC_RESOURCES);
         console.log("base caches cached")
 
-        if(checkAuth()){
+        // if(checkAuth()){}
           cache.addAll(FEATURE_RESOURCES);
           console.log("feature caches cached")
-        }
+        
       })()
     );
   });

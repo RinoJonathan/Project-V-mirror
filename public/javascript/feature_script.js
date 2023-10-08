@@ -311,6 +311,7 @@ async function loadSingleThreadFiles() {
 // Function to toggle between single-threaded and multi-threaded modes
 async function toggleMode() {
     isMultiThreaded = !isMultiThreaded; // Toggle the mode
+    console.log(`is multithreaded = ${isMultiThreaded}`)
     
     if (isMultiThreaded) {
         // Load multi-threading files
