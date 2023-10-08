@@ -23,7 +23,7 @@ alert("it worked")
 
 // -----------------------"
 // multithreading engaged
-// sw.js:116 /javascript/ffmpeg/multi-thread/ffmpeg-core.js
-// sw.js:116 /javascript/ffmpeg/multi-thread/ffmpeg-core.wasm
-// 32sw.js:116 /javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js
-// 32sw.js:116 /javascript/ffmpeg/multi-thread/ffmpeg-core.js
+// sw.js:116 
+// sw.js:116 
+// 32sw.js:116 
+// 32sw.js:116 

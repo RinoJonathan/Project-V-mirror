@@ -30,6 +30,12 @@ const FEATURE_RESOURCES = [
   "/javascript/ffmpeg/ffmpeg/errors.js",
   "/javascript/ffmpeg/ffmpeg/worker.js",
 
+  //multithreading
+  // "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
+  // "/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm",
+  // "/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js",
+  // "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
+
 
 ]
 
