@@ -8,8 +8,25 @@ const catchAsync= require('../utilities/asyncWrapper')
 const {isLoggedIn} = require('../utilities/middlewares')
 
 //JWT settings
+// JWT is rudimentarily used in our app, /feature  caching strategy made this happen
 const jwt = require('jsonwebtoken');
 const tokenExpirationDays = 21; 
+
+const setJwtCookies = (expiryDays, req, res) => {
+
+  const tokenExpiration = tokenExpirationDays * 24 * 60 * 60 ;
+  const maxAgeMilliseconds = tokenExpirationDays * 24 * 60 * 60 * 1000;
+  const userData = { userId: req.user._id, username: req.user.username, email: req.user.email }
+  const token = jwt.sign(userData, process.env['JWT_SECRET'], { expiresIn: tokenExpiration });
+       
+  if (!token) {
+    req.flash("error", "Failed to generate JWT token.");
+    return res.redirect('/');
+  }
+
+  res.cookie('jwt', token, { httpOnly: true, maxAge: maxAgeMilliseconds }); // Store the token in a cookie (secure and HTTP-only for securi
+
+}
 
 
 
@@ -38,18 +55,17 @@ router.post('/register', catchAsync(async (req, res) => {
         
 
         try{
-        const tokenExpiration = tokenExpirationDays * 24 * 60 * 60 ;
-        const maxAgeMilliseconds = tokenExpirationDays * 24 * 60 * 60 * 1000;
-        const userData = { userId: req.user._id, username: req.user.username, email: req.user.email }
-      const token = jwt.sign(userData, process.env['JWT_SECRET'], { expiresIn: tokenExpiration });
         
-        res.cookie('jwt', token, { httpOnly: false, maxAge: maxAgeMilliseconds }); // Store the token in a cookie (secure and HTTP-only for security)
+        setJwtCookies(tokenExpirationDays, req, res)
+        
         req.flash("success", "Account Successfully Created")
         res.redirect('/')
         }
         catch(e) {
+            
             req.flash("error", "Account cant stay logged in offline")
             console.log("error during jwt tokenization")
+            
         }
     })  
     }
@@ -73,17 +89,9 @@ router.post('/login', passport.authenticate('local', { failureFlash: true, failu
         return res.redirect('/');
       }
   
-      const tokenExpiration = tokenExpirationDays * 24 * 60 * 60;
-      const maxAgeMilliseconds = tokenExpirationDays * 24 * 60 * 60 * 1000;
-      const userData = { userId: req.user._id, username: req.user.username, email: req.user.email }
-      const token = jwt.sign(userData, process.env['JWT_SECRET'], { expiresIn: tokenExpiration });
-  
-      if (!token) {
-        req.flash("error", "Failed to generate JWT token.");
-        return res.redirect('/');
-      }
-  
-      res.cookie('jwt', token, { httpOnly: false, maxAge: maxAgeMilliseconds });
+
+      setJwtCookies(tokenExpirationDays, req, res)
+
       req.flash("success", `Logged in successfully as ${req.user.username}`);
       
       if (req.session.returnTo) {
@@ -96,6 +104,7 @@ router.post('/login', passport.authenticate('local', { failureFlash: true, failu
     } catch (e) {
       req.flash("error", "Account can't stay logged in offline");
       console.error("Error during JWT tokenization:", e);
+      console.log(e.message)
       res.redirect('/');
     }
   });
@@ -113,17 +122,8 @@ router.get('/google',
         return res.redirect('/');
       }
   
-      const tokenExpiration = tokenExpirationDays * 24 * 60 * 60;
-      const maxAgeMilliseconds = tokenExpirationDays * 24 * 60 * 60 * 1000;
-      const userData = { userId: req.user._id, username: req.user.username, email: req.user.email }
-      const token = jwt.sign(userData, process.env['JWT_SECRET'], { expiresIn: tokenExpiration });
+      setJwtCookies(tokenExpirationDays, req, res)
   
-      if (!token) {
-        req.flash("error", "Failed to generate JWT token.");
-        return res.redirect('/');
-      }
-  
-      res.cookie('jwt', token, { httpOnly: false, maxAge: maxAgeMilliseconds });
       req.flash("success", `Logged in successfully as ${req.user.username}`);
       res.redirect('/');
     } catch (e) {

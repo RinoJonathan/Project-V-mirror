@@ -1,5 +1,5 @@
 // Define a version for your cache (update this when you make changes).
-const CACHE_VERSION = 'vt0.011';
+const CACHE_VERSION = 'vt0.012';
 
 // Define a cache name based on the version.
 const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
@@ -40,23 +40,18 @@ const FEATURE_RESOURCES = [
 ]
 
 //function to check if user had logged in online
+//This is no longer required - can acess if logged in atleast once
 const checkAuth = () => {
-    
-
   // const jwtToken = document.cookie.split('; ').find((cookie) => cookie.startsWith('jwt='));
-  const jwtToken = true
-  
-  if (jwtToken) {
-    
-    console.log("jwt available")
-    return true;
-
-  } else {
-    
-    console.log("no jwt available")
-    return false;
-
-  }
+  // const jwtToken = true
+  // if (jwtToken) {
+  //   console.log("jwt available")
+  //   return true;
+  // } else {  
+  //   console.log("no jwt available")
+  //   return false;
+  // }
+  return true
 }
 
 // Function to clean up old caches when activating a new service worker.
