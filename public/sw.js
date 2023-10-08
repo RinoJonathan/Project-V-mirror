@@ -1,5 +1,5 @@
 // Define a version for your cache (update this when you make changes).
-const CACHE_VERSION = 'vt0.014';
+const CACHE_VERSION = 'vt0.011';
 
 // Define a cache name based on the version.
 const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
@@ -85,6 +85,7 @@ self.addEventListener("install", (event) => {
         
       })()
     );
+    // self.skipWaiting(); // Ensure that the new service worker activates immediately
   });
 
 
@@ -94,12 +95,9 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
       const names = await caches.keys();
-      console.log(names)
       await Promise.all(
         names.map((name) => {
-          console.log("iteration1")
           if (name !== CACHE_NAME) {
-            console.log(`${name} deleted`)
             return caches.delete(name);
           }
         })
@@ -107,6 +105,7 @@ self.addEventListener("activate", (event) => {
       await clients.claim();
     })()
   );
+  self.skipWaiting(); // Ensure that the new service worker activates immediately
 });
 
 self.addEventListener('fetch', (event) => {
@@ -114,7 +113,7 @@ self.addEventListener('fetch', (event) => {
   const urlObj = new URL(request.url);
   const url = urlObj.pathname.toLowerCase()
 
-  // console.log(url)
+   console.log(url)
   // Handle homepage caching 
   if (url === '/') {
     // Check if the user is online.
