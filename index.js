@@ -1,3 +1,5 @@
+// require('events').EventEmitter.prototype._maxListeners = 25;
+
 const express = require('express');
 const app = express();
 require('dotenv').config();
@@ -16,6 +18,13 @@ const passport = require('passport')
 const passportLocal = require('passport-local')
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+
+app.use((req, res, next) => {
+    res.header('Cross-Origin-Embedder-Policy', 'require-corp');
+    res.header('Cross-Origin-Opener-Policy', 'same-origin');
+    next();
+  });
+  
 
 mongoose.connect("mongodb://localhost:27017/projectV")
     .then(() => {
@@ -86,11 +95,6 @@ passport.use(new GoogleStrategy({
 
 
 
-app.use((req, res, next) => {
-    res.header('Cross-Origin-Embedder-Policy', 'require-corp');
-    res.header('Cross-Origin-Opener-Policy', 'same-origin');
-    next();
-  });
 
 
 passport.serializeUser(User.serializeUser())

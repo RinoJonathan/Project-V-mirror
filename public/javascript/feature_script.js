@@ -1,4 +1,8 @@
 
+
+
+
+
 import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
 import { fetchFile } from "/javascript/ffmpeg/utils/index.js";
 let ffmpeg = null;
@@ -53,6 +57,31 @@ const mode = document.getElementById('mode').textContent ;
 
 
 //defining functions
+
+// Function to load multi-threading files
+async function loadMultiThreadFiles() {
+
+    console.log("multithreading engaged")
+
+
+    await ffmpeg.load({
+        coreURL: "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
+        wasmURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm',
+        workerURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
+    });
+}
+
+// Function to load single-threading files
+async function loadSingleThreadFiles() {
+
+    console.log("singlethreading engaged")
+
+    await ffmpeg.load({
+        coreURL: "/javascript/ffmpeg/core/ffmpeg-core.js"
+    });
+
+    
+}
 
 
 //ffmpeg initialization
@@ -279,28 +308,7 @@ function calculateDuration(startTime, endTime) {
   
 
 
-// Function to load multi-threading files
-async function loadMultiThreadFiles() {
 
-    console.log("multithreading engaged")
-
-
-    await ffmpeg.load({
-        coreURL: "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
-        wasmURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm',
-        workerURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
-    });
-}
-
-// Function to load single-threading files
-async function loadSingleThreadFiles() {
-
-    console.log("singlethreading engaged")
-
-    await ffmpeg.load({
-        coreURL: "/javascript/ffmpeg/core/ffmpeg-core.js"
-    });
-}
 
 
 
@@ -322,7 +330,9 @@ async function toggleMode() {
     }
 }
 
-
+// Add an event listener to the toggle button
+const toggleModeButton = document.getElementById('toggleModeButton');
+toggleModeButton.addEventListener('click', toggleMode);
 
 
 /***************************** Driver and main codes start from here ************************** */
@@ -333,6 +343,10 @@ async function toggleMode() {
 console.log("loading ffmpeg")
  
 await initialize_Ffmpeg();
+
+
+
+
 
 
 //event handler for conversion 
@@ -541,6 +555,3 @@ convertButton.addEventListener('click', async () => {
 
 });
 
-// Add an event listener to the toggle button
-const toggleModeButton = document.getElementById('toggleModeButton');
-toggleModeButton.addEventListener('click', toggleMode);
