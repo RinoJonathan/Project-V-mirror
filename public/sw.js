@@ -4,6 +4,7 @@ const CACHE_VERSION = 'v1';
 // Define a cache name based on the version.
 const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
 
+
 // Define an array of static resources to cache.
 const APP_STATIC_RESOURCES = [
   '/',
@@ -14,8 +15,29 @@ const APP_STATIC_RESOURCES = [
   // Add more static resources here as needed.
 ];
 
+const FEATURE_RESOURCES = [
+  '/javascript/ffmpeg/'
+]
+
+//function to check if user had logged in online
+const checkAuth = () => {
+    
+
+  const jwtToken = document.cookie.split('; ').find((cookie) => cookie.startsWith('jwt='));
+  
+  if (jwtToken) {
+    
+    return true;
+
+  } else {
+    
+    return false;
+
+  }
+}
+
 // Function to clean up old caches when activating a new service worker.
-function cleanUpCaches() {
+const cleanUpCaches= () => {
   return caches.keys().then((cacheNames) => {
     return Promise.all(
       cacheNames.map((cache) => {
@@ -33,7 +55,12 @@ self.addEventListener("install", (event) => {
       (async () => {
         const cache = await caches.open(CACHE_NAME);
         cache.addAll(APP_STATIC_RESOURCES);
-        console.log("installed caches")
+        console.log("base caches cached")
+
+        if(checkAuth()){
+          cache.addAll(FEATURE_RESOURCES);
+          console.log("feature caches cached")
+        }
       })()
     );
   });
@@ -50,16 +77,25 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const request = event.request;
-  const url = new URL(request.url);
+  const urlObj = new URL(request.url);
+  const url = urlObj.pathname.toLowerCase()
 
-  // Handle homepage caching (always cache).
-  if (url.pathname === '/') {
-    event.respondWith(caches.match('/'));
-    return;
+  // Handle homepage caching 
+  if (url === '/') {
+    // Check if the user is online.
+    if (navigator.onLine) {
+      // If online, fetch the resource from the network (do not cache).
+      event.respondWith(fetch(request));
+      return;
+    } else {
+      // If offline, respond with the cached page.
+      event.respondWith(caches.match(request));
+      return;
+    }
   }
 
   // Handle static resource caching (always cache).
-  if (STATIC_RESOURCES.includes(url.pathname)) {
+  if (APP_STATIC_RESOURCES.includes(url)) {
     event.respondWith(caches.match(request));
     return;
   }
@@ -68,27 +104,74 @@ self.addEventListener('fetch', (event) => {
   // For example, you can check if the user is authenticated by verifying
   // the presence and validity of a JWT token stored on the client.
 
-  // Handle authenticated feature pages.
-  if (url.pathname.startsWith('/features/')) {
-    // Implement caching strategy for authenticated feature pages.
-    event.respondWith(
-      caches.match(request).then((cachedResponse) => {
-        return cachedResponse || fetch(request).then((fetchResponse) => {
-          // Cache the fetched response for future use.
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, fetchResponse.clone());
+  if (checkAuth()) {
+    // Handle authenticated feature pages.
+    if (url.startsWith('/features/')) {
+      event.respondWith(
+        caches.match(request).then((cachedResponse) => {
+          return cachedResponse || fetch(request).then((fetchResponse) => {
+            // Cache the fetched response for future use.
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, fetchResponse.clone());
+            });
+            return fetchResponse;
+          }).catch((e) => {
+            console.log("error while fetching feature page")
           });
-          return fetchResponse;
-        });
-      })
-    );
+        })
+      );
+      return;
+    }
+  } else {
+    // Display a custom message or prompt the user to log in when offline.
+    // You can show a modal, a custom HTML element, or navigate to a login page.
+    console.log("Please log in using the internet.");
+    // If offline, respond with the cached offline.html page.
+    window.location.href = '/user/login';
     return;
   }
 
+  if (url.startsWith('/user')) {
+    // Check if the user is online.
+    if (navigator.onLine) {
+      // If online, fetch the resource from the network (do not cache).
+      event.respondWith(fetch(request));
+      return;
+    } else {
+      // If offline, respond with the cached offline.html page.
+      event.respondWith(caches.match('/offlineLogin.html'));
+      return;
+    }
+  }
+  
   // For all other requests, go to the network first, then cache.
   event.respondWith(
     fetch(request).catch(() => {
       return caches.match(request);
     })
   );
-});
+}); 
+
+
+//legacy fetch
+// self.addEventListener("fetch", (event) => {
+//     // As a single page app, direct app to always go to cached home page.
+//     if (event.request.mode === "navigate") {
+//       event.respondWith(caches.match("/Menarche_Tracker/"));
+//       return;
+//     }
+  
+//     // For all other requests, go to the cache first, and then the network.
+//     event.respondWith(
+//       (async () => {
+//         const cache = await caches.open(CACHE_NAME);
+//         const cachedResponse = await cache.match(event.request);
+//         if (cachedResponse) {
+//           // Return the cached response if it's available.
+//           return cachedResponse;
+//         }
+//         // If resource isn't in the cache, return a 404.
+//         return new Response(null, { status: 404 });
+//       })()
+//     );
+//   });

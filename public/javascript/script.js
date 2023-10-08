@@ -32,35 +32,35 @@ if ('serviceWorker' in navigator) {
 
 
 
-import jwtDecode from "/javascript/jwt/jwt-decode.js"
-const jwsDemo = () => {
+// import jwtDecode from "/javascript/jwt/jwt-decode.js"
+// const jwsDemo = () => {
     
-    // import jwtDecode from 'https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/+esm'
+//     // import jwtDecode from 'https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/+esm'
     
-    // Check if the JWT token cookie is present
-    const jwtToken = document.cookie.split('; ').find((cookie) => cookie.startsWith('jwt='));
+//     // Check if the JWT token cookie is present
+//     const jwtToken = document.cookie.split('; ').find((cookie) => cookie.startsWith('jwt='));
     
-    if (jwtToken) {
-      // Extract the token value from the cookie
-      const tokenValue = jwtToken.split('=')[1];
+//     if (jwtToken) {
+//       // Extract the token value from the cookie
+//       const tokenValue = jwtToken.split('=')[1];
     
-      // Try to decode the token (you need to have a JWT library for this)
-      try {
-        const decodedToken = jwtDecode(tokenValue); // Assuming you have a library like jwt_decode
-        const { username } = decodedToken; // Replace with the actual field in your token
+//       // Try to decode the token (you need to have a JWT library for this)
+//       try {
+//         const decodedToken = jwtDecode(tokenValue); // Assuming you have a library like jwt_decode
+//         const { username } = decodedToken; // Replace with the actual field in your token
     
-        // Display a welcome message with the username
-        console.log(`Welcome, ${username}`);
-      } catch (error) {
-        // Token decoding failed (possibly expired or invalid)
-        console.error('Token decoding failed:', error);
-        console.log('Please log in using the internet.');
-      }
-    } else {
-      // Token cookie is not present
-      console.log('Please log in using the internet.');
-    }
-}
+//         // Display a welcome message with the username
+//         console.log(`Welcome, ${username}`);
+//       } catch (error) {
+//         // Token decoding failed (possibly expired or invalid)
+//         console.error('Token decoding failed:', error);
+//         console.log('Please log in using the internet.');
+//       }
+//     } else {
+//       // Token cookie is not present
+//       console.log('Please log in using the internet.');
+//     }
+// }
 
 
 //defining functions
