@@ -9,14 +9,16 @@
 <!-- <button id="toggleModeButton">single/ multithreaded</button> -->
 
 <!--  switch between single and multithreading -->
- <p>toggle multithreading</p>
- 
- <label class="switch">
+<div class="switch-container">
+    <p>toggle multithreading</p>
     
-    <input type="checkbox" id="toggleModeButton">
-    <span class="slider round"></span>
-    
-</label>
+    <label class="switch">
+       
+       <input type="checkbox" id="toggleModeButton">
+       <span class="slider round"></span>
+       
+   </label>
+   </div>
 
 
 
@@ -38,7 +40,7 @@
 </select>
 
 <video id="output-video" controls></video><br/>
-<button id="convertButton">Convert</button>
+<button type="button" id="convertButton" class="btn btn-dark">Process</button>
 
 <p id="message"></p>
 

@@ -510,3 +510,7 @@ convertButton.addEventListener('click', async () => {
 // Add an event listener to the toggle button
 const toggleModeButton = document.getElementById('toggleModeButton');
 toggleModeButton.addEventListener('click', toggleMode);
+
+
+
+

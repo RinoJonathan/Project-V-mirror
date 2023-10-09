@@ -27,6 +27,10 @@ fieldset {
     width: max-content;
     border: 1px solid #D4D4D5;
     display: inline-block;
+    color: white;
+    background-color: rgb(20, 18, 18);
+    margin-top: 1em;
+    margin-bottom: 1em;
     }
 
 .time_input{
@@ -45,6 +49,7 @@ width :90px;
     display: inline-block;
     width: 60px;
     height: 34px;
+    margin-left: 1em ;
   }
   
   /* Hide default HTML checkbox */
@@ -101,3 +106,60 @@ width :90px;
   .slider.round:before {
     border-radius: 50%;
   } 
+
+
+  .switch-container{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: rgb(117, 117, 117) solid 1px;
+    border-radius: 20px;
+    padding: 1em;
+    background-color: rgb(20, 18, 18);
+    color: white;
+  }
+
+
+
+#outputFormat{
+
+  background-color: rgb(20, 18, 18);
+  color: white;
+}
+
+#videoInput{
+
+  padding: 1rem;
+  width: 15rem;
+  height: 2rem;
+  border: rgb(117, 117, 117) solid 1px;
+  border-radius: 20px;
+  background-color: rgb(20, 18, 18);
+  color: white;
+}
+  
+fieldset{
+
+  border-radius: 20px;
+}
+  
+
+.trim-time-container{
+
+  flex-direction: row;
+    justify-content: space-between;
+    border: rgb(117, 117, 117) solid 1px;
+    border-radius: 20px;
+    padding: 1em;
+    background-color: rgb(41, 39, 39);
+    margin: 2em 1em;
+}
+
+#outputName{
+
+  border: rgb(117, 117, 117) solid 1px;
+  border-radius: 20px;
+  height: 2rem;
+  width: 15rem;
+}

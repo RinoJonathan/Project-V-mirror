@@ -7,14 +7,17 @@
 <span id="mode">trim</span>
 
 <!--  switch between single and multithreading -->
-<p>toggle multithreading</p>
+<div class="switch-container">
+  <p>toggle multithreading</p>
+  
+  <label class="switch">
+     
+     <input type="checkbox" id="toggleModeButton">
+     <span class="slider round"></span>
+     
+ </label>
+ </div>
 
-<label class="switch">
-  
-  <input type="checkbox" id="toggleModeButton">
-  <span class="slider round"></span>
-  
-</label>
 
 <input type="file" id="videoInput" accept="video/*">
 <input type="text" id="outputName" placeholder="Output filename">
@@ -23,31 +26,38 @@
 
 
 
-<fieldset>
-  <legend>Start time</legend>
-  <div>
-    <input class="time_input" id="start_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
-    <input class="time_input" id="start_minute" type="number" min="0" max="59" placeholder="00" value=0 >:
-    <input class="time_input" id="start_second"type="number" min="0" max="59" placeholder="00"  value=0 >
-    
-     
-  </div>         
-</fieldset>    
+<div class="trim-time-container">
 
-<fieldset>
-  <legend>End time</legend>
-  <div>
-    <input class="time_input" id="end_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
-    <input class="time_input" id="end_minute" type="number" min="0" max="59" placeholder="00" value=0 >:
-    <input class="time_input" id="end_second"type="number" min="0" max="59" placeholder="00"  value=0 >
-    
-     
-  </div>         
-</fieldset>    
+
+  <fieldset>
+    <legend>Start time</legend>
+    <div>
+      <input class="time_input" id="start_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
+      <input class="time_input" id="start_minute" type="number" min="0" max="59" placeholder="00" value=0 >:
+      <input class="time_input" id="start_second"type="number" min="0" max="59" placeholder="00"  value=0 >
+      
+       
+    </div>         
+ </fieldset>    
+
+ <fieldset>
+    <legend>End time</legend>
+    <div>
+      <input class="time_input" id="end_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
+      <input class="time_input" id="end_minute" type="number" min="0" max="59" placeholder="00" value=0 >:
+      <input class="time_input" id="end_second"type="number" min="0" max="59" placeholder="00"  value=0 >
+      
+       
+    </div>         
+ </fieldset>    
+
+</div>   
 
 
 <video id="output-video" controls></video><br/>
-<button id="convertButton">Convert</button>
+
+<button type="button" id="convertButton" class="btn btn-dark">Process</button>
+
 
 <p id="message"></p>
 
