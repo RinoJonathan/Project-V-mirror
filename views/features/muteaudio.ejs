@@ -1,0 +1,23 @@
+<% layout("./layouts/features.ejs") %> 
+
+<span id="mode">removeaudio</span>
+
+<!--  switch between single and multithreading -->
+ <p>toggle multithreading</p>
+ 
+ <label class="switch">
+    
+    <input type="checkbox" id="toggleModeButton">
+    <span class="slider round"></span>
+    
+</label>
+
+<input type="file" id="videoInput" accept="video/*">
+<input type="text" id="outputName" placeholder="Output filename">
+
+<video id="output-video" controls></video><br/>
+<button id="convertButton">Convert</button>
+
+<p id="message"></p>
+
+<a href="#" id="downloadLink" download>Download Output</a>
