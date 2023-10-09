@@ -27,3 +27,6 @@ alert("it worked")
 // sw.js:116 
 // 32sw.js:116 
 // 32sw.js:116 
+
+//https://codepen.io/baahubali92/pen/KbRBxJ
+//https://codepen.io/hitensharma/pen/dybryGE

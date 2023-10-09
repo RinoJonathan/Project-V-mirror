@@ -1,0 +1,38 @@
+<% layout("./layouts/features.ejs") %> 
+
+<span id="mode">split</span>
+
+<!--  switch between single and multithreading -->
+ <p>toggle multithreading</p>
+ 
+ <label class="switch">
+    
+    <input type="checkbox" id="toggleModeButton">
+    <span class="slider round"></span>
+    
+</label>
+
+<input type="file" id="videoInput" accept="video/*">
+<input type="text" id="outputName" placeholder="Output filename">
+
+
+
+
+
+<fieldset>
+    <legend>Start time</legend>
+    <div>
+      <input class="time_input" id="start_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
+      <input class="time_input" id="start_minute" type="number" min="0" max="59" placeholder="00" value=0 >:
+      <input class="time_input" id="start_second"type="number" min="0" max="59" placeholder="00"  value=0 >
+      
+       
+    </div>         
+ </fieldset>   
+<video id="output-video" controls></video><br/>
+<button id="convertButton">Convert</button>
+
+<p id="message"></p>
+
+<a href="#" id="downloadLink" download>Get File 1</a>
+<a href="#" id="downloadLink2" download>Get File 2</a>
