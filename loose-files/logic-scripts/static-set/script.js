@@ -102,7 +102,7 @@ const getCommands = (inputObject, mode)=> {
         conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
         //trim: `-ss ${inputObject.start.time} -i "${inputObject.inputFileName}" -to ${inputObject.end.time}  "${inputObject.outputFileName}"`,
         trim: `-ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -t ${inputObject.end.time} -map 0:v -map 1:a -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
-        merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
+        merge: `-f concat -safe 0 -i concat_list.txt -c:v copy -c:a copy "${inputObject.outputFileName}"`,
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
         resize:`-i "${inputObject.inputFileName}" -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
         removeaudio:`-i "${inputObject.inputFileName}" -c:v copy -an "${inputObject.outputFileName}"`,
@@ -114,6 +114,9 @@ const getCommands = (inputObject, mode)=> {
 
     return editoptions[mode]
 }
+
+
+//ffmpeg -f concat -safe 0 -i concat_list.txt -c:v copy -c:a copy "${inputObject.outputFileName}
 
 // ffmpeg -i "${inputObject.inputFileName}" -c:v copy -an "${inputObject.outputFileName}"
 
