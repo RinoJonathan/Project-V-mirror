@@ -91,7 +91,7 @@ function parseCommandString(commandString) {
 
     if (currentArg) {
         args.push(currentArg);
-    }
+    } 
 
     return args;
 }
@@ -104,11 +104,13 @@ const getCommands = (inputObject, mode)=> {
         trim: `-ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -t ${inputObject.end.time} -map 0:v -map 1:a -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
-        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
-        removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
-        crop:`-i ${inputObject.inputFileName} -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`,
-        getaudio: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`
+        resize:`-i "${inputObject.inputFileName}" -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
+        removeaudio:`-i "${inputObject.inputFileName}" -an ${inputObject.outputFileName}`,
+        crop:`-i "${inputObject.inputFileName}" -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`,
+        getaudio: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
+        textoverlay:`-i ${inputObject.inputFileName} -vf drawtext=${inputObject.drawtext} -codec:a copy ${inputObject.outputFileName}`
     }
+
 
     return editoptions[mode]
 }
@@ -129,6 +131,7 @@ const processVideo = async (inputObject, mode ) => {
         case 'resize':
         case 'crop':
         case 'getaudio':
+        case 'textoverlay':
 
                 console.log(inputObject.inputFileName)
                 console.log(inputObject.videoFile.name)
@@ -337,7 +340,7 @@ convertButton.addEventListener('click', async () => {
             size:'',
             dimension:'',
             audioinput:'',
-            text:''
+            drawtext:''
     }
 
     
@@ -472,6 +475,16 @@ convertButton.addEventListener('click', async () => {
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
 
+            break;
+
+        case 'textoverlay':
+            inputObject.inputFileName = inputObject.videoFile.name;
+            inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+            inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+        
+            inputObject.drawtext=`text='${document.getElementById('text').value}':x=${document.getElementById('x').value}:y=${document.getElementById('y').value}:fontsize=${document.getElementById('fontsize').value}`;
+            console.log(` The created drawtext ${inputObject.drawtext}`)
+            
             break;
         
 

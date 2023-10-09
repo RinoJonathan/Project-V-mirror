@@ -1,0 +1,282 @@
+.macbook-pro-16-1-child,
+.macbook-pro-16-1-item {
+  position: absolute;
+  top: 1079px;
+  left: 0;
+  width: 1728px;
+  height: 988px;
+}
+.macbook-pro-16-1-child {
+  object-fit: cover;
+}
+.macbook-pro-16-1-item {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.95) 64.37%,
+    rgba(217, 217, 217, 0)
+  );
+}
+.navbar-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--color-black);
+  width: 1728px;
+  height: 107px;
+}
+.project-v {
+  position: absolute;
+  top: 18px;
+  left: 38px;
+  font-size: var(--font-size-29xl);
+  display: inline-block;
+  width: 298px;
+  height: 70px;
+}
+.create,
+.create-button {
+  position: absolute;
+  top: 6px;
+  left: 29px;
+}
+.create-button {
+  top: 28px;
+  left: 628px;
+  background-color: var(--color-black);
+  width: 150px;
+  height: 50px;
+  overflow: hidden;
+}
+.edit,
+.edit-button {
+  position: absolute;
+  top: 6px;
+  left: 47px;
+}
+.edit-button {
+  top: 28px;
+  left: 789px;
+  background-color: var(--color-black);
+  width: 150px;
+  height: 50px;
+  overflow: hidden;
+}
+.file,
+.file-button {
+  position: absolute;
+  top: 6px;
+  left: 49px;
+}
+.file-button {
+  top: 28px;
+  left: 467px;
+  background-color: var(--color-black);
+  width: 150px;
+  height: 50px;
+  overflow: hidden;
+}
+.temp-buttons,
+.templates {
+  position: absolute;
+  top: 6px;
+  left: 17px;
+}
+.temp-buttons {
+  top: 28px;
+  left: 961px;
+  background-color: var(--color-black);
+  width: 184px;
+  height: 50px;
+  overflow: hidden;
+}
+.my-projects,
+.my-projects1 {
+  position: absolute;
+  top: 6px;
+  left: 21px;
+}
+.my-projects {
+  top: 28px;
+  left: 1166px;
+  background-color: var(--color-black);
+  width: 211px;
+  height: 50px;
+  overflow: hidden;
+}
+.profile-child {
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background-color: var(--color-white);
+}
+.navbar,
+.profile,
+.profile-child,
+.user-1-icon {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+}
+.user-1-icon {
+  top: 0;
+  left: 0;
+  object-fit: cover;
+}
+.navbar,
+.profile {
+  top: 28px;
+  left: 1623px;
+}
+.navbar {
+  top: 0;
+  left: 0;
+  width: 1728px;
+  height: 107px;
+  font-size: var(--font-size-13xl);
+}
+.bgv-1,
+.macbook-pro-16-1-inner {
+  position: absolute;
+  top: 107px;
+  left: 0;
+  width: 1728px;
+  height: 972px;
+}
+.macbook-pro-16-1-inner {
+  top: 88px;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 988px;
+}
+.do-you-want {
+  margin: 0;
+}
+.pro {
+  color: var(--color-red);
+}
+.span {
+  color: var(--color-white);
+}
+.project-v1 {
+  margin: 0;
+  color: var(--color-blue);
+}
+.do-you-want-container {
+  position: absolute;
+  top: 266px;
+  left: 414px;
+  white-space: pre-wrap;
+}
+.easy,
+.mask-group {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.mask-group {
+  height: 100%;
+  width: 100%;
+  right: 0;
+  bottom: 0;
+}
+.easy-animation-child {
+  position: absolute;
+  height: 98.08%;
+  width: 6.67%;
+  top: 0.96%;
+  right: -3.33%;
+  bottom: 0.96%;
+  left: 96.67%;
+  border-radius: var(--br-xl);
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+.easy-animation {
+  position: absolute;
+  top: 738px;
+  left: 939px;
+  width: 75px;
+  height: 156px;
+  color: var(--color-red);
+}
+.rectangle-div {
+  position: absolute;
+  top: 4276px;
+  left: 0;
+  background-color: var(--color-black);
+  width: 1728px;
+  height: 619px;
+}
+.organisation,
+.v,
+.v1 {
+  position: absolute;
+  top: 0;
+}
+.v1 {
+  left: 0;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25), 0 4px 4px rgba(0, 0, 0, 0.25),
+    0 4px 4px rgba(0, 0, 0, 0.25), 0 4px 4px rgba(0, 0, 0, 0.25),
+    0 4px 4px rgba(0, 0, 0, 0.25), 0 4px 4px rgba(0, 0, 0, 0.25),
+    0 4px 4px rgba(0, 0, 0, 0.25);
+  -webkit-text-stroke: 1px #fff;
+}
+.organisation,
+.v {
+  left: 176px;
+  width: 97px;
+  height: 206px;
+}
+.organisation {
+  top: 143px;
+  left: 0;
+  font-size: 64px;
+  color: var(--color-white);
+  display: inline-block;
+  width: 449px;
+  height: 70px;
+}
+.by-team-,
+.v-parent {
+  position: absolute;
+  top: 206px;
+  left: 76px;
+  font-size: var(--font-size-29xl);
+  color: var(--color-red);
+}
+.v-parent {
+  top: 4416px;
+  left: 99px;
+  width: 449px;
+  height: 264px;
+  cursor: pointer;
+  font-size: var(--font-size-131xl);
+  color: var(--color-black);
+}
+.us {
+  color: var(--color-blue);
+}
+.about-us,
+.at-project-container {
+  position: absolute;
+  top: 1236px;
+  left: 162px;
+}
+.at-project-container {
+  top: 1505px;
+  font-size: 40px;
+  display: inline-block;
+  width: 999px;
+  height: 308px;
+}
+.macbook-pro-16-1 {
+  position: relative;
+  background-color: var(--color-white);
+  width: 100%;
+  height: 4895px;
+  overflow: hidden;
+  text-align: left;
+  font-size: var(--font-size-109xl);
+  color: var(--color-white);
+  font-family: var(--font-keania-one);
+}
