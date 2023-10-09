@@ -397,7 +397,7 @@ convertButton.addEventListener('click', async () => {
                 inputObject.videoFile = videoInput.files;
                 console.log(inputObject.videoFile)
                 inputObject.inputFileName = inputObject.videoFile[0].name;
-                inputObject.outputFileType = document.getElementById('outputFormat').value;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
                 inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
 
                 const inputType = inputObject.inputFileName.split('.').pop();
