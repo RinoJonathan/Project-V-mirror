@@ -108,7 +108,7 @@ const getCommands = (inputObject, mode)=> {
         removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
         crop:`-i ${inputObject.inputFileName} -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`,
         getaudio: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
-        textoverlay:`-i ${inputObject.inputFileName} -vf drawtext=${drawtext} ${inputObject.outputFileName}`
+        textoverlay:`-i ${inputObject.inputFileName} -vf drawtext=${drawtext} -codec:a copy ${inputObject.outputFileName}`
     }
 
     return editoptions[mode]
