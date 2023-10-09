@@ -3,6 +3,9 @@ body{
     background: rgb(56, 56, 56);
 }
 
+h1 p {
+    color: rgb(255, 255, 255);
+}
 
 /* navbar styles */
 
@@ -41,6 +44,8 @@ body{
     background-color: #000000; /* Dark background color */
     color: #fff; /* Text color */
 }
+
+
 
 
 /* footer styles */

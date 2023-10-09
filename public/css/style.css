@@ -4,6 +4,8 @@ body{
 }
 
 
+
+
 /* navbar styles */
 
 
@@ -397,3 +399,17 @@ width :90px;
   .slider.round:before {
     border-radius: 50%;
   } 
+
+
+
+
+
+
+
+
+/* critical */
+
+p {
+    color: rgb(255, 255, 255); 
+  }
+  
