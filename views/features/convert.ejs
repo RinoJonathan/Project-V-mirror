@@ -1,0 +1,34 @@
+<% layout("./layouts/features.ejs") %> 
+
+
+<h1>Convert </h1>
+<p>Convert your video file to different format</p>
+
+<span id="mode">conversion</span>
+
+<!--  switch between single and multithreading -->
+ <p>toggle multithreading</p>
+ 
+ <label class="switch">
+    
+    <input type="checkbox" id="toggleModeButton">
+    <span class="slider round"></span>
+    
+</label>
+
+<input type="file" id="videoInput" accept="video/*">
+<input type="text" id="outputName" placeholder="Output filename">
+<select id="outputFormat">
+    <option value="mp4">MP4</option>
+    <option value="gif">GIF</option>
+    <option value="mov">MOV</option>
+    <option value="mp3">MP3</option>
+    <!-- <option value="webm">WEBM</option>  doesnt support webm for now -->
+    <option value="avi">AVI</option>
+</select>
+<video id="output-video" controls></video><br/>
+<button id="convertButton">Convert</button>
+
+<p id="message"></p>
+
+<a href="#" class="feature_download_link" id="downloadLink" download>Get File</a>

@@ -91,7 +91,7 @@ function parseCommandString(commandString) {
 
     if (currentArg) {
         args.push(currentArg);
-    }
+    } 
 
     return args;
 }
@@ -104,11 +104,15 @@ const getCommands = (inputObject, mode)=> {
         trim: `-ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -t ${inputObject.end.time} -map 0:v -map 1:a -c:v copy -c:a copy "${inputObject.outputFileName}"`, 
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
-        resize:`-i ${inputObject.inputFileName} -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
-        removeaudio:`-i ${inputObject.inputFileName} -an ${inputObject.outputFileName}`,
-        crop:`-i ${inputObject.inputFileName} -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`,
+        resize:`-i "${inputObject.inputFileName}" -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
+        removeaudio:`-i "${inputObject.inputFileName}" -an ${inputObject.outputFileName}`,
+        crop:`-i "${inputObject.inputFileName}" -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`,
         getaudio: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
+<<<<<<< HEAD
         textoverlay:`-i ${inputObject.inputFileName} -vf drawtext=${drawtext} -codec:a copy ${inputObject.outputFileName}`
+=======
+        textoverlay:`-i "${inputObject.inputFileName}" -vf drawtext="${inputObject.drawtext}" ${inputObject.outputFileName}`
+>>>>>>> 22c8496e5084f299c60f0df6dfa90b83645c3c9f
     }
 
     return editoptions[mode]
@@ -481,8 +485,8 @@ convertButton.addEventListener('click', async () => {
             inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
             inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
         
-            inputObject.drawtext=`${document.getElementById('text').value}:${document.getElementById('x').value}:${document.getElementById('y').value}:${document.getElementById('fontsize').value}`;
-            console.log(inputObject.drawtext)
+            inputObject.drawtext=`text='${document.getElementById('text').value}':x=${document.getElementById('x').value}:y=${document.getElementById('y').value}:fontsize=${document.getElementById('fontsize').value}`;
+            console.log(` The created drawtext ${inputObject.drawtext}`)
             
             break;
         
