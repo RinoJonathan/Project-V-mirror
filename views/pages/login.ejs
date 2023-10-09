@@ -1,6 +1,6 @@
 <% layout("./layouts/boilerplate.ejs") %> 
 
-<h1>Login User</h1>
+<!-- <h1>Login User</h1>
 <form action="/user/login" method="post">
 
     <div>
@@ -19,4 +19,42 @@
 <div><a class="button google" href="/user/google">Sign in with Google</a></div>
 
 <a href="/user/register">Register</a>
-<a href="/user/logout">Logout</a>
+<a href="/user/logout">Logout</a> -->
+
+
+<main class="container mt-5">
+
+<h1>Login</h1>
+<form action="/user/login" method="POST" class="validated-form" novalidate>
+    <div class="mb-3">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control" type="text" id="username" name="username" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-control" type="password" id="password" name="password" required>
+        <div class="valid-feedback">
+            Looks good!
+        </div>
+    </div>
+    <button class="btn btn-success">Login</button>
+</form>
+
+<a href="/user/google"><button class="btn btn-success" >Google Sign in</button></a>
+
+<a href="/user/register"> <button class="btn btn-primary"  >Register</button> </a>
+    
+<a href="/user/logout"><button class="btn btn-danger" >Logout</button></a>
+
+
+
+
+
+
+
+
+</main>

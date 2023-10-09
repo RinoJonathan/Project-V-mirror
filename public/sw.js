@@ -11,6 +11,8 @@ const APP_STATIC_RESOURCES = [
   '/css/style.css',
   '/javascript/script.js',
 
+  '/javascript/validateForms.js',
+
   '/images/trim.png',
   '/images/split.png',
   '/images/getaudio.png',
