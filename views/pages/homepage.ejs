@@ -1,20 +1,73 @@
 <% layout("./layouts/boilerplate.ejs") %> 
 
-<h1>Welcome home</h1>
-<% if(currentUser){ %>
-    <h1><%= currentUser.username  %> </h1>
-<% } %> 
 
-<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur illum delectus atque harum voluptatum corporis voluptas provident labore eos, placeat voluptates unde error eaque sunt deleniti iste dolorem voluptate molestiae.</p>
 
-<div>
-    <a href="/feature/trim">trim</a>
-    <a href="/feature/convert">convert</a>
-    <a href="/feature/merge">merge</a>
-    <a href="/feature/split">split</a>
-    <a href="/feature/resize">resize</a>
-    <a href="/feature/getaudio">getaudio</a>
-    <a href="/feature/muteaudio">muteaudio</a>
-</div>
-<a href="/feature/trim">trim</a>
-<!-- <script src="/temp.js"></script> -->
+
+
+
+  
+
+  <div class="slide_1">
+    
+        <h1>Welcome home</h1>
+    <% if(currentUser){ %>
+        <h1><%= currentUser.username  %> </h1>
+    <% } %> 
+
+    <p class="slide_text">Do you want to Edit</p>
+    <p class="slide_text">without giving away Video files</p>
+    <p class="slide_text">Straight away from the  Browser?</p>
+    <a href="#tools" class="btn btn-dark dark-button">Try out Tools</a>
+
+    
+  </div>
+
+
+
+
+
+
+  <div class="slide_2 overlay-right-to-left">
+    
+
+    <p class="slide_text">We Leverage Technologies like PWA</p>
+    <p class="slide_text">So, you can continue your editing from our webapp even when offline</p>
+  </div>
+
+
+  
+
+
+
+  <div class="container-carousel" id="tools">
+    <h1>Editing Tools</h1>
+    <ul class="control" id="custom-control">
+      <li class="prev">
+        <i class="fas fa-angle-left fa-2x"></i>
+      </li>
+      <li class="next">
+        <i class="fas fa-angle-right fa-2x"></i>
+      </li>
+    </ul>
+    <div class="my-slider">
+      <a href="/feature/trim"><img src="/images/trim.png" alt="trim" ></a>
+      <a href="/feature/split"><img src="/images/split.png" alt="split" ></a>
+      <a href="/feature/getaudio"><img src="/images/getaudio.png" alt="get audio" ></a>
+      <a href="/feature/muteaudio"><img src="/images/mute.png" alt="mute audio" ></a>
+      <a href="/feature/convert"><img src="/images/convert.png" alt="convert" ></a>
+      <a href="/feature/merge"><img src="/images/merge.avif" alt="merge" ></a>
+      <a href="/feature/resize"><img src="/images/resize.png" alt="resize" ></a> 
+      
+  
+    </div>
+  </div>
+
+  
+
+
+
+
+
+
+
+

@@ -10,6 +10,27 @@ const APP_STATIC_RESOURCES = [
   '/',
   '/css/style.css',
   '/javascript/script.js',
+
+  '/images/trim.png',
+  '/images/split.png',
+  '/images/getaudio.png',
+  '/images/mute.png',
+  '/images/convert.png',
+  '/images/merge.avif',
+  '/images/resize.png',
+
+
+  'https://fonts.googleapis.com/css2?family=Keania+One&display=swap',
+  'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js',
+
+  '/images/slide_1.png',
+  '/images/slide_2.png',
+  // '',
+  // '',
   '/javascript/feature_script.js',
   '/offline.html',
   'offlineLogin.html',
@@ -112,7 +133,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   const urlObj = new URL(request.url);
-  const url = urlObj.pathname.toLowerCase()
+  const url = urlObj.pathname
 
    console.log(url)
   // Handle homepage caching 
