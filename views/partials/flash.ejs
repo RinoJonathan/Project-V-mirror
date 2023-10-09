@@ -1,7 +1,12 @@
 <% if(success && success.length >0) {%> 
 
     
-    <p style="background-color: rgba(23, 131, 23, 0.288);">success: <%= success  %> </p>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            
+        </button>
+    </div>
     
 <% }  %> 
 
@@ -9,13 +14,22 @@
 <% if(failure && failure.length > 0) {%> 
 
     
-    <p style="background-color: rgba(136, 10, 10, 0.288);">failure: <%= failure  %>  %> </p>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= failure %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            
+        </button>
+    </div>
 
 <% } %> 
 
 <% if(error && error.length > 0) {%> 
 
     
-    <p style="background-color: rgba(136, 10, 10, 0.288);">failure: <%= error  %>  %> </p>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </button>
+    </div>
 
 <% } %>  
