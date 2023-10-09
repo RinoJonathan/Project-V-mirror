@@ -212,7 +212,7 @@ const processVideo = async (inputObject, mode ) => {
                 for (const file of inputObject.videoFile) {
                 const { name } = file;
                 ffmpeg.writeFile(name, await fetchFile(file));
-                inputPaths.push(`file ${name}`);
+                inputPaths.push(`file '${name}'`);
                 }
                 console.log(inputPaths)
                 await ffmpeg.writeFile('concat_list.txt', inputPaths.join('\n'));

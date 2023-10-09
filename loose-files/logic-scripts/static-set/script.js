@@ -105,7 +105,7 @@ const getCommands = (inputObject, mode)=> {
         merge: `-f concat -safe 0 -i concat_list.txt "${inputObject.outputFileName}"`,
         split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
         resize:`-i "${inputObject.inputFileName}" -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
-        removeaudio:`-i "${inputObject.inputFileName}" -an ${inputObject.outputFileName}`,
+        removeaudio:`-i "${inputObject.inputFileName}" -c:v copy -an "${inputObject.outputFileName}"`,
         crop:`-i "${inputObject.inputFileName}" -vf crop=${inputObject.dimension} ${inputObject.outputFileName}`,
         getaudio: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
         textoverlay:`-i ${inputObject.inputFileName} -vf drawtext=${inputObject.drawtext} -codec:a copy ${inputObject.outputFileName}`
@@ -114,6 +114,8 @@ const getCommands = (inputObject, mode)=> {
 
     return editoptions[mode]
 }
+
+// ffmpeg -i "${inputObject.inputFileName}" -c:v copy -an "${inputObject.outputFileName}"
 
 //['-f', 'concat', '-safe', '0', '-i', 'concat_list.txt', 'output.mp4']
 // `ffmpeg -ss ${inputObject.start.time} -i ${inputObject.inputFileName} -t ${inputObject.end.time} -c ${inputObject.outputFileName}`
@@ -150,7 +152,7 @@ const processVideo = async (inputObject, mode ) => {
                 for (const file of inputObject.videoFile) {
                 const { name } = file;
                 ffmpeg.writeFile(name, await fetchFile(file));
-                inputPaths.push(`file ${name}`);
+                inputPaths.push(`file '${name}'`);
                 }
                 console.log(inputPaths)
                 await ffmpeg.writeFile('concat_list.txt', inputPaths.join('\n'));
