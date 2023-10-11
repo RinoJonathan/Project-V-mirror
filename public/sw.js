@@ -22,6 +22,11 @@ const APP_STATIC_RESOURCES = [
   '/images/resize.png',
 
 
+  '/icons/icon-512x512.png',
+  '/manifest.json',
+  '',
+
+
   'https://fonts.googleapis.com/css2?family=Keania+One&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
@@ -31,6 +36,10 @@ const APP_STATIC_RESOURCES = [
 
   '/images/slide_1.png',
   '/images/slide_2.png',
+  // '/icons/icon-192x192.png',
+  // '/icons/icon-256x256.png',
+  // '/icons/icon-384x384.png',
+
   // '',
   // '',
   '/javascript/feature_script.js',

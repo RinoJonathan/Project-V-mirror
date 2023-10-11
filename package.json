@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JustinFrost47/webVideoEditor.git"
+    "url": "git+https://github.com/JustinFrost47/Project-V.git"
   },
   "keywords": [
     "video",
@@ -20,9 +20,9 @@
   "author": "team-v",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JustinFrost47/webVideoEditor/issues"
+    "url": "https://github.com/JustinFrost47/Project-V/issues"
   },
-  "homepage": "https://github.com/JustinFrost47/webVideoEditor#readme",
+  "homepage": "https://github.com/JustinFrost47/Project-V#readme",
   "dependencies": {
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",

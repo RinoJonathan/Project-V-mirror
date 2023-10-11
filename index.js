@@ -123,6 +123,7 @@ const sessionRoute = require('./routes/session')
 
 const userRoute = require('./routes/user')
 const featureRoute = require('./routes/features')
+const infoRoute = require('./routes/info')
 
 app.use('/test', testRoutes)
 app.use('/cookie', cookieRoute)
@@ -130,6 +131,7 @@ app.use('/session', sessionRoute)
 
 app.use('/user', userRoute)
 app.use('/feature', featureRoute)
+app.use('/info', infoRoute)
 
 const port =  3000;
 
