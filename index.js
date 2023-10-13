@@ -26,7 +26,7 @@ app.use((req, res, next) => {
   });
   
 
-mongoose.connect("mongodb://localhost:27017/projectV")
+mongoose.connect("mongodb://127.0.0.1:27017/projectV")
     .then(() => {
         console.log("Mongoose Connected successfully")
     })
