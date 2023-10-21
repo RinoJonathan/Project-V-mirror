@@ -12,6 +12,8 @@
     <span id="mode">trim</span>
 
       <!--  switch between single and multithreading -->
+
+      <div class="switch-container">
      <p>toggle multithreading</p>
      
      <label class="switch">
@@ -20,15 +22,18 @@
         <span class="slider round"></span>
         
     </label>
+    </div>
 
     <input type="file" id="videoInput" accept="video/*">
     <input type="text" id="outputName" placeholder="Output filename">
 
 
+    
+
+    <div class="trim-time-container">
 
 
-
-    <fieldset>
+      <fieldset>
         <legend>Start time</legend>
         <div>
           <input class="time_input" id="start_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
@@ -49,6 +54,10 @@
            
         </div>         
      </fieldset>    
+
+    </div>
+
+    
      
 
     <video id="output-video" controls></video><br/>

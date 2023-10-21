@@ -11,6 +11,10 @@ const APP_STATIC_RESOURCES = [
   '/css/style.css',
   '/javascript/script.js',
 
+  '/javascript/validateForms.js',
+  '/info/offline',
+  '/info/about',
+
   '/images/trim.png',
   '/images/split.png',
   '/images/getaudio.png',
@@ -18,6 +22,11 @@ const APP_STATIC_RESOURCES = [
   '/images/convert.png',
   '/images/merge.avif',
   '/images/resize.png',
+
+
+  '/icons/icon-512x512.png',
+  '/manifest.json',
+  '',
 
 
   'https://fonts.googleapis.com/css2?family=Keania+One&display=swap',
@@ -29,11 +38,15 @@ const APP_STATIC_RESOURCES = [
 
   '/images/slide_1.png',
   '/images/slide_2.png',
+  '/icons/icon-192x192.png',
+  // '/icons/icon-256x256.png',
+  // '/icons/icon-384x384.png',
+
   // '',
   // '',
   '/javascript/feature_script.js',
-  '/offline.html',
-  'offlineLogin.html',
+  // '/offline.html',
+  // 'offlineLogin.html',
   // Add more static resources here as needed.
 ];
 
@@ -59,6 +72,9 @@ const FEATURE_RESOURCES = [
 
 
 ]
+
+
+
 
 //function to check if user had logged in online
 //This is no longer required - can acess if logged in atleast once - vestigial feature
@@ -185,6 +201,8 @@ self.addEventListener('fetch', (event) => {
               
               // If cached resource is not present, fetch it from the network.
             console.log("Cached resource not present. Fetching from network...");
+
+            
             return fetch(request).then((fetchResponse) => {
               if (fetchResponse.status === 200) {
                 // Clone the response before caching it.
@@ -204,7 +222,7 @@ self.addEventListener('fetch', (event) => {
             }
             else{
               console.log("turn on the network to see the feature")
-              return caches.match('/offline.html');
+              return caches.match('/info/offline');
             }
           }
         })
@@ -233,7 +251,7 @@ self.addEventListener('fetch', (event) => {
       return;
     } else {
       // If offline, respond with the cached offline.html page.
-      event.respondWith(caches.match('/offlineLogin.html'));
+      event.respondWith(caches.match('info/offline'));
       return;
     }
   }
@@ -244,6 +262,8 @@ self.addEventListener('fetch', (event) => {
       return caches.match(request);
     })
   );
+
+  
 }); 
 
 

@@ -13,8 +13,9 @@ if ('serviceWorker' in navigator) {
 }
 
 
+if(document.querySelector(".my-slider") && tns){
 
-//tiny slider code
+  //tiny slider code
 
 var slider = tns({
   container: ".my-slider",
@@ -48,3 +49,8 @@ var slider = tns({
   // edgePadding: 20,
   // loop: false,
 });
+
+
+}
+
+

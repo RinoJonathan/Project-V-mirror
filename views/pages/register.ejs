@@ -1,6 +1,6 @@
 <% layout("./layouts/boilerplate.ejs") %> 
 
-<h1>Register User</h1>
+<!-- <h1>Register User</h1>
     <form action="/user/register" method="post">
 
         <div>
@@ -21,4 +21,40 @@
     </form>
     
     <a href="/user/login">Login</a>
-    <a href="/user/logout">Logout</a>
+    <a href="/user/logout">Logout</a> -->
+
+<main class="container mt-5">
+
+
+        <h1>Register</h1>
+    <form action="/user/register" method="POST" class="validated-form" novalidate>
+        <div class="mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" type="text" id="username" name="username" placeholder="Username" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" id="email" name="email"  placeholder="Email" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" type="password" id="password" name="password" placeholder="Password" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <button class="btn btn-success">Register</button>
+    </form>
+
+    
+    <a href="/user/login"> <button class="btn btn-primary"  >Login</button> </a>
+    
+    <a href="/user/logout"><button class="btn btn-danger" >Logout</button></a>
+
+    </main>

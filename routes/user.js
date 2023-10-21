@@ -42,7 +42,7 @@ router.post('/register', catchAsync(async (req, res) => {
         // Check if the user is already authenticated with Google
     if (req.isAuthenticated() && req.user.googleId) {
         // Handle the case where the user is already authenticated with Google
-        req.flash('error', 'You are already registered with Google.');
+        req.flash('error', 'You are already logged in with Google.');
         return res.redirect('/');
     }
 
