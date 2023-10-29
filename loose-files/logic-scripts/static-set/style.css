@@ -163,3 +163,16 @@ fieldset{
   height: 2rem;
   width: 15rem;
 }
+
+
+.hidden{
+
+  display: none;
+}
+
+
+.videoContainer{
+
+  max-width: 60%;
+  max-height: 40%;
+}

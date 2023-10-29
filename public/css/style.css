@@ -505,3 +505,15 @@ p {
   padding-right: 10% ;
 
 }
+
+.hidden{
+
+  display: none;
+}
+
+
+.videoContainer{
+
+  max-width: 60%;
+  max-height: 40%;
+}

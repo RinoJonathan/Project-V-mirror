@@ -1,5 +1,5 @@
 // Define a version for your cache (update this when you make changes).
-const CACHE_VERSION = 'vt0.012';
+const CACHE_VERSION = 'vt0.013';
 
 // Define a cache name based on the version.
 const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
@@ -26,7 +26,7 @@ const APP_STATIC_RESOURCES = [
 
   '/icons/icon-512x512.png',
   '/manifest.json',
-  '',
+  // '',
 
 
   'https://fonts.googleapis.com/css2?family=Keania+One&display=swap',
