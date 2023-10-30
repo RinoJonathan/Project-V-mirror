@@ -32,6 +32,7 @@
 
   <fieldset>
     <legend>Start time</legend>
+    <legend> <button class="btn btn-dark capture-button" onclick="captureTime(['start_hour', 'start_minute', 'start_second'])">Capture Time</button></legend>
     <div>
       <input class="time_input" id="start_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
       <input class="time_input" id="start_minute" type="number" min="0" max="59" placeholder="00" value=0 >:
@@ -43,6 +44,7 @@
 
  <fieldset>
     <legend>End time</legend>
+    <legend><button class="btn btn-dark capture-button" onclick="captureTime(['end_hour', 'end_minute', 'end_second'])">Capture Time</button></legend>
     <div>
       <input class="time_input" id="end_hour" type="number" min="0" max="23" placeholder="00" value=0 >:
       <input class="time_input" id="end_minute" type="number" min="0" max="59" placeholder="00" value=0 >:
@@ -63,3 +65,40 @@
 <p id="message"></p>
 
 <a href="#" class="feature_download_link" id="downloadLink" download><button type="button"  class="btn btn-success">Get File</button></a>
+
+
+<script>
+
+  const videoInputPlayer = document.getElementById('input-video');
+
+    const captureTime = (timeList) => {
+    
+    const vidTime = videoInputPlayer.currentTime;
+  
+    // Convert vidTime from seconds to the format hh:mm:ss.ss
+    const formattedTime = convertTime(vidTime);
+  
+    // Split the formatted time by ':'
+    const timeParts = formattedTime.split(':');
+  
+    // Loop through the timeList and insert the time parts
+    for (let i = 0; i < 3; i++) {
+      const inputField = document.getElementById(timeList[i]);
+      if (inputField) {
+        inputField.value = timeParts[i];
+      }
+    }
+  };
+  
+  // Function to convert time in seconds to hh:mm:ss.ss format
+  const convertTime = (timeInSeconds) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = (timeInSeconds % 60).toFixed(0);
+  
+    return `${padZero(hours)}:${padZero(minutes)}:${seconds}`;
+  };
+  
+  // Function to pad a single-digit number with a leading zero
+  const padZero = (num) => (num < 10 ? `0${num}` : num);
+  </script>

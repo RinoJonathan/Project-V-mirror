@@ -41,6 +41,26 @@ color: #555;
 width :90px;
 }
 
+.capture-button{
+
+  margin: 0px;
+  margin-left: 37%;
+  background-color: rgb(49, 49, 49);
+  color: rgb(255, 255, 255);
+  border-radius: 20px;
+  border: 2px solid rgb(20, 20, 20);
+  padding: 0.7em 1em;
+
+}
+
+.capture-button:hover{
+
+  background-color: rgb(255, 255, 255)  ;
+  color: rgb(49, 49, 49);
+  transition: 0.7s;
+
+}
+
 
 
  /* The switch - the box around the slider */
