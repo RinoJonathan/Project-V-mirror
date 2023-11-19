@@ -162,10 +162,10 @@ carousel */
 
 /* Style for the images */
 .my-slider img {
-  width: 400px; /* Set a specific width for the images */
-  height: 400px; /* Automatically adjust the height to maintain aspect ratio */
-  
+  width: 100%; /* Allow images to take the full width of their container */
+  height: auto; /* Automatically adjust the height to maintain aspect ratio */
 }
+
 
 /* .my-slider{
   padding-left: 20%;
@@ -173,66 +173,11 @@ carousel */
 
 } */
 
-.container-carousel> a {
+.container-carousel a {
 
   display: block;
 }
 
-/* Media query for screens smaller than 768px (e.g., smartphones) */
-@media (max-width: 767px) {
-  .container-carousel {
-      height: 400px; /* Adjust the height for smaller screens */
-  }
-
-  .my-slider img {
-      width: 300px; /* Adjust the image width for smaller screens */
-      height: auto; /* Automatically adjust the height to maintain aspect ratio */
-  }
-
-  .container-carousel {
-    position: relative;
-    margin-top: 3%;
-    margin-left: 70%;
-    
-  }
-  
-}
-
-/* Media query for screens between 768px and 992px (e.g., tablets) */
-@media (min-width: 768px) and (max-width: 991px) {
-  .container-carousel {
-      height: 500px; /* Adjust the height for tablets */
-  }
-
-  .my-slider img {
-      width: 360px; /* Adjust the image width for tablets */
-      height: auto; /* Automatically adjust the height to maintain aspect ratio */
-  }
-}
-
-/* Media query for screens larger than 992px (e.g., desktops) */
-@media (min-width: 1130px) {
-  .container-carousel {
-      height: 600px; /* Keep the default height for desktops */
-  }
-
-  .my-slider img {
-      width: 400px; /* Keep the default image width for desktops */
-      height: 400px; /* Keep the default image height for desktops */
-  }
-}
-
-.container-carousel {
-  position: relative;
-  margin-top: 3%;
-  margin-left: 5%;
-  margin-right: 5%;
-}
-
-/* .carousel-anchor{
-
-  margin: 50px 50px;
-} */
 
 
 h1 {
@@ -265,6 +210,90 @@ h1 {
   right: 120px;
  
 }
+
+
+
+
+
+/* Media query for screens smaller than 768px (e.g., smartphones) */
+@media (max-width: 767px) {
+  .container-carousel {
+      
+    height: 70%; /* Adjust the height for smaller screens */
+  }
+
+
+
+  .my-slider img {
+    width: 100%; /* Allow images to take the full width of their container */
+    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+  }
+  
+
+  .container-carousel {
+    position: relative;
+    margin-top: 3%;
+    margin-left: 70%;
+    
+  }
+
+  .control li.prev{
+
+    
+      left: 10px; /* Adjust the left position for smaller screens */
+      font-size: 1.5em; /* Adjust the font size for smaller screens */
+    
+  }
+  .control li.next {
+
+    right: 10px; /* Adjust the right position for smaller screens */
+    font-size: 1.5em; /* Adjust the font size for smaller screens */
+  }
+  
+}
+
+/* Media query for screens between 768px and 992px (e.g., tablets) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .container-carousel {
+      height: 600px; /* Adjust the height for tablets */
+  }
+
+  .my-slider img {
+    width: 100%; /* Allow images to take the full width of their container */
+    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+  }
+  
+}
+
+/* Media query for screens larger than 992px (e.g., desktops) */
+@media (min-width: 1130px) {
+  .container-carousel {
+      height: 600px; /* Keep the default height for desktops */
+  }
+
+  .my-slider img {
+    width: 100%; /* Allow images to take the full width of their container */
+    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+  }
+  
+}
+
+.container-carousel {
+  position: relative;
+  margin-top: 3%;
+  margin-left: 5%;
+  margin-right: 5%;
+  overflow: hidden; /* Add this to prevent images from overlapping */
+}
+
+
+/* .carousel-anchor{
+
+  margin: 50px 50px;
+} */
+
+
+
 .tns-nav {
   text-align: center;
   margin-top: 15px;
