@@ -1,10 +1,14 @@
 
+//************ development mode import
+// import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
+// import { fetchFile } from "/javascript/ffmpeg/utils/index.js";
 
 
-
-
+//************  production mode import
+// import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.4/+esm";
 import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
-import { fetchFile } from "/javascript/ffmpeg/utils/index.js";
+import { fetchFile } from "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.min.js";
+
 let ffmpeg = null;
 let previousProcessedVideoUrl;
 let previousProcessedVideoUrl2;
@@ -63,10 +67,18 @@ async function loadMultiThreadFiles() {
 
     console.log("multithreading engaged")
 
+    //************ development mode
+    // await ffmpeg.load({
+    //     coreURL: "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
+    //     wasmURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm',
+    //     workerURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
+    // });
 
+
+    //*************  production mode
     await ffmpeg.load({
-        coreURL: "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
-        wasmURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm',
+        coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.4/dist/esm/ffmpeg-core.js",
+        wasmURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.4/dist/esm/ffmpeg-core.wasm',
         workerURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
     });
 }
@@ -76,11 +88,17 @@ async function loadSingleThreadFiles() {
 
     console.log("singlethreading engaged")
 
-    await ffmpeg.load({
-        coreURL: "/javascript/ffmpeg/core/ffmpeg-core.js"
-    });
+    //************ development mode
+    // await ffmpeg.load({
+    //     coreURL: "/javascript/ffmpeg/core/ffmpeg-core.js"
+    // });
 
     
+    //*************  production mode
+    await ffmpeg.load({
+        coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.js"
+        // coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/+esm"
+    });
 }
 
 

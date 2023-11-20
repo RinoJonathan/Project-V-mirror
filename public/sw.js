@@ -52,27 +52,51 @@ const APP_STATIC_RESOURCES = [
 
 
 //internal feature resources
+// const FEATURE_RESOURCES = [
+//   // '/temp.js',
+//   "/javascript/ffmpeg/core/ffmpeg-core.js",
+//   "/javascript/ffmpeg/core/ffmpeg-core.wasm",
+//   "/javascript/ffmpeg/ffmpeg/index.js",
+//   "/javascript/ffmpeg/utils/index.js",
+//   "/javascript/ffmpeg/ffmpeg/classes.js",
+//   "/javascript/ffmpeg/utils/errors.js",
+//   "/javascript/ffmpeg/utils/const.js",
+//   "/javascript/ffmpeg/ffmpeg/const.js",
+//   "/javascript/ffmpeg/ffmpeg/utils.js",
+//   "/javascript/ffmpeg/ffmpeg/errors.js",
+//   "/javascript/ffmpeg/ffmpeg/worker.js",
+
+//   //multithreading
+//   // "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
+//   // "/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm",
+//   // "/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js",
+//   // "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
+
+
+// ]
+
 const FEATURE_RESOURCES = [
-  '/temp.js',
-  "/javascript/ffmpeg/core/ffmpeg-core.js",
-  "/javascript/ffmpeg/core/ffmpeg-core.wasm",
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/index.min.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.min.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/worker.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/classes.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/errors.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/const.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/const.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/utils.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/errors.js',
+  'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.wasm',
   "/javascript/ffmpeg/ffmpeg/index.js",
-  "/javascript/ffmpeg/utils/index.js",
+  '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js',
+
+  "/javascript/ffmpeg/ffmpeg/worker.js",
   "/javascript/ffmpeg/ffmpeg/classes.js",
-  "/javascript/ffmpeg/utils/errors.js",
-  "/javascript/ffmpeg/utils/const.js",
-  "/javascript/ffmpeg/ffmpeg/const.js",
+  "/javascript/ffmpeg/ffmpeg/const.js ",
   "/javascript/ffmpeg/ffmpeg/utils.js",
   "/javascript/ffmpeg/ffmpeg/errors.js",
-  "/javascript/ffmpeg/ffmpeg/worker.js",
-
-  //multithreading
-  // "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
-  // "/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm",
-  // "/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js",
-  // "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
-
-
+  
+  
 ]
 
 let loadFlag = 0 ;
@@ -219,9 +243,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  if (FEATURE_RESOURCES.includes(url)) {
+    console.log("offline static caches - features");
+    event.respondWith(caches.match(request));
+    return;
+  }
+
   // Check user authentication (implement your authentication logic here).
-  // For example, you can check if the user is authenticated by verifying
-  // the presence and validity of a JWT token stored on the client.
+  // like check if the user is authenticated by verifying
+  // the presence and validity of a JWT token stored on the client. but for now its removed
 
   // Handle authenticated feature pages.
   if (url.startsWith('/feature')) {
