@@ -88,7 +88,13 @@ const FEATURE_RESOURCES = [
   'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/errors.js',
   'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.wasm',
   "/javascript/ffmpeg/ffmpeg/index.js",
-  '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
+  '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js',
+
+  "/javascript/ffmpeg/ffmpeg/worker.js",
+  "/javascript/ffmpeg/ffmpeg/classes.js",
+  "/javascript/ffmpeg/ffmpeg/const.js ",
+  "/javascript/ffmpeg/ffmpeg/utils.js",
+  "/javascript/ffmpeg/ffmpeg/errors.js",
   
   
 ]
