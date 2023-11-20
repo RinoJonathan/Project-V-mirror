@@ -50,6 +50,8 @@ const APP_STATIC_RESOURCES = [
   // Add more static resources here as needed.
 ];
 
+
+//internal feature resources
 const FEATURE_RESOURCES = [
   '/temp.js',
   "/javascript/ffmpeg/core/ffmpeg-core.js",
@@ -73,7 +75,7 @@ const FEATURE_RESOURCES = [
 
 ]
 
-
+let loadFlag = 0 ;
 
 
 //function to check if user had logged in online
@@ -110,21 +112,46 @@ const checkAuth = () => {
 // }
 
 // On install, cache the static resources
-self.addEventListener("install", (event) => {
-    event.waitUntil(
-      (async () => {
-        const cache = await caches.open(CACHE_NAME);
-        cache.addAll(APP_STATIC_RESOURCES);
-        console.log("base caches cached")
 
-        // if(checkAuth()){}
-          cache.addAll(FEATURE_RESOURCES);
-          console.log("feature caches cached")
-        
-      })()
-    );
-    // self.skipWaiting(); // Ensure that the new service worker activates immediately
-  });
+
+const testPrint = () => {
+
+  console.log("delayed message")
+}
+
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+
+      cache.addAll(APP_STATIC_RESOURCES);
+      console.log("base caches cached");
+
+      
+      
+      await cache.addAll(FEATURE_RESOURCES);
+      await console.log("feature caches cached");
+      
+      // If (checkAuth()) {}
+      // await cache.addAll(FEATURE_RESOURCES);
+      // await console.log("feature caches cached");
+
+
+      // Send a message to the main thread to indicate that feature assets are loaded
+      // self.clients.matchAll().then(clients => {
+      //   clients.forEach(client => {
+      //     client.postMessage({ assetsLoaded: true });
+      //   });
+      // });
+      
+
+      // Ensure that the new service worker activates immediately
+      //self.skipWaiting();
+    })()
+  );
+});
+
 
 
   
@@ -141,28 +168,45 @@ self.addEventListener("activate", (event) => {
         })
       );
       await clients.claim();
+      // Send a message directly to the main thread to indicate activation
+      self.clients.matchAll().then((clients) => {
+        clients.forEach((client) => {
+          client.postMessage({ activationEvent: true });
+        });
+      });
     })()
   );
   self.skipWaiting(); // Ensure that the new service worker activates immediately
 });
 
+
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   const urlObj = new URL(request.url);
-  const url = urlObj.pathname
+  const url = urlObj.pathname;
 
-   console.log(url)
-  // Handle homepage caching 
+  console.log(url);
+
+  // if(loadFlag == 0) {
+
+  //   self.clients.matchAll().then(clients => {
+  //     clients.forEach(client => client.postMessage({ assetsLoaded: true }));
+  // })
+  // console.log("sent message, load flag changed")
+  // loadFlag =1;
+  // }
+
+  // Handle homepage caching
   if (url === '/') {
     // Check if the user is online.
     if (navigator.onLine) {
       // If online, fetch the resource from the network (do not cache).
-      console.log("online home")
+      console.log("online home");
       event.respondWith(fetch(request));
       return;
     } else {
       // If offline, respond with the cached page.
-      console.log("offline home")
+      console.log("offline home");
       event.respondWith(caches.match(request));
       return;
     }
@@ -170,7 +214,7 @@ self.addEventListener('fetch', (event) => {
 
   // Handle static resource caching (always cache).
   if (APP_STATIC_RESOURCES.includes(url)) {
-    console.log("offline static caches")
+    console.log("offline static caches");
     event.respondWith(caches.match(request));
     return;
   }
@@ -179,58 +223,47 @@ self.addEventListener('fetch', (event) => {
   // For example, you can check if the user is authenticated by verifying
   // the presence and validity of a JWT token stored on the client.
 
-   
   // Handle authenticated feature pages.
-
-
   if (url.startsWith('/feature')) {
-
-    console.log("inside /fetch")
+    console.log("inside /fetch");
     if (checkAuth()) {
       // Handle authenticated feature pages.
-      
       event.respondWith(
         caches.match(request).then((cachedResponse) => {
           if (cachedResponse) {
             // If cached resource is present, use it.
             console.log("Cached resource present.");
             return cachedResponse;
-          } 
-          else {
-            if(navigator.onLine){
-              
+          } else {
+            if (navigator.onLine) {
               // If cached resource is not present, fetch it from the network.
-            console.log("Cached resource not present. Fetching from network...");
+              console.log("Cached resource not present. Fetching from network...");
 
-            
-            return fetch(request).then((fetchResponse) => {
-              if (fetchResponse.status === 200) {
-                // Clone the response before caching it.
-                const responseToCache = fetchResponse.clone();
+              return fetch(request).then((fetchResponse) => {
+                if (fetchResponse.status === 200) {
+                  // Clone the response before caching it.
+                  const responseToCache = fetchResponse.clone();
 
-                // Cache the fetched response for future use.
-                caches.open(CACHE_NAME).then((cache) => {
-                  cache.put(request, responseToCache);
-                });
-              }
+                  // Cache the fetched response for future use.
+                  caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(request, responseToCache);
+                  });
+                }
 
-              console.log("Fetched feature page from the network.");
-              return fetchResponse;
-            }).catch((e) => {
-              console.log("Error while fetching feature page:", e);
-            });
-            }
-            else{
-              console.log("turn on the network to see the feature")
+                console.log("Fetched feature page from the network.");
+                return fetchResponse;
+              }).catch((e) => {
+                console.log("Error while fetching feature page:", e);
+              });
+            } else {
+              console.log("turn on the network to see the feature");
               return caches.match('/info/offline');
             }
           }
         })
       );
       return;
-      
-    }
-    else {
+    } else {
       // Display a custom message or prompt the user to log in when offline.
       // You can show a modal, a custom HTML element, or navigate to a login page.
       console.log("Please log in using the internet.");
@@ -238,10 +271,7 @@ self.addEventListener('fetch', (event) => {
       window.location.href = '/user/login';
       return;
     }
-
-    
   }
-  
 
   if (url.startsWith('/user')) {
     // Check if the user is online.
@@ -255,16 +285,17 @@ self.addEventListener('fetch', (event) => {
       return;
     }
   }
-  
+
+
+
   // For all other requests, go to the network first, then cache.
   event.respondWith(
     fetch(request).catch(() => {
       return caches.match(request);
     })
   );
+});
 
-  
-}); 
 
 
 //legacy fetch
