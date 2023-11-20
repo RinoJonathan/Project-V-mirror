@@ -281,6 +281,13 @@ const generateOutput = async (inputObject ) => {
         downloadLink2.style.display = "block";
 
     }
+
+      //unhide output video
+      if(video.classList.contains('hidden')){
+
+        video.classList.toggle('hidden')
+
+      }
 }
 
 
@@ -555,3 +562,35 @@ convertButton.addEventListener('click', async () => {
 
 });
 
+
+
+//Showing input video controls
+const videoInputPlayer = document.getElementById('input-video');
+
+
+videoInput.addEventListener("change", function(event) {
+    const selectedFile = event.target.files[0]; // Get the selected file
+  
+    if (selectedFile) {
+      
+      console.log("File selected:", selectedFile.name);
+
+      var objectURL = URL.createObjectURL(selectedFile)
+      videoInputPlayer.src = objectURL
+      
+      //unhide input video
+      if(videoInputPlayer.classList.contains('hidden')){
+
+        videoInputPlayer.classList.toggle('hidden')
+
+      }
+      
+
+
+  
+      
+    } else {
+      
+      console.log("No file selected.");
+    }
+  });

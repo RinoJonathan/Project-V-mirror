@@ -1,5 +1,13 @@
-// // extra fitting
+
+let overlayElements = document.querySelectorAll('.loading-overlay');
+
+
+
+// service worker registration
 if ('serviceWorker' in navigator) {
+
+
+
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js') // Replace with the path to your service worker file
@@ -10,8 +18,72 @@ if ('serviceWorker' in navigator) {
         console.error('Service Worker registration failed:', error);
       });
   });
+
+    // Check if .loading-overlay is present in the current page
+if (overlayElements && overlayElements.length > 0) {
+  
+  // Add an event listener to handle messages from the service worker
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    const { data } = event;
+    // Check if the message indicates activation event
+    if (data && data.activationEvent) {
+      // Update the UI to hide the loading overlay
+      for (let overlayElement of overlayElements) {
+        overlayElement.style.display = 'none';
+      }
+
+      // Update the local storage flag to indicate that assets are loaded
+      localStorage.setItem('assetsLoaded', 'true');
+    }
+  });
+}
+}
+else{
+  alert(" your browser doesnt support offline mode :(")
 }
 
+
+
+
+
+if (overlayElements && overlayElements.length > 0) {
+
+  // Check if assets are already loaded (based on local storage)
+  if (localStorage.getItem('assetsLoaded') === 'true') {
+    console.log("***layouts local storage")
+    for (let overlayElement of overlayElements) {
+      overlayElement.style.display = 'none';
+    }
+  } else {
+    console.log("***NO layouts local storage")
+    // Add an event listener to handle messages from the service worker
+    // navigator.serviceWorker.addEventListener('message', (event) => {
+    //   const { data } = event;
+
+      
+
+    //   // Check if the message indicates that assets are loaded
+    //   if (data && data.assetsLoaded) {
+    //     // Update the UI to hide the loading overlay
+    //     for (let overlayElement of overlayElements) {
+    //       overlayElement.style.display = 'none';
+    //     }
+    //     console.log(" ***layouts in local storage set true 2")
+    //     // Update the local storage flag to indicate that assets are loaded
+    //     localStorage.setItem('assetsLoaded', 'true');
+        
+    //   }
+    // });
+
+    // console.log(" ***Event listener set for message")
+  }
+}
+
+
+
+
+
+// console.log("dev setting")
 
 if(document.querySelector(".my-slider") && tns){
 
