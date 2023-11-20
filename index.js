@@ -26,7 +26,7 @@ app.use((req, res, next) => {
   });
   
 
-mongoose.connect("mongodb://127.0.0.1:27017/projectV")
+mongoose.connect(process.env['DB_URL'])
     .then(() => {
         console.log("Mongoose Connected successfully")
     })
@@ -172,6 +172,6 @@ app.use((err, req, res, next) => {
 
 
 
-app.listen(port, () => {
+app.listen(process.env['PORT'], () => {
     console.log(`listening from port: ${port} `)
 })
