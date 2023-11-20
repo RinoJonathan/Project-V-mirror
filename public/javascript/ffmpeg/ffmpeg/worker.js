@@ -115,7 +115,11 @@ self.onmessage = async ({ data: { id, type, data: _data }, }) => {
         }
     }
     catch (e) {
-        self.postMessage({ id, type: FFMessageType.ERROR, data: e });
+        self.postMessage({
+            id,
+            type: FFMessageType.ERROR,
+            data: e.toString(),
+        });
         return;
     }
     if (data instanceof Uint8Array) {

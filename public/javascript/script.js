@@ -1,7 +1,10 @@
+//set as pwa or normal
+var projectMode = 'pwa';
+
 
 let overlayElements = document.querySelectorAll('.loading-overlay');
 
-
+if(projectMode === 'pwa'){
 
 // service worker registration
 if ('serviceWorker' in navigator) {
@@ -77,6 +80,15 @@ if (overlayElements && overlayElements.length > 0) {
 
     // console.log(" ***Event listener set for message")
   }
+}
+
+}
+else if(projectMode === 'normal'){
+
+for (let overlayElement of overlayElements) {
+  overlayElement.style.display = 'none';
+}
+
 }
 
 

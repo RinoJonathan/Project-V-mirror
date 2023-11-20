@@ -87,3 +87,15 @@ alert("it worked")
 // sw.js:117 /images/slide_2.png
 // sw.js:117 /s/keaniaone/v24/zol54pxjk65e8pxardnu-cnkvg.woff2
 // sw.js:117 /ajax/libs/font-awesome/5.15.4/webfonts/fa-solid-900.woff2
+
+
+//
+//  /npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/index.min.js,
+// sw.js:188 '/npm/@ffmpeg/util@0.12.1/dist/esm/index.min.js',
+// Navigated to http://localhost:3000/feature/muteaudio
+// sw.js:188 '/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/classes.js',
+// sw.js:188 '/npm/@ffmpeg/util@0.12.1/dist/esm/errors.js',
+// sw.js:188 '/npm/@ffmpeg/util@0.12.1/dist/esm/const.js',
+// sw.js:188 '/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/const.js',
+// sw.js:188 '/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/utils.js',
+// sw.js:188 '/npm/@ffmpeg/ffmpeg@0.12.7/dist/esm/errors.js',
