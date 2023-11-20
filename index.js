@@ -26,7 +26,7 @@ app.use((req, res, next) => {
   });
   
 
-mongoose.connect("mongodb://127.0.0.1:27017/projectV")
+mongoose.connect(process.env['DB_URL'])
     .then(() => {
         console.log("Mongoose Connected successfully")
     })
@@ -76,7 +76,7 @@ passport.use(new passportLocal(User.authenticate()))
 passport.use(new GoogleStrategy({
     clientID: process.env['GOOGLE_CLIENT_ID'],
     clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-    callbackURL: "http://localhost:3000/user/google/callback"
+    callbackURL: process.env['GOOGLE_REDIRECT_URI']
     // scope: ['profile', 'email']
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -172,6 +172,6 @@ app.use((err, req, res, next) => {
 
 
 
-app.listen(port, () => {
+app.listen(process.env['PORT'], () => {
     console.log(`listening from port: ${port} `)
 })
