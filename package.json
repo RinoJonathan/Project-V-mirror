@@ -4,7 +4,10 @@
   "description": "a lightweight video editing tool which doesnt require you to commit to this ineffecient cycle of uploading your video to the server and downloading it",
   "main": "index.js",
   "scripts": {
+    "minify": "nodemon --watch ./public/javascript/original/script.js,./public/javascript/original/feature_script.js --exec npx terser ./public/javascript/original/feature_script.js --compress --mangle toplevel  -o ./public/javascript/feature_script.js & npx terser ./public/javascript/original/script.js --compress --mangle toplevel  -o ./public/javascript/script.js ",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
   "repository": {
     "type": "git",
@@ -36,7 +39,6 @@
     "method-override": "^3.0.0",
     "mongoose": "^7.5.3",
     "mongoose-findorcreate": "^4.0.0",
-    "nodemon": "^3.0.1",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
@@ -45,5 +47,9 @@
   },
   "engines": {
     "node": ">=14.20.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "terser": "^5.24.0"
   }
 }
