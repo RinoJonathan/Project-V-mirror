@@ -4,7 +4,10 @@
   "description": "a lightweight video editing tool which doesnt require you to commit to this ineffecient cycle of uploading your video to the server and downloading it",
   "main": "index.js",
   "scripts": {
+    "minify": "nodemon --watch ./public/javascript/original/script.js,./public/javascript/original/feature_script.js --exec npx terser ./public/javascript/original/feature_script.js --compress --mangle toplevel  -o ./public/javascript/feature_script.js & npx terser ./public/javascript/original/script.js --compress --mangle toplevel  -o ./public/javascript/script.js ",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
   "repository": {
     "type": "git",
