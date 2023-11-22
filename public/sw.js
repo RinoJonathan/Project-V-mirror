@@ -6,6 +6,54 @@ const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
 
 
 // Define an array of static resources to cache.
+
+//development
+// const APP_STATIC_RESOURCES = [
+//   '/',
+//   '/css/style.css',
+//   '/javascript/script.js',
+
+//   '/javascript/validateForms.js',
+//   '/info/offline',
+//   '/info/about',
+
+//   '/images/trim.png',
+//   '/images/split.png',
+//   '/images/getaudio.png',
+//   '/images/mute.png',
+//   '/images/convert.png',
+//   '/images/merge.avif',
+//   '/images/resize.png',
+
+
+//   '/icons/icon-512x512.png',
+//   '/manifest.json',
+//   // '',
+
+
+//   'https://fonts.googleapis.com/css2?family=Keania+One&display=swap',
+//   'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css',
+//   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
+//   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
+//   'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js',
+//   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js',
+
+//   '/images/slide_1.png',
+//   '/images/slide_2.png',
+//   '/icons/icon-192x192.png',
+//   // '/icons/icon-256x256.png',
+//   // '/icons/icon-384x384.png',
+
+//   // '',
+//   // '',
+//   '/javascript/feature_script.js',
+//   // '/offline.html',
+//   // 'offlineLogin.html',
+//   // Add more static resources here as needed.
+// ];
+
+//production
+
 const APP_STATIC_RESOURCES = [
   '/',
   '/css/style.css',
@@ -15,13 +63,13 @@ const APP_STATIC_RESOURCES = [
   '/info/offline',
   '/info/about',
 
-  '/images/trim.png',
-  '/images/split.png',
-  '/images/getaudio.png',
-  '/images/mute.png',
-  '/images/convert.png',
-  '/images/merge.avif',
-  '/images/resize.png',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/trim.png',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/split.png',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/getaudio.png',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/mute.png',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/convert.png',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/merge.avif',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/resize.png',
 
 
   '/icons/icon-512x512.png',
@@ -36,9 +84,10 @@ const APP_STATIC_RESOURCES = [
   'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js',
 
-  '/images/slide_1.png',
-  '/images/slide_2.png',
   '/icons/icon-192x192.png',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/slide_1.jpg',
+  'https://cdn.jsdelivr.net/gh/ProjectV103/Project-V-Public/public/images/slide_2.jpg',
+  
   // '/icons/icon-256x256.png',
   // '/icons/icon-384x384.png',
 
@@ -49,7 +98,6 @@ const APP_STATIC_RESOURCES = [
   // 'offlineLogin.html',
   // Add more static resources here as needed.
 ];
-
 
 //internal feature resources
 // const FEATURE_RESOURCES = [
