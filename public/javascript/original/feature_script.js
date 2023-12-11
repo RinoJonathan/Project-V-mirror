@@ -1,11 +1,11 @@
 
-//************ development mode import
+//************ development mode import - switch-dev
 // import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
 // import { fetchFile } from "/javascript/ffmpeg/utils/index.js";
 
 
 //************  production mode import
-// import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.4/+esm";
+//// import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.4/+esm";
 import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
 import { fetchFile } from "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.min.js";
 
@@ -67,7 +67,7 @@ async function loadMultiThreadFiles() {
 
     console.log("multithreading engaged")
 
-    //************ development mode
+    //************ development mode  -  switch-dev
     // await ffmpeg.load({
     //     coreURL: "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
     //     wasmURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm',
@@ -88,7 +88,7 @@ async function loadSingleThreadFiles() {
 
     console.log("singlethreading engaged")
 
-    //************ development mode
+    //************ development mode   - switch-dev
     // await ffmpeg.load({
     //     coreURL: "/javascript/ffmpeg/core/ffmpeg-core.js"
     // });
