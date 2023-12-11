@@ -22,7 +22,7 @@
 <a href="/user/logout">Logout</a> -->
 
 
-<main class="container mt-5">
+<main class="container mt-5" >
 
 <h1>Login</h1>
 <form action="/user/login" method="POST" class="validated-form" novalidate>
@@ -41,20 +41,21 @@
             Looks good!
         </div>
     </div>
-    <button class="btn btn-success">Login</button>
+    <button class="btn btn-success" >Login</button>
 </form>
 
-<a href="/user/google"><button class="btn btn-success" >Google Sign in</button></a>
 
-<a href="/user/register"> <button class="btn btn-primary"  >Register</button> </a>
+
+<a href="/user/register"> <button class="btn btn-primary"   >Register</button> </a>
     
-<a href="/user/logout"><button class="btn btn-danger" >Logout</button></a>
+<!-- <a href="/user/logout"><button class="btn btn-danger" >Logout</button></a> -->
 
+<p class="divLine" style="margin-top: 5em;">OR</p>
 
-
-
-
-
+<a href="/user/google"><button type="button" href="/user/google" class="google-sign-in-button" style="margin-top: 5em;">
+    SignIn with Google
+</button>
+</a>
 
 
 </main>
