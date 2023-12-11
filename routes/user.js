@@ -28,6 +28,11 @@ const setJwtCookies = (expiryDays, req, res) => {
 
 }
 
+const setNameCookie = (req, res) => {
+
+  res.cookie("UserName", req.user, { maxAge: tokenExpirationDays*24*60*60 , httpOnly: false })
+
+}
 
 
 router.get('/register', (req, res) => {
@@ -57,6 +62,7 @@ router.post('/register', catchAsync(async (req, res) => {
         try{
         
         setJwtCookies(tokenExpirationDays, req, res)
+        setNameCookie(req, res)
         
         req.flash("success", "Account Successfully Created")
         res.redirect('/')
@@ -91,6 +97,7 @@ router.post('/login', passport.authenticate('local', { failureFlash: true, failu
   
 
       setJwtCookies(tokenExpirationDays, req, res)
+      setNameCookie(req, res)
 
       req.flash("success", `Logged in successfully as ${req.user.username}`);
       
@@ -123,6 +130,7 @@ router.get('/google',
       }
   
       setJwtCookies(tokenExpirationDays, req, res)
+      setNameCookie(req, res)
   
       req.flash("success", `Logged in successfully as ${req.user.username}`);
       res.redirect('/');
@@ -141,6 +149,7 @@ router.get('/logout', (req, res) => {
 
         if(err) req.flash('error', err.message) 
     })
+        res.clearCookie('UserName')
         req.flash('success', "Goodbye!");
         res.redirect('/');
 });

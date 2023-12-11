@@ -1,5 +1,5 @@
 // Define a version for your cache (update this when you make changes).
-const CACHE_VERSION = 'vt0.013';
+const CACHE_VERSION = 'vt0.014';
 
 // Define a cache name based on the version.
 const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
@@ -97,6 +97,7 @@ const APP_STATIC_RESOURCES = [
   // '/offline.html',
   // 'offlineLogin.html',
   // Add more static resources here as needed.
+  
 ];
 
 //internal feature resources
