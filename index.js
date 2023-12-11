@@ -19,6 +19,10 @@ const passportLocal = require('passport-local')
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 
+const {createClient} = require('redis');
+const RedisStore = require("connect-redis").default;
+
+
 app.use((req, res, next) => {
     res.header('Cross-Origin-Embedder-Policy', 'require-corp');
     res.header('Cross-Origin-Opener-Policy', 'same-origin');
@@ -44,19 +48,72 @@ app.use(methodOverride('_method'));
 
 app.use(cookieParser(process.env['COOKIE_PARSER_SECRET']))
 
-const sessionConfig ={
-    secret: process.env['SESSION_SECRET'],
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
 
-        httpOnly: true,
-        expires: Date.now() + 1000*60*60*24*7,
-        maxAge: 1000*60*60*24*7
-    }
+
+//***********************redis
+
+// Initialize client.
+
+redisClientObject = { 
+    // port: process.env.REDIS_PORT,
+    // host: process.env.REDIS_HOST,
+    // username: process.env.REDIS_USER,
+    // password: process.env.REDIS_PASSWORD,
+    url: process.env.REDIS_URL
 }
 
+let redisClient = createClient(redisClientObject)
+redisClient.connect()
+    .then(() => {
+        console.log("Redis Connected successfully")
+    })
+    .catch( (e)=> {
+        console.log(e)
+    })
+
+
+// Initialize store.
+let redisStore = new RedisStore({
+    client: redisClient,
+    prefix: "projectV:",
+  })
+
+
+
+// Initialize sesssion storage.
+
+
+
+const sessionConfig ={
+    store: redisStore,
+    secret: process.env['SESSION_SECRET'],
+    resave: false, // required: force lightweight session keep alive (touch)
+    saveUninitialized: false, // recommended: only save session when data exists
+    cookie: {
+
+      httpOnly: true,
+      expires: Date.now() + 1000*60*60*24*7,
+      maxAge: 1000*60*60*24*7
+  }
+  }
+
+
 app.use(session(sessionConfig))
+
+
+// const sessionConfig ={
+//     secret: process.env['SESSION_SECRET'],
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+
+//         httpOnly: true,
+//         expires: Date.now() + 1000*60*60*24*7,
+//         maxAge: 1000*60*60*24*7
+//     }
+// }
+
+// app.use(session(sessionConfig))
 
 
 app.engine('ejs', ejsMate);
