@@ -7,7 +7,6 @@
     "minify": "nodemon --watch ./public/javascript/original/script.js,./public/javascript/original/feature_script.js --exec npx terser ./public/javascript/original/feature_script.js --compress --mangle toplevel  -o ./public/javascript/feature_script.js & npx terser ./public/javascript/original/script.js --compress --mangle toplevel  -o ./public/javascript/script.js ",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
-    
   },
   "repository": {
     "type": "git",
@@ -28,6 +27,7 @@
   "homepage": "https://github.com/JustinFrost47/Project-V#readme",
   "dependencies": {
     "connect-flash": "^0.1.1",
+    "connect-redis": "^7.1.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
@@ -43,6 +43,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
+    "redis": "^4.6.11",
     "serve-index": "^1.9.1"
   },
   "engines": {
