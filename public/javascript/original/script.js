@@ -1,5 +1,10 @@
-//set as pwa or normal
+//******** set as pwa production -  switch-dev
 var projectMode = 'pwa';
+
+
+// set as normal during production
+// var projectMode = 'normal';
+
 
 
 let overlayElements = document.querySelectorAll('.loading-overlay');
@@ -92,7 +97,39 @@ for (let overlayElement of overlayElements) {
 }
 
 
+// Function to get the value of a cookie by name
+function getCookie(cookieName) {
+  const name = `${cookieName}=`;
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(';');
 
+  for (let i = 0; i < cookieArray.length; i++) {
+    let cookie = cookieArray[i].trim();
+    if (cookie.indexOf(name) === 0) {
+      return JSON.parse(cookie.substring(name.length+2, cookie.length));
+    }
+  }
+
+  return null;
+}
+
+
+const userNameCookie = getCookie('UserName');
+
+if (userNameCookie) {
+  
+  const loginNav = document.querySelector("#loginNav")
+  const regNav = document.querySelector("#registerNav")
+
+  loginNav.innerHTML = userNameCookie.username
+  loginNav.href = ""
+  regNav.innerText = "LogOut"
+  regNav.href = "/user/logout"
+  
+  
+} else {
+  console.log('UserName cookie not found or has no value.');
+}
 
 
 // console.log("dev setting")
