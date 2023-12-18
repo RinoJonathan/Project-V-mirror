@@ -121,7 +121,7 @@ if (userNameCookie) {
   const loginNav = document.querySelector("#loginNav")
   const regNav = document.querySelector("#registerNav")
 
-  loginNav.innerHTML = userNameCookie.username
+  loginNav.innerText = userNameCookie.username
   loginNav.href = ""
   regNav.innerText = "LogOut"
   regNav.href = "/user/logout"
