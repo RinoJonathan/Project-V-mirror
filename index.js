@@ -7,6 +7,7 @@ const path = require('path');
 const ejsMate = require('ejs-mate');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
 
 const appError = require("./utilities/appError")
 const asyncWrapper = require("./utilities/asyncWrapper")
@@ -21,6 +22,8 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const {createClient} = require('redis');
 const RedisStore = require("connect-redis").default;
+
+const mongoSanitize = require('express-mongo-sanitize');
 
 
 app.use((req, res, next) => {
@@ -43,7 +46,9 @@ const User = require('./models/user')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(bodyParser.json());
 
+app.use(mongoSanitize());
 
 
 app.use(cookieParser(process.env['COOKIE_PARSER_SECRET']))
