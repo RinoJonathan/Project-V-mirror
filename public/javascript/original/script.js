@@ -1,10 +1,5 @@
 // "production" - pwa | "developmental" - normal mode
-const envMode = "developmental"// "developmental"
-
-
-
-
-
+const envMode = "production"// "developmental"
 
 
 let overlayElements = document.querySelectorAll('.loading-overlay');

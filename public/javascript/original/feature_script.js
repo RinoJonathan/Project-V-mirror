@@ -1,4 +1,6 @@
-const envMode = "developmental"// "developmental"
+//"developmental" or "production"
+
+const envMode = "production"
 let pathObject = {}
 let FFmpeg, fetchFile;
 
