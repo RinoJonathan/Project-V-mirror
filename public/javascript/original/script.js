@@ -1,11 +1,9 @@
+// "production" - pwa | "developmental" - normal mode
 const envMode = "developmental"// "developmental"
 
-//******** set as pwa production -  switch-dev
-var projectMode = 'pwa';
 
 
-// set as normal during production
-// var projectMode = 'normal';
+
 
 
 

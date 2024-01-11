@@ -3,6 +3,7 @@ let pathObject = {}
 let FFmpeg, fetchFile;
 
 
+
 if (envMode === "production") {
 
     pathObject = {
@@ -31,15 +32,6 @@ if (envMode === "production") {
 
 
 
-//************ development mode import - switch-dev
-// import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
-// import { fetchFile } from "/javascript/ffmpeg/utils/index.js";
-
-
-//************  production mode import
-//// import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.4/+esm";
-// import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
-// import { fetchFile } from "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.min.js";
 
 // Wrap the dynamic imports in an IIFE for dynamic import paths
 
@@ -114,20 +106,7 @@ async function loadMultiThreadFiles() {
 
     console.log("multithreading engaged")
 
-    //************ development mode  -  switch-dev
-    // await ffmpeg.load({
-    //     coreURL: "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
-    //     wasmURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm',
-    //     workerURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
-    // });
 
-
-    //*************  production mode
-    // await ffmpeg.load({
-    //     coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.4/dist/esm/ffmpeg-core.js",
-    //     wasmURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.4/dist/esm/ffmpeg-core.wasm',
-    //     workerURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
-    // });
 
     await ffmpeg.load({
         coreURL: pathObject['mtCore'],
@@ -141,19 +120,9 @@ async function loadSingleThreadFiles() {
 
     console.log("singlethreading engaged")
 
-    //************ development mode   - switch-dev
-    // await ffmpeg.load({
-    //     coreURL: "/javascript/ffmpeg/core/ffmpeg-core.js"
-    // });
 
-    
-    //*************  production mode
-    // await ffmpeg.load({
-    //     coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.js"
-    //     // coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/+esm"
-    // });
 
-        await ffmpeg.load({
+    await ffmpeg.load({
         coreURL: pathObject['stCore']
         // coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/+esm"
     });
@@ -431,8 +400,7 @@ toggleModeButton.addEventListener('click', toggleMode);
 
 async function initLoad() {
     console.log("loading ffmpeg")
-    await console.log(FFmpeg)
-    await console.log(fetchFile)
+
     await initialize_Ffmpeg();
     
   }
