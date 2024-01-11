@@ -387,8 +387,8 @@ async function toggleMode() {
 }
 
 // Add an event listener to the toggle button
-const toggleModeButton = document.getElementById('toggleModeButton');
-toggleModeButton.addEventListener('click', toggleMode);
+// const toggleModeButton = document.getElementById('toggleModeButton');
+// toggleModeButton.addEventListener('click', toggleMode);
 
 
 /***************************** Driver and main codes start from here ************************** */
