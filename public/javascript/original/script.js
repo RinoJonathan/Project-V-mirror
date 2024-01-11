@@ -1,15 +1,10 @@
-//******** set as pwa production -  switch-dev
-var projectMode = 'pwa';
-
-
-// set as normal during production
-// var projectMode = 'normal';
-
+// "production" - pwa | "developmental" - normal mode
+const envMode = "production"// "developmental"
 
 
 let overlayElements = document.querySelectorAll('.loading-overlay');
 
-if(projectMode === 'pwa'){
+if(envMode === 'production'){
 
 // service worker registration
 if ('serviceWorker' in navigator) {
@@ -88,7 +83,7 @@ if (overlayElements && overlayElements.length > 0) {
 }
 
 }
-else if(projectMode === 'normal'){
+else if(envMode === 'developmental'){
 
 for (let overlayElement of overlayElements) {
   overlayElement.style.display = 'none';

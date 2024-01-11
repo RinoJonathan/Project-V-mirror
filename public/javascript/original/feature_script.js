@@ -1,13 +1,54 @@
+//"developmental" or "production"
 
-//************ development mode import - switch-dev
-// import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
-// import { fetchFile } from "/javascript/ffmpeg/utils/index.js";
+const envMode = "production"
+let pathObject = {}
+let FFmpeg, fetchFile;
 
 
-//************  production mode import
-//// import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.4/+esm";
-import { FFmpeg } from "/javascript/ffmpeg/ffmpeg/index.js";
-import { fetchFile } from "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.min.js";
+
+if (envMode === "production") {
+
+    pathObject = {
+        ffmpeg : "/javascript/ffmpeg/ffmpeg/index.js",
+        utils: "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.min.js",
+        mtCore: "https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.4/dist/esm/ffmpeg-core.js",
+        mtWasm: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.4/dist/esm/ffmpeg-core.wasm',
+        mtWorker: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js',
+        stCore: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.js",
+
+    }
+} else if(envMode === "developmental") {
+
+    pathObject = {
+        ffmpeg : "/javascript/ffmpeg/ffmpeg/index.js",
+        utils: "/javascript/ffmpeg/utils/index.js",
+        mtCore: "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
+        mtWasm: '/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm',
+        mtWorker: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js',
+        stCore: "/javascript/ffmpeg/core/ffmpeg-core.js",
+
+    }
+
+}
+
+
+
+
+
+// Wrap the dynamic imports in an IIFE for dynamic import paths
+
+(async () => {
+    const { FFmpeg: ffmpegModule } = await import(pathObject.ffmpeg);
+    const { fetchFile: fetchFileModule } = await import(pathObject.utils);
+
+    FFmpeg = ffmpegModule;
+    fetchFile = fetchFileModule;
+
+    await initLoad();
+
+})();
+
+
 
 let ffmpeg = null;
 let previousProcessedVideoUrl;
@@ -67,19 +108,12 @@ async function loadMultiThreadFiles() {
 
     console.log("multithreading engaged")
 
-    //************ development mode  -  switch-dev
-    // await ffmpeg.load({
-    //     coreURL: "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
-    //     wasmURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm',
-    //     workerURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
-    // });
 
 
-    //*************  production mode
     await ffmpeg.load({
-        coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.4/dist/esm/ffmpeg-core.js",
-        wasmURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.4/dist/esm/ffmpeg-core.wasm',
-        workerURL: '/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js'
+        coreURL: pathObject['mtCore'],
+        wasmURL: pathObject['mtWasm'],
+        workerURL: pathObject['mtWorker']
     });
 }
 
@@ -88,17 +122,13 @@ async function loadSingleThreadFiles() {
 
     console.log("singlethreading engaged")
 
-    //************ development mode   - switch-dev
-    // await ffmpeg.load({
-    //     coreURL: "/javascript/ffmpeg/core/ffmpeg-core.js"
-    // });
 
-    
-    //*************  production mode
+
     await ffmpeg.load({
-        coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.js"
+        coreURL: pathObject['stCore']
         // coreURL: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/+esm"
     });
+
 }
 
 
@@ -372,11 +402,12 @@ toggleModeButton.addEventListener('click', toggleMode);
 
 async function initLoad() {
     console.log("loading ffmpeg")
+
     await initialize_Ffmpeg();
     
   }
   
-  initLoad();
+
 
 
 

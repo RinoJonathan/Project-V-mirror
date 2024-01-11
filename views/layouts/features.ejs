@@ -41,9 +41,15 @@
    
 <!-- NOTE: prior to v2.2.1 tiny-slider.js need to be in <body> -->
 
+    <% if(envMode==="production") { %>
+        <script type="module" src="/javascript/script.js"></script>
+        <script type="module" src="/javascript/feature_script.js"></script>
+    <% } else if(envMode === "developmental") {%>
+        <script type="module" src="/javascript/original/script.js"></script>
+        <script type="module" src="/javascript/original/feature_script.js"></script>
+    <% } %> 
  
-    <script type="module" src="/javascript/script.js"></script>
-    <script type="module" src="/javascript/feature_script.js"></script>
+
     
     
 </body>

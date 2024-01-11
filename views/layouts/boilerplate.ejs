@@ -18,7 +18,7 @@
 
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icons/icon-512x512.png" />
-    
+
     <meta name="google-site-verification" content="ULR8k55bWjFMbIKf_zXSn-sllCV_Ef8YrCFzXehx2pg" />
 
 </head>
@@ -42,8 +42,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
 <!-- NOTE: prior to v2.2.1 tiny-slider.js need to be in <body> -->
 
+    <% if(envMode==="production") { %>
+        <script type="module" src="/javascript/script.js"></script>
+    <% } else if(envMode === "developmental") {%>
+        <script type="module" src="/javascript/original/script.js"></script>
+    <% } %> 
 
-    <script type="module" src="/javascript/script.js"></script>
+    
 </body>
 <!-- <script src="" integrity="></script> -->
 
