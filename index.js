@@ -198,6 +198,7 @@ passport.deserializeUser(User.deserializeUser())
 
 const flashMiddleware = (req, res, next) => {
     res.locals.currentUser = req.user
+    res.locals.envMode = process.env["ENV_MODE"]
     res.locals.success = req.flash('success')
     res.locals.failure = req.flash('failure')
     res.locals.error = req.flash('error')
