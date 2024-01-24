@@ -9,6 +9,8 @@ Project V has two main dependencies
 2. Nodejs
 3. Git
 
+Dependency on redis was removed to enable mobility during possible future migrations
+
 Though there are no dependencies on operating system, We highly recommend you to use Linux
 
 ### 1.Mongodb
@@ -142,4 +144,5 @@ shutdown  the server and run  (dont forget to revert envmode to production befor
 	
 if you face any errors, fix it and try again. if you dont face any errors, then these files will become minified outside
 
+read documentation folder of the project to get a good understanding of this project
 
