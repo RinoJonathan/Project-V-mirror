@@ -684,3 +684,9 @@ a{
 .divLine:after {
   margin-left: 10px
 }
+
+.member-card{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
