@@ -221,14 +221,17 @@ h1 {
 @media (max-width: 767px) {
   .container-carousel {
       
-    height: 70%; /* Adjust the height for smaller screens */
+    height: 400px; /* Adjust the height for smaller screens */
   }
 
 
 
   .my-slider img {
-    width: 100%; /* Allow images to take the full width of their container */
-    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+    width: 90%; /* Allow images to take the full width of their container */
+    height: 300px; /* Automatically adjust the height to maintain aspect ratio */
+    margin-left: 7%;
+    margin-right: 7%;
+    /* max-width: 420px; */
   }
   
 
@@ -261,7 +264,7 @@ h1 {
   }
 
   .my-slider img {
-    width: 100%; /* Allow images to take the full width of their container */
+    width: 90%; /* Allow images to take the full width of their container */
     height: auto; /* Automatically adjust the height to maintain aspect ratio */
   }
   
@@ -270,12 +273,12 @@ h1 {
 /* Media query for screens larger than 992px (e.g., desktops) */
 @media (min-width: 1130px) {
   .container-carousel {
-      height: 600px; /* Keep the default height for desktops */
+      height: 500px; /* Keep the default height for desktops */
   }
 
   .my-slider img {
-    width: 100%; /* Allow images to take the full width of their container */
-    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+    width: 90%; /* Allow images to take the full width of their container */
+    height: 300px; /* Automatically adjust the height to maintain aspect ratio */
   }
   
 }
