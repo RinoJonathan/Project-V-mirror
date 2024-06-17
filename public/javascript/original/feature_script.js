@@ -1,6 +1,6 @@
 //"developmental" or "production"
 
-const envMode = "production"
+// const envMode = "production"
 let pathObject = {}
 let FFmpeg, fetchFile;
 
@@ -17,7 +17,7 @@ if (envMode === "production") {
         stCore: "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.js",
 
     }
-} else if(envMode === "developmental") {
+} else if(envMode === "development") {
 
     pathObject = {
         ffmpeg : "/javascript/ffmpeg/ffmpeg/index.js",
