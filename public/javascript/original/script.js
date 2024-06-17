@@ -1,11 +1,13 @@
 // "production" - pwa | "developmental" - normal mode
-const envMode = "production"// "developmental"
+// const envMode = "production"// "developmental"
 
 
 let overlayElements = document.querySelectorAll('.loading-overlay');
 
 if(envMode === 'production'){
 
+  console.log("env mode is: ")
+console.log(envMode)
 // service worker registration
 if ('serviceWorker' in navigator) {
 
@@ -83,12 +85,14 @@ if (overlayElements && overlayElements.length > 0) {
 }
 
 }
-else if(envMode === 'developmental'){
+else if(envMode === 'development'){
 
 for (let overlayElement of overlayElements) {
   overlayElement.style.display = 'none';
 }
 
+console.log("env mode is: ")
+console.log(envMode)
 }
 
 

@@ -1,5 +1,5 @@
 // require('events').EventEmitter.prototype._maxListeners = 25;
-
+require('./utilities/envConfig') 
 const express = require('express');
 const app = express();
 require('dotenv').config();
@@ -198,7 +198,7 @@ passport.deserializeUser(User.deserializeUser())
 
 const flashMiddleware = (req, res, next) => {
     res.locals.currentUser = req.user
-    res.locals.envMode = process.env["ENV_MODE"]
+    res.locals.envMode = process.env.NODE_ENV
     res.locals.success = req.flash('success')
     res.locals.failure = req.flash('failure')
     res.locals.error = req.flash('error')
@@ -226,7 +226,7 @@ app.use('/user', userRoute)
 app.use('/feature', featureRoute)
 app.use('/info', infoRoute)
 
-const port =  3000;
+const port =  process.env['PORT'];
 
 app.get("/", (req, res) => {
 
@@ -265,6 +265,6 @@ app.use((err, req, res, next) => {
 
 
 
-app.listen(process.env['PORT'], () => {
+app.listen(port, () => {
     console.log(`listening from port: ${port} `)
 })

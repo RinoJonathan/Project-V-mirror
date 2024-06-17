@@ -36,6 +36,11 @@
 
     <%- include("../partials/footer")  %> 
 
+    <script>
+
+        const envMode = "<%= envMode %>";
+
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
    
@@ -44,7 +49,7 @@
     <% if(envMode==="production") { %>
         <script type="module" src="/javascript/script.js"></script>
         <script type="module" src="/javascript/feature_script.js"></script>
-    <% } else if(envMode === "developmental") {%>
+    <% } else if(envMode === "development") {%>
         <script type="module" src="/javascript/original/script.js"></script>
         <script type="module" src="/javascript/original/feature_script.js"></script>
     <% } %> 
