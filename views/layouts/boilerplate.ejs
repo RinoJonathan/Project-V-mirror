@@ -40,6 +40,8 @@
     <script>
 
         const envMode = "<%= envMode %>";
+        if(envMode === "production")   console.log = () => {} //to turn off console logging
+
 
     </script>
 

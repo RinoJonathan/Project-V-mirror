@@ -6,8 +6,7 @@ let overlayElements = document.querySelectorAll('.loading-overlay');
 
 if(envMode === 'production'){
 
-  console.log("env mode is: ")
-console.log(envMode)
+
 // service worker registration
 if ('serviceWorker' in navigator) {
 
