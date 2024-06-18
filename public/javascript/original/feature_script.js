@@ -211,15 +211,25 @@ class VideoProcessor {
         this.ffmpegManager.initLoad();
     }
 
+    
     async handleConvertButtonClick() {
 
             const videoInput = document.getElementById('videoInput');
             const mode = document.getElementById('mode').textContent;
+            const outName = document.getElementById('outputName')
             console.log(mode)
         
             if (!videoInput || videoInput.files.length === 0) {
                 console.error("No video file selected.");
                 return;
+            }
+
+            if(!outName.value) {
+                
+                // outName.focus()
+                outName.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                alert("Enter Name for Output file")
+                return
             }
         
             const videoFile = videoInput.files;
@@ -227,7 +237,7 @@ class VideoProcessor {
 
                 videoFile: videoInput.files,
                 inputFileName:'',
-                outputFileN: document.getElementById('outputName').value,
+                outputFileN: outName.value,
                 outputFileType: '',
                 outputFileName: '',
                 outputFileName2: '',
