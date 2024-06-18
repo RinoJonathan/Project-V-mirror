@@ -11,8 +11,12 @@ class FFmpegManager {
     async initLoad() {
         let pathObject = this.getPathObject();
 
-        const { FFmpeg: ffmpegModule } = await import(pathObject.ffmpeg);
-        const { fetchFile: fetchFileModule } = await import(pathObject.utils);
+        const {
+            FFmpeg: ffmpegModule
+        } = await import(pathObject.ffmpeg);
+        const {
+            fetchFile: fetchFileModule
+        } = await import(pathObject.utils);
 
         this.FFmpeg = ffmpegModule;
         this.fetchFile = fetchFileModule;
@@ -46,10 +50,15 @@ class FFmpegManager {
     async initializeFfmpeg() {
         if (this.ffmpeg === null) {
             this.ffmpeg = new this.FFmpeg();
-            this.ffmpeg.on("log", ({ message }) => {
+            this.ffmpeg.on("log", ({
+                message
+            }) => {
                 console.log(message);
             });
-            this.ffmpeg.on("progress", ({ progress, time }) => {
+            this.ffmpeg.on("progress", ({
+                progress,
+                time
+            }) => {
                 this.message.innerHTML = `${progress * 100} %`;
             });
             if (this.isMultiThreaded) {
@@ -108,7 +117,7 @@ class FFmpegManager {
     getCommands(inputObject, mode) {
         const editoptions = {
             conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
-            trim: `-ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -t ${inputObject.end.time} -map 0:v -map 1:a -c:v copy -c:a copy "${inputObject.outputFileName}"`,
+            trim: `-ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -ss "${inputObject.start.time}" -i "${inputObject.inputFileName}" -t ${inputObject.end.time} -map 0:v -map 1:a? -c:v copy -c:a copy "${inputObject.outputFileName}"`,
             merge: `-f concat -safe 0 -i concat_list.txt -c:v copy -c:a copy "${inputObject.outputFileName}"`,
             split: `-i "${inputObject.inputFileName}" -t ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName}" -ss ${inputObject.start.time} -c:v copy -c:a copy "${inputObject.outputFileName2}"`,
             resize: `-i "${inputObject.inputFileName}" -vf "scale=${inputObject.size},setsar=1:1" ${inputObject.outputFileName}`,
@@ -136,7 +145,9 @@ class FFmpegManager {
             case 'merge':
                 const inputPaths = [];
                 for (const file of inputObject.videoFile) {
-                    const { name } = file;
+                    const {
+                        name
+                    } = file;
                     await this.ffmpeg.writeFile(name, await this.fetchFile(file));
                     inputPaths.push(`file '${name}'`);
                 }
@@ -147,18 +158,22 @@ class FFmpegManager {
                 return;
         }
 
+
         this.message.innerHTML = 'Start transcoding';
         const command = this.getCommands(inputObject, mode);
         const commandArray = this.parseCommandString(command);
         await this.ffmpeg.exec(commandArray);
         this.message.innerHTML = 'Transcoding completed';
+
     }
 
     async generateOutput(inputObject, mode) {
         const data = await this.ffmpeg.readFile(inputObject.outputFileName);
         const video = document.getElementById('output-video');
         const mimeType = `video/${inputObject.outputFileType}`;
-        const processedVideoUrl = URL.createObjectURL(new Blob([data.buffer], { type: mimeType }));
+        const processedVideoUrl = URL.createObjectURL(new Blob([data.buffer], {
+            type: mimeType
+        }));
         video.src = processedVideoUrl;
 
         if (this.previousProcessedVideoUrl) {
@@ -173,7 +188,9 @@ class FFmpegManager {
 
         if (mode === 'split') {
             const data2 = await this.ffmpeg.readFile(inputObject.outputFileName2);
-            const processedVideoUrl2 = URL.createObjectURL(new Blob([data2.buffer], { type: mimeType }));
+            const processedVideoUrl2 = URL.createObjectURL(new Blob([data2.buffer], {
+                type: mimeType
+            }));
 
             if (this.previousProcessedVideoUrl2) {
                 URL.revokeObjectURL(this.previousProcessedVideoUrl2);
@@ -205,160 +222,171 @@ class VideoProcessor {
         }
 
         this.convertButton.addEventListener("click", async () => {
+            
+        try{
             await this.handleConvertButtonClick();
+        } catch(e) {
+
+            document.getElementById('message').innerHTML = 'error occured';
+            console.log(e)
+
+        }
         });
 
         this.ffmpegManager.initLoad();
     }
 
-    
+
     async handleConvertButtonClick() {
 
-            const videoInput = document.getElementById('videoInput');
-            const mode = document.getElementById('mode').textContent;
-            const outName = document.getElementById('outputName')
-            console.log(mode)
-        
-            if (!videoInput || videoInput.files.length === 0) {
-                console.error("No video file selected.");
-                return;
-            }
+        const videoInput = document.getElementById('videoInput');
+        const mode = document.getElementById('mode').textContent;
+        const outName = document.getElementById('outputName')
+        console.log(mode)
 
-            if(!outName.value) {
-                
-                // outName.focus()
-                outName.scrollIntoView({ behavior: 'smooth', block: 'center' })
-                alert("Enter Name for Output file")
-                return
-            }
-        
-            const videoFile = videoInput.files;
-            var inputObject = {
-
-                videoFile: videoInput.files,
-                inputFileName:'',
-                outputFileN: outName.value,
-                outputFileType: '',
-                outputFileName: '',
-                outputFileName2: '',
-                start: {
-                    hour: 0,
-                    minute: 0,
-                    second: 0
-                },
-                end : {
-                    hour: 0,
-                    minute: 0,
-                    second: 0
-                },
-                duration:'',
-                size:'',
-                dimension:'',
-                audioinput:'',
-                drawtext:''
+        if (!videoInput || videoInput.files.length === 0) {
+            console.error("No video file selected.");
+            return;
         }
-        
-            switch (mode) {
-                case 'conversion':
-                    inputObject.outputFileType = document.getElementById('outputFormat').value;
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-                    break;
-        
-                case 'trim':
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
-                    inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-                    inputObject.start = {
-                        hour: document.getElementById('start_hour').value,
-                        minute: document.getElementById('start_minute').value,
-                        second: document.getElementById('start_second').value,
-                    };
-                    inputObject.end = {
-                        hour: document.getElementById('end_hour').value,
-                        minute: document.getElementById('end_minute').value,
-                        second: document.getElementById('end_second').value,
-                    };
-                    inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
-                    inputObject.end.time = `${inputObject.start.hour}:${inputObject.end.minute}:${inputObject.end.second}`;
-                    inputObject.end.time = this.calculateDuration(inputObject.start.time, inputObject.end.time);
-                    break;
-        
-                case 'merge':
-                    console.log("merging - input");
-                    inputObject.videoFile = videoInput.files;
-                    console.log(inputObject.videoFile);
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
-                    inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-        
-                    const inputType = inputObject.inputFileName.split('.').pop();
-                    for (var type of inputObject.videoFile) {
-                        if (type.name.split('.').pop() != inputType) {
-                            alert("input files must be of the same type");
-                            return;
-                        }
+
+        if (!outName.value) {
+
+            // outName.focus()
+            outName.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
+            alert("Enter Name for Output file")
+            return
+        }
+
+        const videoFile = videoInput.files;
+        var inputObject = {
+
+            videoFile: videoInput.files,
+            inputFileName: '',
+            outputFileN: outName.value,
+            outputFileType: '',
+            outputFileName: '',
+            outputFileName2: '',
+            start: {
+                hour: 0,
+                minute: 0,
+                second: 0
+            },
+            end: {
+                hour: 0,
+                minute: 0,
+                second: 0
+            },
+            duration: '',
+            size: '',
+            dimension: '',
+            audioinput: '',
+            drawtext: ''
+        }
+
+        switch (mode) {
+            case 'conversion':
+                inputObject.outputFileType = document.getElementById('outputFormat').value;
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                break;
+
+            case 'trim':
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                inputObject.start = {
+                    hour: document.getElementById('start_hour').value,
+                    minute: document.getElementById('start_minute').value,
+                    second: document.getElementById('start_second').value,
+                };
+                inputObject.end = {
+                    hour: document.getElementById('end_hour').value,
+                    minute: document.getElementById('end_minute').value,
+                    second: document.getElementById('end_second').value,
+                };
+                inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
+                inputObject.end.time = `${inputObject.start.hour}:${inputObject.end.minute}:${inputObject.end.second}`;
+                inputObject.end.time = this.calculateDuration(inputObject.start.time, inputObject.end.time);
+                break;
+
+            case 'merge':
+                console.log("merging - input");
+                inputObject.videoFile = videoInput.files;
+                console.log(inputObject.videoFile);
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+
+                const inputType = inputObject.inputFileName.split('.').pop();
+                for (var type of inputObject.videoFile) {
+                    if (type.name.split('.').pop() != inputType) {
+                        alert("input files must be of the same type");
+                        return;
                     }
-                    break;
-        
-                case 'split':
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
-                    inputObject.outputFileName = `${inputObject.outputFileN}p1.${inputObject.outputFileType}`;
-                    inputObject.outputFileName2 = `${inputObject.outputFileN}p2.${inputObject.outputFileType}`;
-                    inputObject.start = {
-                        hour: document.getElementById('start_hour').value,
-                        minute: document.getElementById('start_minute').value,
-                        second: document.getElementById('start_second').value,
-                    };
-                    inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
-                    console.log(inputObject)
-                    break;
-        
-                case 'resize':
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
-                    inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-                    inputObject.size = document.getElementById('dimension').value;
-                    break;
-        
-                case 'removeaudio':
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
-                    inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-                    break;
-        
-                case 'crop':
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
-                    inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-                    inputObject.dimension = `${document.getElementById('width').value}:${document.getElementById('height').value}:${document.getElementById('x').value}:${document.getElementById('y').value}`;
-                    console.log(inputObject.dimension);
-                    break;
-        
-                case 'getaudio':
-                    inputObject.outputFileType = document.getElementById('outputFormat').value;
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-                    break;
-        
-                case 'textoverlay':
-                    inputObject.inputFileName = inputObject.videoFile[0].name;
-                    inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
-                    inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
-                    inputObject.drawtext = `text='${document.getElementById('text').value}':x=${document.getElementById('x').value}:y=${document.getElementById('y').value}:fontsize=${document.getElementById('fontsize').value}`;
-                    console.log(` The created drawtext ${inputObject.drawtext}`);
-                    break;
-        
-                default:
-                    console.log("path not found");
-                    return;
-            }
-        
-            // Now you would call your FFmpeg processing function with inputObject
-            await this.ffmpegManager.processVideo(inputObject, mode);
-            await this.ffmpegManager.generateOutput(inputObject, mode);
+                }
+                break;
+
+            case 'split':
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                inputObject.outputFileName = `${inputObject.outputFileN}p1.${inputObject.outputFileType}`;
+                inputObject.outputFileName2 = `${inputObject.outputFileN}p2.${inputObject.outputFileType}`;
+                inputObject.start = {
+                    hour: document.getElementById('start_hour').value,
+                    minute: document.getElementById('start_minute').value,
+                    second: document.getElementById('start_second').value,
+                };
+                inputObject.start.time = `${inputObject.start.hour}:${inputObject.start.minute}:${inputObject.start.second}`;
+                console.log(inputObject)
+                break;
+
+            case 'resize':
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                inputObject.size = document.getElementById('dimension').value;
+                break;
+
+            case 'removeaudio':
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                break;
+
+            case 'crop':
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                inputObject.dimension = `${document.getElementById('width').value}:${document.getElementById('height').value}:${document.getElementById('x').value}:${document.getElementById('y').value}`;
+                console.log(inputObject.dimension);
+                break;
+
+            case 'getaudio':
+                inputObject.outputFileType = document.getElementById('outputFormat').value;
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                break;
+
+            case 'textoverlay':
+                inputObject.inputFileName = inputObject.videoFile[0].name;
+                inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
+                inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
+                inputObject.drawtext = `text='${document.getElementById('text').value}':x=${document.getElementById('x').value}:y=${document.getElementById('y').value}:fontsize=${document.getElementById('fontsize').value}`;
+                console.log(` The created drawtext ${inputObject.drawtext}`);
+                break;
+
+            default:
+                console.log("path not found");
+                return;
         }
+
+        // Now you would call your FFmpeg processing function with inputObject
+        await this.ffmpegManager.processVideo(inputObject, mode);
+        await this.ffmpegManager.generateOutput(inputObject, mode);
+    }
 
     calculateDuration(startTime, endTime) {
         const startParts = startTime.split(':').map(parseFloat);
@@ -383,32 +411,32 @@ class VideoProcessor {
 const videoInputPlayer = document.getElementById('input-video');
 
 
-videoInput.addEventListener("change", function(event) {
+videoInput.addEventListener("change", function (event) {
     const selectedFile = event.target.files[0]; // Get the selected file
-  
+
     if (selectedFile) {
-      
-      console.log("File selected:", selectedFile.name);
 
-      var objectURL = URL.createObjectURL(selectedFile)
-      videoInputPlayer.src = objectURL
-      
-      //unhide input video
-      if(videoInputPlayer.classList.contains('hidden')){
+        console.log("File selected:", selectedFile.name);
 
-        videoInputPlayer.classList.toggle('hidden')
+        var objectURL = URL.createObjectURL(selectedFile)
+        videoInputPlayer.src = objectURL
 
-      }
-      
+        //unhide input video
+        if (videoInputPlayer.classList.contains('hidden')) {
+
+            videoInputPlayer.classList.toggle('hidden')
+
+        }
 
 
-  
-      
+
+
+
     } else {
-      
-      console.log("No file selected.");
+
+        console.log("No file selected.");
     }
-  });
+});
 
 
 new VideoProcessor(envMode);
