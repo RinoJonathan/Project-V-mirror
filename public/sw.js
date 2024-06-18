@@ -1,8 +1,10 @@
 // Define a version for your cache (update this when you make changes).
-const CACHE_VERSION = 'vt0.016';
+const CACHE_VERSION = 'vt0.017';
 
 // Define a cache name based on the version.
 const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
+
+console.log = () => {} //turning off logging
 
 
 // Define an array of static resources to cache.
