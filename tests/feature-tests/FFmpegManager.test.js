@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { FFmpegManager } from "../../public/javascript/original/feature_script";
 
 
@@ -8,7 +12,16 @@ describe('FFmpegManager', () => {
   let mockMessage;
 
   beforeEach(() => {
-    document.body.innerHTML = '<div id="message"></div><video id="output-video" class="hidden"></video><a id="downloadLink"></a><a id="downloadLink2"></a>';
+    
+    document.body.innerHTML = `
+    <input type="file" id="videoInput" />
+    <input type="text" id="outputName" />
+    <button id="convertButton"></button>
+    <span id="mode">conversion</span>
+    <div id="message"></div>
+    <video id="input-video" class="hidden"></video>
+  `;
+  
     mockMessage = document.getElementById('message');
     ffmpegManager = new FFmpegManager('development');
     mockFFmpeg = {

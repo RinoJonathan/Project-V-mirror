@@ -427,7 +427,14 @@ export class VideoProcessor {
                 inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
                 break;
 
-            case 'crop':
+            case 'crop':    document.body.innerHTML = `
+            <input type="file" id="videoInput" />
+            <input type="text" id="outputName" />
+            <button id="convertButton"></button>
+            <span id="mode">conversion</span>
+            <div id="message"></div>
+            <video id="input-video" class="hidden"></video>
+          `;
                 inputObject.inputFileName = inputObject.videoFile[0].name;
                 inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
                 inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
@@ -477,5 +484,11 @@ export class VideoProcessor {
 
 
 
+//env mode gets defined during  production or development, for testing, things should go differently
+if (typeof envMode !== 'undefined') {
+    new VideoProcessor(envMode);
+    
+  } else {
 
-new VideoProcessor(envMode);
+    new VideoProcessor('development');
+  }
