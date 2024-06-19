@@ -7,7 +7,7 @@
     "minify": "nodemon --watch ./public/javascript/original/script.js,./public/javascript/original/feature_script.js --exec npx terser ./public/javascript/original/feature_script.js --compress --mangle toplevel  -o ./public/javascript/feature_script.js & npx terser ./public/javascript/original/script.js --compress --mangle toplevel  -o ./public/javascript/script.js ",
     "dev": "npx cross-env NODE_ENV=development nodemon index.js",
     "start": "npx cross-env NODE_ENV=production nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -54,6 +54,7 @@
     "node": ">=14.20.1"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.0.1",
     "terser": "^5.24.0"
   }

@@ -12,7 +12,7 @@
  * 8. processVideo
  * 9. generateOutput
  */
-class FFmpegManager {
+export class FFmpegManager {
     constructor(envMode) {
         this.envMode = envMode;
         this.ffmpeg = null;
@@ -242,7 +242,7 @@ class FFmpegManager {
  * 1. handleConvertButtonClick
  * 2.  calculateDuration
  */
-class VideoProcessor {
+export class VideoProcessor {
     constructor(envMode) {
         this.ffmpegManager = new FFmpegManager(envMode);
         this.videoInput = document.getElementById('videoInput');
