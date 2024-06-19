@@ -1,4 +1,18 @@
-class FFmpegManager {
+
+/**
+ * FFmpegManager deals with all actions associated with using ffmpeg.wasm
+ * 
+ * 1. initLoad 
+ * 2. getPathObject 
+ * 3. initializeFfmpeg
+ * 4. loadMultiThreadFiles
+ * 5. loadSingleThreadFiles
+ * 6. parseCommandString
+ * 7. getCommands
+ * 8. processVideo
+ * 9. generateOutput
+ */
+export class FFmpegManager {
     constructor(envMode) {
         this.envMode = envMode;
         this.ffmpeg = null;
@@ -8,6 +22,7 @@ class FFmpegManager {
         this.message = document.getElementById('message');
     }
 
+    //loads modules of ffmpeg based on result from getPathObject function/method
     async initLoad() {
         let pathObject = this.getPathObject();
 
@@ -24,6 +39,8 @@ class FFmpegManager {
         await this.initializeFfmpeg();
     }
 
+
+    // dynamically select url's path based on env mode 
     getPathObject() {
         const paths = {
             production: {
@@ -47,6 +64,7 @@ class FFmpegManager {
         return paths[this.envMode];
     }
 
+    //initializes ffmpeg instance
     async initializeFfmpeg() {
         if (this.ffmpeg === null) {
             this.ffmpeg = new this.FFmpeg();
@@ -69,6 +87,7 @@ class FFmpegManager {
         }
     }
 
+    //load files for  multithreaded mode
     async loadMultiThreadFiles() {
         console.log("multithreading engaged");
         const pathObject = this.getPathObject();
@@ -79,6 +98,7 @@ class FFmpegManager {
         });
     }
 
+    //load files for  singlethreaded mode
     async loadSingleThreadFiles() {
         console.log("singlethreading engaged");
         const pathObject = this.getPathObject();
@@ -87,6 +107,7 @@ class FFmpegManager {
         });
     }
 
+    //utility function - converts string commands to array commands
     parseCommandString(commandString) {
         const args = [];
         let currentArg = '';
@@ -114,6 +135,8 @@ class FFmpegManager {
         return args;
     }
 
+
+    //gets string ffmpeg commands based on  mode
     getCommands(inputObject, mode) {
         const editoptions = {
             conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
@@ -130,6 +153,8 @@ class FFmpegManager {
         return editoptions[mode];
     }
 
+
+    //processes the input videos based on commands with ffmpeg.exec
     async processVideo(inputObject, mode) {
         switch (mode) {
             case 'conversion':
@@ -167,6 +192,7 @@ class FFmpegManager {
 
     }
 
+    //creates a blob file and generates a download link, ie: offline downloading from the memory
     async generateOutput(inputObject, mode) {
         const data = await this.ffmpeg.readFile(inputObject.outputFileName);
         const video = document.getElementById('output-video');
@@ -209,17 +235,32 @@ class FFmpegManager {
     }
 }
 
-class VideoProcessor {
+
+/**
+ * FFmpegManager deals with getting data from user , connecting it to ffmpegManager, and executing the core logic
+ * 
+ * 1. handleVideoInput
+ * 2. handleConvertButtonClick
+ * 3.  calculateDuration
+ */
+export class VideoProcessor {
     constructor(envMode) {
         this.ffmpegManager = new FFmpegManager(envMode);
         this.videoInput = document.getElementById('videoInput');
         this.outputName = document.getElementById('outputName');
         this.convertButton = document.getElementById('convertButton');
         this.mode = document.getElementById('mode').textContent;
+        this.videoInputPlayer = document.getElementById('input-video')
 
         if (!this.videoInput || !this.outputName || !this.convertButton || !this.mode) {
             throw new Error("One or more required DOM elements are missing.");
         }
+
+
+        this.videoInput.addEventListener("change", (event) => {
+            this.handleVideoInput(event)
+        })
+
 
         this.convertButton.addEventListener("click", async () => {
             
@@ -236,7 +277,37 @@ class VideoProcessor {
         this.ffmpegManager.initLoad();
     }
 
+    //video popus up when user inputs it
+    handleVideoInput(event) {
 
+            const selectedFile = event.target.files[0]; // Get the selected file
+        
+            if (selectedFile) {
+        
+                console.log("File selected:", selectedFile.name);
+        
+                var objectURL = URL.createObjectURL(selectedFile)
+                this.videoInputPlayer.src = objectURL
+        
+                //unhide input video
+                if (this.videoInputPlayer.classList.contains('hidden')) {
+        
+                    this.videoInputPlayer.classList.toggle('hidden')
+        
+                }
+        
+        
+        
+        
+        
+            } else {
+        
+                console.log("No file selected.");
+            }
+
+    }
+
+    //gets input from user and uses ffmpgeManager class
     async handleConvertButtonClick() {
 
         const videoInput = document.getElementById('videoInput');
@@ -356,7 +427,14 @@ class VideoProcessor {
                 inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
                 break;
 
-            case 'crop':
+            case 'crop':    document.body.innerHTML = `
+            <input type="file" id="videoInput" />
+            <input type="text" id="outputName" />
+            <button id="convertButton"></button>
+            <span id="mode">conversion</span>
+            <div id="message"></div>
+            <video id="input-video" class="hidden"></video>
+          `;
                 inputObject.inputFileName = inputObject.videoFile[0].name;
                 inputObject.outputFileType = inputObject.inputFileName.split('.').pop();
                 inputObject.outputFileName = `${inputObject.outputFileN}.${inputObject.outputFileType}`;
@@ -388,6 +466,7 @@ class VideoProcessor {
         await this.ffmpegManager.generateOutput(inputObject, mode);
     }
 
+    //utility function,  calculates time in seconds from start and end timing
     calculateDuration(startTime, endTime) {
         const startParts = startTime.split(':').map(parseFloat);
         const endParts = endTime.split(':').map(parseFloat);
@@ -403,40 +482,13 @@ class VideoProcessor {
     }
 }
 
-// Define envMode based on the environment
-// const envMode = 'development';  // or 'production'
-
-// Initialize the VideoProcessor instance
-//Showing input video controls
-const videoInputPlayer = document.getElementById('input-video');
 
 
-videoInput.addEventListener("change", function (event) {
-    const selectedFile = event.target.files[0]; // Get the selected file
+//env mode gets defined during  production or development, for testing, things should go differently
+if (typeof envMode !== 'undefined') {
+    new VideoProcessor(envMode);
+    
+  } else {
 
-    if (selectedFile) {
-
-        console.log("File selected:", selectedFile.name);
-
-        var objectURL = URL.createObjectURL(selectedFile)
-        videoInputPlayer.src = objectURL
-
-        //unhide input video
-        if (videoInputPlayer.classList.contains('hidden')) {
-
-            videoInputPlayer.classList.toggle('hidden')
-
-        }
-
-
-
-
-
-    } else {
-
-        console.log("No file selected.");
-    }
-});
-
-
-new VideoProcessor(envMode);
+    new VideoProcessor('development');
+  }

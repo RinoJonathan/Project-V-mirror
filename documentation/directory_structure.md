@@ -4,19 +4,16 @@
 We follow the usual  folder structure in most express projects. Here is a walkthrough of different folders .
 
 
-## 1. Loose-files
 
-This directory holds individual components that contributors can develop independently before integration into the main Express app. It allows for modular development without requiring full knowledge of the project's stack.
-
-## 2. Models
+## 1. Models
 
 The Models directory contains MongoDB database schema using the Mongoose npm module. If you intend to upgrade database collections, this is the ideal starting point.
 
-## 3. node_modules
+## 2. node_modules
 
 Generated after running `npm run dev`, this folder contains npm modules and is typically not manually modified.
 
-## 4. Views
+## 3. Views
 
 ### EJS Files
 
@@ -29,7 +26,7 @@ The `views` directory stores EJS files, where HTML changes can be made. The stru
 
 In the boilerplate, layout files attach common partials, and main files from features or pages call these layout files for display.
 
-## 5. Public
+## 4. Public
 
 This directory contains static client-side resources:
 
@@ -51,7 +48,7 @@ This directory contains static client-side resources:
 - `public/manifest.json`: Configures the appearance of our app.
 - `public/sw.js`: The service worker crucial for PWA behavior, enabling offline usage and installation.
 
-## 6. Routes
+## 5. Routes
 
 In the `routes` directory, API endpoints are specified across four main files:
 
@@ -60,11 +57,20 @@ In the `routes` directory, API endpoints are specified across four main files:
 - **features.js:** Includes routes for all implemented features.
 - **test.js:** Self-explanatory test routes.
 
+## 6. Tests
+as of now unit tests have been written for feature scripts only. Thats because its kinda a complex part of our system.
+
 ## 7. Utilities
 
 The `utilities` directory contains essential helper functions:
 
 - **Async Wrapper and AppError:** Important utilities in the Express.js file.
 - **middlewares.js:** Includes crucial middleware to check user authentication.
+
+
+## 8. Documentation:
+    Its the folder you are in. It has some  info about the project 
+
+
 
 This well-organized structure facilitates efficient development and maintenance of the Project-V application.
