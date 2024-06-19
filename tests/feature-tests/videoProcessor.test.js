@@ -65,7 +65,7 @@ describe('VideoProcessor', () => {
 
   test('should prompt for output name if not provided', async () => {
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    mockVideoInput.files = [new File(['(⌐□_□)'], 'sample.mp4', { type: 'video/mp4' })];
+    mockVideoInput.files = [new File(['||||' ], 'sample.mp4', { type: 'video/mp4' })];
 
     await videoProcessor.handleConvertButtonClick();
 
@@ -74,7 +74,7 @@ describe('VideoProcessor', () => {
   });
 
   test('should call FFmpegManager methods for valid input', async () => {
-    mockVideoInput.files = [new File(['(⌐□_□)'], 'sample.mp4', { type: 'video/mp4' })];
+    mockVideoInput.files = [new File(['||||' ], 'sample.mp4', { type: 'video/mp4' })];
     mockOutputName.value = 'output';
 
     await videoProcessor.handleConvertButtonClick();
@@ -84,7 +84,7 @@ describe('VideoProcessor', () => {
   });
 
   test('should handle different modes correctly', async () => {
-    mockVideoInput.files = [new File(['(⌐□_□)'], 'sample.mp4', { type: 'video/mp4' })];
+    mockVideoInput.files = [new File(['||||' ], 'sample.mp4', { type: 'video/mp4' })];
     mockOutputName.value = 'output';
     document.getElementById('mode').textContent = 'trim';
 
