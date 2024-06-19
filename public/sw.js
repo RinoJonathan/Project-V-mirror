@@ -7,54 +7,6 @@ const CACHE_NAME = `Project-V-cache-${CACHE_VERSION}`;
 console.log = () => {} //turning off logging
 
 
-// Define an array of static resources to cache.
-
-//development
-// const APP_STATIC_RESOURCES = [
-//   '/',
-//   '/css/style.css',
-//   '/javascript/script.js',
-
-//   '/javascript/validateForms.js',
-//   '/info/offline',
-//   '/info/about',
-
-//   '/images/trim.png',
-//   '/images/split.png',
-//   '/images/getaudio.png',
-//   '/images/mute.png',
-//   '/images/convert.png',
-//   '/images/merge.avif',
-//   '/images/resize.png',
-
-
-//   '/icons/icon-512x512.png',
-//   '/manifest.json',
-//   // '',
-
-
-//   'https://fonts.googleapis.com/css2?family=Keania+One&display=swap',
-//   'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css',
-//   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
-//   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
-//   'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js',
-//   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js',
-
-//   '/images/slide_1.png',
-//   '/images/slide_2.png',
-//   '/icons/icon-192x192.png',
-//   // '/icons/icon-256x256.png',
-//   // '/icons/icon-384x384.png',
-
-//   // '',
-//   // '',
-//   '/javascript/feature_script.js',
-//   // '/offline.html',
-//   // 'offlineLogin.html',
-//   // Add more static resources here as needed.
-// ];
-
-//production
 
 const APP_STATIC_RESOURCES = [
   '/',
@@ -102,29 +54,7 @@ const APP_STATIC_RESOURCES = [
   
 ];
 
-//internal feature resources
-// const FEATURE_RESOURCES = [
-//   // '/temp.js',
-//   "/javascript/ffmpeg/core/ffmpeg-core.js",
-//   "/javascript/ffmpeg/core/ffmpeg-core.wasm",
-//   "/javascript/ffmpeg/ffmpeg/index.js",
-//   "/javascript/ffmpeg/utils/index.js",
-//   "/javascript/ffmpeg/ffmpeg/classes.js",
-//   "/javascript/ffmpeg/utils/errors.js",
-//   "/javascript/ffmpeg/utils/const.js",
-//   "/javascript/ffmpeg/ffmpeg/const.js",
-//   "/javascript/ffmpeg/ffmpeg/utils.js",
-//   "/javascript/ffmpeg/ffmpeg/errors.js",
-//   "/javascript/ffmpeg/ffmpeg/worker.js",
 
-//   //multithreading
-//   // "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
-//   // "/javascript/ffmpeg/multi-thread/ffmpeg-core.wasm",
-//   // "/javascript/ffmpeg/multi-thread/ffmpeg-core.worker.js",
-//   // "/javascript/ffmpeg/multi-thread/ffmpeg-core.js",
-
-
-// ]
 
 const FEATURE_RESOURCES = [
   'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.4/dist/esm/ffmpeg-core.js',
@@ -154,7 +84,7 @@ let loadFlag = 0 ;
 
 
 //function to check if user had logged in online
-//This is no longer required - can acess if logged in atleast once - vestigial feature
+//This is no longer required - can acess if logged in atleast once - vestigial component
 const checkAuth = () => {
   // const jwtToken = document.cookie.split('; ').find((cookie) => cookie.startsWith('jwt='));
   // const jwtToken = true
@@ -168,25 +98,7 @@ const checkAuth = () => {
   return true
 }
 
-// Function to clean up old caches when activating a new service worker.
-// const cleanUpCaches= () => {
-//   return caches.keys().then((cacheNames) => {
-//     console.log(cacheNames)
-//     return Promise.all(
-      
-//       cacheNames.map((cache) => {
-//         console.log("iteration1")
-//         if (cache !== CACHE_NAME)
-//          {
-//           console.log(`${cache} deleted`)
-//           return caches.delete(cache);
-//         }
-//       })
-//     );
-//   });
-// }
 
-// On install, cache the static resources
 
 
 const testPrint = () => {
@@ -208,21 +120,7 @@ self.addEventListener("install", (event) => {
       await cache.addAll(FEATURE_RESOURCES);
       await console.log("feature caches cached");
       
-      // If (checkAuth()) {}
-      // await cache.addAll(FEATURE_RESOURCES);
-      // await console.log("feature caches cached");
 
-
-      // Send a message to the main thread to indicate that feature assets are loaded
-      // self.clients.matchAll().then(clients => {
-      //   clients.forEach(client => {
-      //     client.postMessage({ assetsLoaded: true });
-      //   });
-      // });
-      
-
-      // Ensure that the new service worker activates immediately
-      //self.skipWaiting();
     })()
   );
 });
@@ -262,14 +160,7 @@ self.addEventListener('fetch', (event) => {
 
   console.log(url);
 
-  // if(loadFlag == 0) {
 
-  //   self.clients.matchAll().then(clients => {
-  //     clients.forEach(client => client.postMessage({ assetsLoaded: true }));
-  // })
-  // console.log("sent message, load flag changed")
-  // loadFlag =1;
-  // }
 
   // Handle homepage caching
   if (url === '/') {
@@ -300,7 +191,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Check user authentication (implement your authentication logic here).
+  // Check user authentication 
   // like check if the user is authenticated by verifying
   // the presence and validity of a JWT token stored on the client. but for now its removed
 
@@ -345,10 +236,9 @@ self.addEventListener('fetch', (event) => {
       );
       return;
     } else {
-      // Display a custom message or prompt the user to log in when offline.
-      // You can show a modal, a custom HTML element, or navigate to a login page.
+
       console.log("Please log in using the internet.");
-      // If offline, respond with the cached offline.html page.
+
       window.location.href = '/user/login';
       return;
     }
@@ -379,25 +269,3 @@ self.addEventListener('fetch', (event) => {
 
 
 
-//legacy fetch
-// self.addEventListener("fetch", (event) => {
-//     // As a single page app, direct app to always go to cached home page.
-//     if (event.request.mode === "navigate") {
-//       event.respondWith(caches.match("/Menarche_Tracker/"));
-//       return;
-//     }
-  
-//     // For all other requests, go to the cache first, and then the network.
-//     event.respondWith(
-//       (async () => {
-//         const cache = await caches.open(CACHE_NAME);
-//         const cachedResponse = await cache.match(event.request);
-//         if (cachedResponse) {
-//           // Return the cached response if it's available.
-//           return cachedResponse;
-//         }
-//         // If resource isn't in the cache, return a 404.
-//         return new Response(null, { status: 404 });
-//       })()
-//     );
-//   });

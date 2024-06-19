@@ -1,11 +1,8 @@
-// "production" - pwa | "developmental" - normal mode
-// const envMode = "production"// "developmental"
-
-
 let overlayElements = document.querySelectorAll('.loading-overlay');
 
-if(envMode === 'production'){
 
+//in production, service worker gets registered and login overlay is shown
+if(envMode === 'production'){
 
 // service worker registration
 if ('serviceWorker' in navigator) {
@@ -14,7 +11,7 @@ if ('serviceWorker' in navigator) {
 
   window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register('/sw.js') // Replace with the path to your service worker file
+      .register('/sw.js') // comrade, dont forget to change service worker's path if needed
       .then((registration) => {
         console.log('Service Worker registered with scope:', registration.scope);
       })
@@ -23,20 +20,15 @@ if ('serviceWorker' in navigator) {
       });
   });
 
-    // Check if .loading-overlay is present in the current page
 if (overlayElements && overlayElements.length > 0) {
   
-  // Add an event listener to handle messages from the service worker
   navigator.serviceWorker.addEventListener('message', (event) => {
     const { data } = event;
-    // Check if the message indicates activation event
+
     if (data && data.activationEvent) {
-      // Update the UI to hide the loading overlay
       for (let overlayElement of overlayElements) {
         overlayElement.style.display = 'none';
       }
-
-      // Update the local storage flag to indicate that assets are loaded
       localStorage.setItem('assetsLoaded', 'true');
     }
   });
@@ -60,31 +52,11 @@ if (overlayElements && overlayElements.length > 0) {
     }
   } else {
     console.log("***NO layouts local storage")
-    // Add an event listener to handle messages from the service worker
-    // navigator.serviceWorker.addEventListener('message', (event) => {
-    //   const { data } = event;
 
-      
-
-    //   // Check if the message indicates that assets are loaded
-    //   if (data && data.assetsLoaded) {
-    //     // Update the UI to hide the loading overlay
-    //     for (let overlayElement of overlayElements) {
-    //       overlayElement.style.display = 'none';
-    //     }
-    //     console.log(" ***layouts in local storage set true 2")
-    //     // Update the local storage flag to indicate that assets are loaded
-    //     localStorage.setItem('assetsLoaded', 'true');
-        
-    //   }
-    // });
-
-    // console.log(" ***Event listener set for message")
   }
 }
 
-}
-else if(envMode === 'development'){
+} else if(envMode === 'development'){
 
 for (let overlayElement of overlayElements) {
   overlayElement.style.display = 'none';
@@ -160,13 +132,6 @@ var slider = tns({
       items: 3
     }
   }
-  // mode: 'gallery',
-  // speed: 2000,
-  // animateIn: "scale",
-  // controls: false,
-  // nav: false,
-  // edgePadding: 20,
-  // loop: false,
 });
 
 
