@@ -239,8 +239,9 @@ export class FFmpegManager {
 /**
  * FFmpegManager deals with getting data from user , connecting it to ffmpegManager, and executing the core logic
  * 
- * 1. handleConvertButtonClick
- * 2.  calculateDuration
+ * 1. handleVideoInput
+ * 2. handleConvertButtonClick
+ * 3.  calculateDuration
  */
 export class VideoProcessor {
     constructor(envMode) {
@@ -249,10 +250,17 @@ export class VideoProcessor {
         this.outputName = document.getElementById('outputName');
         this.convertButton = document.getElementById('convertButton');
         this.mode = document.getElementById('mode').textContent;
+        this.videoInputPlayer = document.getElementById('input-video')
 
         if (!this.videoInput || !this.outputName || !this.convertButton || !this.mode) {
             throw new Error("One or more required DOM elements are missing.");
         }
+
+
+        this.videoInput.addEventListener("change", (event) => {
+            this.handleVideoInput(event)
+        })
+
 
         this.convertButton.addEventListener("click", async () => {
             
@@ -269,6 +277,35 @@ export class VideoProcessor {
         this.ffmpegManager.initLoad();
     }
 
+    //video popus up when user inputs it
+    handleVideoInput(event) {
+
+            const selectedFile = event.target.files[0]; // Get the selected file
+        
+            if (selectedFile) {
+        
+                console.log("File selected:", selectedFile.name);
+        
+                var objectURL = URL.createObjectURL(selectedFile)
+                this.videoInputPlayer.src = objectURL
+        
+                //unhide input video
+                if (this.videoInputPlayer.classList.contains('hidden')) {
+        
+                    this.videoInputPlayer.classList.toggle('hidden')
+        
+                }
+        
+        
+        
+        
+        
+            } else {
+        
+                console.log("No file selected.");
+            }
+
+    }
 
     //gets input from user and uses ffmpgeManager class
     async handleConvertButtonClick() {
@@ -438,40 +475,7 @@ export class VideoProcessor {
     }
 }
 
-// Define envMode based on the environment
-// const envMode = 'development';  // or 'production'
 
-// Initialize the VideoProcessor instance
-//Showing input video controls
-const videoInputPlayer = document.getElementById('input-video');
-
-
-videoInput.addEventListener("change", function (event) {
-    const selectedFile = event.target.files[0]; // Get the selected file
-
-    if (selectedFile) {
-
-        console.log("File selected:", selectedFile.name);
-
-        var objectURL = URL.createObjectURL(selectedFile)
-        videoInputPlayer.src = objectURL
-
-        //unhide input video
-        if (videoInputPlayer.classList.contains('hidden')) {
-
-            videoInputPlayer.classList.toggle('hidden')
-
-        }
-
-
-
-
-
-    } else {
-
-        console.log("No file selected.");
-    }
-});
 
 
 new VideoProcessor(envMode);
