@@ -1,3 +1,17 @@
+
+/**
+ * FFmpegManager deals with all actions associated with using ffmpeg.wasm
+ * 
+ * 1. initLoad 
+ * 2. getPathObject 
+ * 3. initializeFfmpeg
+ * 4. loadMultiThreadFiles
+ * 5. loadSingleThreadFiles
+ * 6. parseCommandString
+ * 7. getCommands
+ * 8. processVideo
+ * 9. generateOutput
+ */
 class FFmpegManager {
     constructor(envMode) {
         this.envMode = envMode;
@@ -8,6 +22,7 @@ class FFmpegManager {
         this.message = document.getElementById('message');
     }
 
+    //loads modules of ffmpeg based on result from getPathObject function/method
     async initLoad() {
         let pathObject = this.getPathObject();
 
@@ -24,6 +39,8 @@ class FFmpegManager {
         await this.initializeFfmpeg();
     }
 
+
+    // dynamically select url's path based on env mode 
     getPathObject() {
         const paths = {
             production: {
@@ -47,6 +64,7 @@ class FFmpegManager {
         return paths[this.envMode];
     }
 
+    //initializes ffmpeg instance
     async initializeFfmpeg() {
         if (this.ffmpeg === null) {
             this.ffmpeg = new this.FFmpeg();
@@ -69,6 +87,7 @@ class FFmpegManager {
         }
     }
 
+    //load files for  multithreaded mode
     async loadMultiThreadFiles() {
         console.log("multithreading engaged");
         const pathObject = this.getPathObject();
@@ -79,6 +98,7 @@ class FFmpegManager {
         });
     }
 
+    //load files for  singlethreaded mode
     async loadSingleThreadFiles() {
         console.log("singlethreading engaged");
         const pathObject = this.getPathObject();
@@ -87,6 +107,7 @@ class FFmpegManager {
         });
     }
 
+    //utility function - converts string commands to array commands
     parseCommandString(commandString) {
         const args = [];
         let currentArg = '';
@@ -114,6 +135,8 @@ class FFmpegManager {
         return args;
     }
 
+
+    //gets string ffmpeg commands based on  mode
     getCommands(inputObject, mode) {
         const editoptions = {
             conversion: `-i "${inputObject.inputFileName}" "${inputObject.outputFileName}"`,
@@ -130,6 +153,8 @@ class FFmpegManager {
         return editoptions[mode];
     }
 
+
+    //processes the input videos based on commands with ffmpeg.exec
     async processVideo(inputObject, mode) {
         switch (mode) {
             case 'conversion':
@@ -167,6 +192,7 @@ class FFmpegManager {
 
     }
 
+    //creates a blob file and generates a download link, ie: offline downloading from the memory
     async generateOutput(inputObject, mode) {
         const data = await this.ffmpeg.readFile(inputObject.outputFileName);
         const video = document.getElementById('output-video');
@@ -209,6 +235,13 @@ class FFmpegManager {
     }
 }
 
+
+/**
+ * FFmpegManager deals with getting data from user , connecting it to ffmpegManager, and executing the core logic
+ * 
+ * 1. handleConvertButtonClick
+ * 2.  calculateDuration
+ */
 class VideoProcessor {
     constructor(envMode) {
         this.ffmpegManager = new FFmpegManager(envMode);
@@ -237,6 +270,7 @@ class VideoProcessor {
     }
 
 
+    //gets input from user and uses ffmpgeManager class
     async handleConvertButtonClick() {
 
         const videoInput = document.getElementById('videoInput');
@@ -388,6 +422,7 @@ class VideoProcessor {
         await this.ffmpegManager.generateOutput(inputObject, mode);
     }
 
+    //utility function,  calculates time in seconds from start and end timing
     calculateDuration(startTime, endTime) {
         const startParts = startTime.split(':').map(parseFloat);
         const endParts = endTime.split(':').map(parseFloat);
