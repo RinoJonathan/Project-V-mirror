@@ -5,7 +5,17 @@
 import { VideoProcessor } from "../../public/javascript/original/feature_script";
 import { FFmpegManager } from "../../public/javascript/original/feature_script";
 
-jest.mock('../../public/javascript/original/feature_script');
+jest.mock('../../public/javascript/original/feature_script', () => {
+  return {
+    FFmpegManager: jest.fn().mockImplementation(() => {
+      return {
+        initLoad: jest.fn(),
+        processVideo: jest.fn(),
+        generateOutput: jest.fn()
+      };
+    })
+  };
+});
 
 describe('VideoProcessor', () => {
   let videoProcessor;
@@ -32,13 +42,8 @@ describe('VideoProcessor', () => {
     mockMode = document.getElementById('mode').textContent;
     mockMessage = document.getElementById('message');
 
-    mockFFmpegManager = {
-      initLoad: jest.fn(),
-      processVideo: jest.fn(),
-      generateOutput: jest.fn(),
-    };
-    
-    FFmpegManager.mockImplementation(() => mockFFmpegManager);
+    mockFFmpegManager = new FFmpegManager();
+
     videoProcessor = new VideoProcessor('development');
   });
 
@@ -52,8 +57,10 @@ describe('VideoProcessor', () => {
   });
 
   test('should display error message if no video file is selected', async () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     await videoProcessor.handleConvertButtonClick();
-    expect(console.error).toHaveBeenCalledWith('No video file selected.');
+    expect(consoleErrorSpy).toHaveBeenCalledWith('No video file selected.');
+    consoleErrorSpy.mockRestore();
   });
 
   test('should prompt for output name if not provided', async () => {
@@ -79,7 +86,7 @@ describe('VideoProcessor', () => {
   test('should handle different modes correctly', async () => {
     mockVideoInput.files = [new File(['(⌐□_□)'], 'sample.mp4', { type: 'video/mp4' })];
     mockOutputName.value = 'output';
-    mockMode = 'trim';
+    document.getElementById('mode').textContent = 'trim';
 
     document.getElementById('start_hour').value = '00';
     document.getElementById('start_minute').value = '01';
