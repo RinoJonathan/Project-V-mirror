@@ -1,5 +1,20 @@
 Project-V is an online pwa based video editor which does video manipulation from client side. Due to its abilities as a PWA, it can be saved like an app and used offline like a  offline app.
 
+# Note to Code Connoisseurs
+
+Check out this [Video](https://www.youtube.com/watch?v=LZ1zYCbrSsU&t=8s "Video") to see a quick demo of our application 
+
+Project-V is currently deployed in render, check it out using the link 
+[Project-V Production](https://project-v-production.onrender.com/ "Project-V Production")
+
+If you would like to take a look into the main core of this project, you should check out [feature_script.js](https://github.com/RinoJonathan/Project-V-mirror/blob/main/public/javascript/original/feature_script.js "feature_script.js") file
+
+To check out the caching logic, check out [sw.js](https://github.com/RinoJonathan/Project-V-mirror/blob/main/public/sw.js "sw.js") from public files
+
+And ... if you would like to share your feedbacks and thoughts, send us a mail to 
+ projectv103@gmail.com
+we are eager to listen
+
 # Setting up
 
 ## Install Dependencies
