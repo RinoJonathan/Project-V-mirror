@@ -66,6 +66,12 @@ go to the cloned repository  and open a terminal / cmd there and run
 
 	npm install
 
+### 3. Create env
+
+create env files .env.development, .env.production with required fields
+
+	cp documentation/sample-env/sample-env.txt .env.development
+	cp documentation/sample-env/sample-env.txt .env.production
 
 ## Running project in development mode
 
